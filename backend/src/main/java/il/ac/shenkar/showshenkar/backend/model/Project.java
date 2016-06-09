@@ -1,5 +1,6 @@
 package il.ac.shenkar.showshenkar.backend.model;
 
+import com.google.appengine.repackaged.com.google.common.base.Flag;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Index;
 
@@ -17,8 +18,8 @@ public class Project extends BaseEntity {
     @Index
     String department;
     List<String> studentNames;
-    Content location;
-    List<Content> content;
+    String locationId;
+    List<String> contentIds;
 
     public String getName() {
         return name;
@@ -44,19 +45,19 @@ public class Project extends BaseEntity {
         this.studentNames = studentNames;
     }
 
-    public Content getLocation() {
-        return location;
+    public String getLocationId() {
+        return locationId;
     }
 
-    public void setLocation(Content location) {
-        this.location = location;
+    public void setLocationId(String locationId) {
+        this.locationId = locationId;
     }
 
-    public List<Content> getContent() {
-        return content;
+    public List<String> getContentIds() {
+        return contentIds;
     }
 
-    public void setContent(List<Content> content) {
-        this.content = content;
+    public void setContentIds(List<String> contentIds) {
+        this.contentIds = contentIds;
     }
 }
