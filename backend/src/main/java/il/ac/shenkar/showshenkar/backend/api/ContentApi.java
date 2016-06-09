@@ -5,6 +5,7 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.config.Named;
 
+import il.ac.shenkar.showshenkar.backend.OfyService;
 import il.ac.shenkar.showshenkar.backend.model.Content;
 
 /**
@@ -24,20 +25,47 @@ public class ContentApi {
 
     @ApiMethod(
             name = "getContent",
-            path = "contentApi/{id}",
+            path = "contentApi/{QRId}",
             httpMethod = ApiMethod.HttpMethod.GET
     )
-    Content getContent(@Named("id") String id){
+    Content getContent(@Named("QRId") String qrId){
+        return OfyService.ofy().load().type(Content.class).filter("QRId", qrId).first().now();
+    }
+
+    @ApiMethod(
+            name = "SetContent",
+            path = "contentApi",
+            httpMethod = ApiMethod.HttpMethod.POST
+    )
+    Content setContent(Content content){
+        if (content == null){
+            throw new IllegalStateException("Content is null");
+        }
+
+        if (content.getId() != null) {
+            throw new IllegalStateException("Content already exits");
+        }
+
+        OfyService.ofy().save().entity(content).now();
+        return content;
+    }
+
+    @ApiMethod(
+            name = "deleteContent",
+            path = "contentApi/{id}",
+            httpMethod = ApiMethod.HttpMethod.DELETE
+    )
+    Content deleteContent(@Named("id") String id){
         //TODO
         return null;
     }
 
     @ApiMethod(
-            name = "SetContent",
-            path = "contentApi/{id}/{type}",
-            httpMethod = ApiMethod.HttpMethod.POST
+            name = "updateContent",
+            path = "contentApi/{id}",
+            httpMethod = ApiMethod.HttpMethod.PUT
     )
-    Content setContent(@Named("id") String id, @Named("type") String type){
+    Content updateContent(@Named("id") String id){
         //TODO
         return null;
     }

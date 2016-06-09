@@ -7,6 +7,7 @@ import com.google.api.server.spi.config.Named;
 
 import java.util.List;
 
+import il.ac.shenkar.showshenkar.backend.OfyService;
 import il.ac.shenkar.showshenkar.backend.model.Project;
 
 /**
@@ -30,26 +31,52 @@ public class ProjectApi {
             httpMethod = ApiMethod.HttpMethod.GET
     )
     Project getProject(@Named("id") String id){
-        //TODO
-        return null;
+        return OfyService.ofy().load().type(Project.class).filter("id", id).first().now();
     }
 
     @ApiMethod(
-            name = "getProject",
+            name = "getProjects",
             path = "projectApi",
             httpMethod = ApiMethod.HttpMethod.GET
     )
     List<Project> getProjects(){
+        return OfyService.ofy().load().type(Project.class).list();
+    }
+
+    @ApiMethod(
+            name = "setProject",
+            path = "projectApi",
+            httpMethod = ApiMethod.HttpMethod.POST
+    )
+    Project setProject(Project project){
+        if (project == null){
+            throw new IllegalStateException("Project is null");
+        }
+
+        if (project.getId() != null) {
+            throw new IllegalStateException("Project already exits");
+        }
+
+        OfyService.ofy().save().entity(project).now();
+        return project;
+    }
+
+    @ApiMethod(
+            name = "deleteProject",
+            path = "projectApi/{id}",
+            httpMethod = ApiMethod.HttpMethod.DELETE
+    )
+    Project deleteProject(@Named("id") String id){
         //TODO
         return null;
     }
 
     @ApiMethod(
-            name = "setProject",
+            name = "updateProject",
             path = "projectApi/{id}",
-            httpMethod = ApiMethod.HttpMethod.POST
+            httpMethod = ApiMethod.HttpMethod.PUT
     )
-    Project setContent(@Named("id") String id){
+    Project updateProject(@Named("id") String id){
         //TODO
         return null;
     }
