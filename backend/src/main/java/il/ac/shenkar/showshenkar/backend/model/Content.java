@@ -1,6 +1,7 @@
 package il.ac.shenkar.showshenkar.backend.model;
 
 import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Index;
 
 /**
  * Created by:  Gregory Kondratenko on 10/06/2016.
@@ -9,6 +10,8 @@ import com.googlecode.objectify.annotation.Entity;
 @Entity
 public class Content extends BaseEntity{
 
+    @Index
+    String QRId;
     String type;
     Boolean isMedia;
     Boolean isInfo;
@@ -16,6 +19,14 @@ public class Content extends BaseEntity{
     Media media;
     Info info;
     Location location;
+
+    public String getQRId() {
+        return QRId;
+    }
+
+    public void setQRId(String QRId) {
+        this.QRId = QRId;
+    }
 
     public String getType() {
         return type;
