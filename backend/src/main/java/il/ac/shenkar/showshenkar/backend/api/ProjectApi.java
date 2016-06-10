@@ -18,8 +18,8 @@ import il.ac.shenkar.showshenkar.backend.model.Project;
         name = "projectApi",
         version = "v1",
         namespace = @ApiNamespace(
-                ownerDomain = "backend.shoeshenkar..shenkar.ac.il",
-                ownerName = "backend.shoeshenkar..shenkar.ac.il",
+                ownerDomain = "backend.showshenkar.shenkar.ac.il",
+                ownerName = "backend.showshenkar.shenkar.ac.il",
                 packagePath=""
         )
 )

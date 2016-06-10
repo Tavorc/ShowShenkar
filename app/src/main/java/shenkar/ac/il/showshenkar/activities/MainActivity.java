@@ -1,4 +1,4 @@
-package il.ac.shenkar.showshenkar.activities;
+package shenkar.ac.il.showshenkar.activities;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -8,12 +8,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.showshenkar.showshenkar.R;
-
 import java.util.ArrayList;
 
-import il.ac.shenkar.showshenkar.adapters.DepGridViewAdapter;
-import il.ac.shenkar.showshenkar.model.DepImageItem;
+import shenkar.ac.il.showshenkar.adapters.DepGridViewAdapter;
+import shenkar.ac.il.showshenkar.model.DepImageItem;
+import shenkar.ac.il.showshenkar.R;
 
 public class MainActivity extends AppCompatActivity {
 

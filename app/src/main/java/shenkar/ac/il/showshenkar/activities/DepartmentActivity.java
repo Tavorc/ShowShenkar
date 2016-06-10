@@ -1,4 +1,4 @@
-package il.ac.shenkar.showshenkar.activities;
+package shenkar.ac.il.showshenkar.activities;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,13 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.showshenkar.showshenkar.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import il.ac.shenkar.showshenkar.model.DepProject;
-import il.ac.shenkar.showshenkar.adapters.DepProjectsRecyclerAdapter;
+import shenkar.ac.il.showshenkar.R;
+import shenkar.ac.il.showshenkar.model.DepProject;
+import shenkar.ac.il.showshenkar.adapters.DepProjectsRecyclerAdapter;
 
 public class DepartmentActivity extends AppCompatActivity {
     private List<DepProject> mProjects;
