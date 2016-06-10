@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">ShowShenkar</string>
+    <string name="dep_project_name">שם הפרויקט</string>
+    <string name="dep_project_student">שם הסטודנט</string>
+    <string name="dep_1">הנדסת תכנה</string>
+    <string name="dep_2">תעשייה וניהול</string>
+    <string name="dep_3">הנדסת תכנה</string>
+    <string name="dep_4">הנדסת תכנה</string>
+    <string name="dep_5">הנדסת תכנה</string>
+    <string name="dep_6">הנדסת תכנה</string>
+    <string name="dep_7">הנדסת תכנה</string>
+    <string name="dep_8">הנדסת תכנה</string>
+    <string name="dep_9">הנדסת תכנה</string>
+
 </resources>
