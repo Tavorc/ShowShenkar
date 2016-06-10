@@ -28,7 +28,7 @@ public class ContentApi {
             path = "contentApi/{QRId}",
             httpMethod = ApiMethod.HttpMethod.GET
     )
-    Content getContent(@Named("QRId") String qrId){
+    public Content getContent(@Named("QRId") String qrId){
         return OfyService.ofy().load().type(Content.class).filter("QRId", qrId).first().now();
     }
 
@@ -37,7 +37,7 @@ public class ContentApi {
             path = "contentApi",
             httpMethod = ApiMethod.HttpMethod.POST
     )
-    Content setContent(Content content){
+    public Content setContent(Content content){
         if (content == null){
             throw new IllegalStateException("Content is null");
         }
@@ -55,7 +55,7 @@ public class ContentApi {
             path = "contentApi/{id}",
             httpMethod = ApiMethod.HttpMethod.DELETE
     )
-    Content deleteContent(@Named("id") String id){
+    public Content deleteContent(@Named("id") String id){
         //TODO
         return null;
     }
@@ -65,7 +65,7 @@ public class ContentApi {
             path = "contentApi/{id}",
             httpMethod = ApiMethod.HttpMethod.PUT
     )
-    Content updateContent(@Named("id") String id){
+    public Content updateContent(@Named("id") String id){
         //TODO
         return null;
     }

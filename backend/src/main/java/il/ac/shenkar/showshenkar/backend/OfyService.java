@@ -5,6 +5,7 @@ import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 
 import il.ac.shenkar.showshenkar.backend.model.Content;
+import il.ac.shenkar.showshenkar.backend.model.Department;
 import il.ac.shenkar.showshenkar.backend.model.Project;
 
 /**
@@ -18,6 +19,7 @@ public class OfyService {
         ObjectifyService.register(RegistrationRecord.class);
         ObjectifyService.register(Content.class);
         ObjectifyService.register(Project.class);
+        ObjectifyService.register(Department.class);
     }
 
     public static Objectify ofy() {

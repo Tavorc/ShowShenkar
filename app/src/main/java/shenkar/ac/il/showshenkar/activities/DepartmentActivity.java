@@ -10,9 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import il.ac.shenkar.showshenkar.backend.projectApi.model.Project;
 import shenkar.ac.il.showshenkar.R;
 import shenkar.ac.il.showshenkar.model.DepProject;
 import shenkar.ac.il.showshenkar.adapters.DepProjectsRecyclerAdapter;
@@ -40,6 +42,37 @@ public class DepartmentActivity extends AppCompatActivity {
         rvProjects.setLayoutManager(new LinearLayoutManager(this));
 
         setDummyProject();
+        /***********real getData logic for recyclerView**************************************************************
+
+            final ProjectApi projectApi = new ProjectApi.Builder(
+                         AndroidHttp.newCompatibleTransport(),
+                         new JacksonFactory(),
+                         new HttpRequestInitializer() {
+                            @Override
+                                public void initialize(HttpRequest request) throws IOException {
+
+                            }
+            }).setRootUrl(Constants.ROOT_URL).build();
+            new AsyncTask<Void,Void,Void>(){
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        List<Project> projects = projectApi.getProjectsByDepartment(department).execute().getItems();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    //show complition in UI
+                    //fill grid view with data
+                }
+            }.execute();
+
+
+         ******************************************************************************************************/
 
         DepProjectsRecyclerAdapter adapter = new DepProjectsRecyclerAdapter(this, mProjects);
         rvProjects.setAdapter(adapter);

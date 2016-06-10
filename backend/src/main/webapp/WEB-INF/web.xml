@@ -13,7 +13,7 @@
         <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
         <init-param>
             <param-name>services</param-name>
-            <param-value>il.ac.shenkar.showshenkar.backend.RegistrationEndpoint, il.ac.shenkar.showshenkar.backend.MessagingEndpoint, il.ac.shenkar.showshenkar.backend.api.ContentApi, il.ac.shenkar.showshenkar.backend.api.ProjectApi</param-value>
+            <param-value>il.ac.shenkar.showshenkar.backend.RegistrationEndpoint, il.ac.shenkar.showshenkar.backend.MessagingEndpoint, il.ac.shenkar.showshenkar.backend.api.ContentApi, il.ac.shenkar.showshenkar.backend.api.ProjectApi, il.ac.shenkar.showshenkar.backend.api.DepartmentApi</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

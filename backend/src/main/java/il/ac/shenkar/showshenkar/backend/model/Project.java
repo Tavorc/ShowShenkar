@@ -1,6 +1,5 @@
 package il.ac.shenkar.showshenkar.backend.model;
 
-import com.google.appengine.repackaged.com.google.common.base.Flag;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Index;
 

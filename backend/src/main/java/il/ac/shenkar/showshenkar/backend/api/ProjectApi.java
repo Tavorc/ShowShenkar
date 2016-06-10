@@ -30,8 +30,17 @@ public class ProjectApi {
             path = "projectApi/{id}",
             httpMethod = ApiMethod.HttpMethod.GET
     )
-    Project getProject(@Named("id") String id){
+    public Project getProject(@Named("id") String id){
         return OfyService.ofy().load().type(Project.class).filter("id", id).first().now();
+    }
+
+    @ApiMethod(
+            name = "getProjectsByDepartment",
+            path = "projectApi/ByDepartment/{department}",
+            httpMethod = ApiMethod.HttpMethod.GET
+    )
+    public List<Project> getProjectsByDepartment(@Named("department") String department){
+        return OfyService.ofy().load().type(Project.class).filter("department", department).list();
     }
 
     @ApiMethod(
@@ -39,7 +48,7 @@ public class ProjectApi {
             path = "projectApi",
             httpMethod = ApiMethod.HttpMethod.GET
     )
-    List<Project> getProjects(){
+    public List<Project> getProjects(){
         return OfyService.ofy().load().type(Project.class).list();
     }
 
@@ -48,7 +57,7 @@ public class ProjectApi {
             path = "projectApi",
             httpMethod = ApiMethod.HttpMethod.POST
     )
-    Project setProject(Project project){
+    public Project setProject(Project project){
         if (project == null){
             throw new IllegalStateException("Project is null");
         }
@@ -66,7 +75,7 @@ public class ProjectApi {
             path = "projectApi/{id}",
             httpMethod = ApiMethod.HttpMethod.DELETE
     )
-    Project deleteProject(@Named("id") String id){
+    public Project deleteProject(@Named("id") String id){
         //TODO: update stub
         return null;
     }
