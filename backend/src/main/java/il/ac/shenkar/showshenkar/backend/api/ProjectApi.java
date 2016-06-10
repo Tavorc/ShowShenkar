@@ -67,7 +67,7 @@ public class ProjectApi {
             httpMethod = ApiMethod.HttpMethod.DELETE
     )
     Project deleteProject(@Named("id") String id){
-        //TODO
+        //TODO: update stub
         return null;
     }
 
@@ -77,7 +77,7 @@ public class ProjectApi {
             httpMethod = ApiMethod.HttpMethod.PUT
     )
     Project updateProject(@Named("id") String id){
-        //TODO
+        //TODO: update stub
         return null;
     }
 
