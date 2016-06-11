@@ -1,30 +1,20 @@
-package shenkar.ac.il.showshenkar.activities;
+package il.ac.shenkar.showshenkar.activities;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
-import com.google.api.client.json.jackson2.JacksonFactory;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-import il.ac.shenkar.showshenkar.backend.departmentApi.DepartmentApi;
-import il.ac.shenkar.showshenkar.backend.departmentApi.model.Department;
-import il.ac.shenkar.showshenkar.backend.projectApi.ProjectApi;
-import shenkar.ac.il.showshenkar.adapters.DepGridViewAdapter;
-import shenkar.ac.il.showshenkar.model.DepImageItem;
-import shenkar.ac.il.showshenkar.R;
-import shenkar.ac.il.showshenkar.utils.Constants;
+import il.ac.shenkar.showshenkar.R;
+import il.ac.shenkar.showshenkar.adapters.DepGridViewAdapter;
+import il.ac.shenkar.showshenkar.model.DepImageItem;
+
+
 
 public class MainActivity extends AppCompatActivity {
 

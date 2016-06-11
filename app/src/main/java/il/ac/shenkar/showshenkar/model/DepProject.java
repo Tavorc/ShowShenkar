@@ -1,4 +1,4 @@
-package shenkar.ac.il.showshenkar.model;
+package il.ac.shenkar.showshenkar.model;
 
 public class DepProject {
     private String name;

@@ -1,4 +1,4 @@
-package shenkar.ac.il.showshenkar.utils;
+package il.ac.shenkar.showshenkar.utils;
 
 /**
  * Created by user on 10/06/2016.

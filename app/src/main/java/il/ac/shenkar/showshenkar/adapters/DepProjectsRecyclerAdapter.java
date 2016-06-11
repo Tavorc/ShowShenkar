@@ -1,4 +1,4 @@
-package shenkar.ac.il.showshenkar.adapters;
+package il.ac.shenkar.showshenkar.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,11 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import java.util.List;
 
-import shenkar.ac.il.showshenkar.model.DepProject;
-import shenkar.ac.il.showshenkar.R;
+import il.ac.shenkar.showshenkar.R;
+import il.ac.shenkar.showshenkar.model.DepProject;
 
 public class DepProjectsRecyclerAdapter extends RecyclerView.Adapter<DepProjectsRecyclerAdapter.CustomViewHolder> {
     private List<DepProject> depProjectList;

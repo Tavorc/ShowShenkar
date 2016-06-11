@@ -1,4 +1,4 @@
-package shenkar.ac.il.showshenkar.adapters;
+package il.ac.shenkar.showshenkar.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,14 +14,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import shenkar.ac.il.showshenkar.model.DepImageItem;
-import shenkar.ac.il.showshenkar.R;
+import il.ac.shenkar.showshenkar.R;
+import il.ac.shenkar.showshenkar.model.DepImageItem;
 
 public class DepGridViewAdapter extends ArrayAdapter<DepImageItem> {
 
     private Context context;
     private int layoutResourceId;
-    private ArrayList<DepImageItem> data = new ArrayList<DepImageItem>();
+    private ArrayList<DepImageItem> data = new ArrayList<>();
 
     public DepGridViewAdapter(Context context, int layoutResourceId, ArrayList<DepImageItem> data) {
         super(context, layoutResourceId, data);
