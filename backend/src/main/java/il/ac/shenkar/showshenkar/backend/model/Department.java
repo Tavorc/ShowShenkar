@@ -6,7 +6,7 @@ import com.googlecode.objectify.annotation.Index;
  * Created by:  Gregory Kondratenko on 10/06/2016.
  * Description: Department entity class
  */
-public class Department {
+public class Department extends BaseEntity {
     @Index
     String name;
     String imageUrl;
