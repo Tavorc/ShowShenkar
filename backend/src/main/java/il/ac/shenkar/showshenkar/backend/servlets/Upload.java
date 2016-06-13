@@ -26,6 +26,19 @@ public class Upload extends HttpServlet {
 
         Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(req);
         List<BlobKey> blobKeys = blobs.get("myFile");
+        String fileType = req.getParameter("fType");
+        String fileParams = req.getParameter("fParams");
+
+        switch (fileType){
+            case "LocationImg" :
+                //TODO
+                break;
+            case "Img" :
+                //TODO
+                break;
+            default:
+                break;
+        }
 
         if (blobKeys == null || blobKeys.isEmpty()) {
             res.sendRedirect("/");
