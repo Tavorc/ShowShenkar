@@ -3,13 +3,14 @@ package il.ac.shenkar.showshenkar.backend.model;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by:  Gregory Kondratenko on 10/06/2016.
  * Description: Base Entity class for app content
  */
-public class BaseEntity {
+public class BaseEntity implements Serializable {
 
     @Id
     Long id;

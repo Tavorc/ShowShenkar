@@ -4,8 +4,14 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.config.Named;
+import com.google.appengine.api.memcache.ErrorHandlers;
+import com.google.appengine.api.memcache.Expiration;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 import il.ac.shenkar.showshenkar.backend.OfyService;
 import il.ac.shenkar.showshenkar.backend.model.Department;
@@ -28,11 +34,11 @@ public class DepartmentApi {
 
     @ApiMethod(
             name = "getDepartment",
-            path = "departmentApi/{name}",
+            path = "departmentApi/{id}",
             httpMethod = ApiMethod.HttpMethod.GET
     )
-    public Department getDepartment(@Named("name") String name){
-        return OfyService.ofy().load().type(Department.class).filter("name", name).first().now();
+    public Department getDepartment(@Named("id") Long id){
+        return OfyService.ofy().load().type(Department.class).id(id).now();
     }
 
     @ApiMethod(
@@ -41,7 +47,21 @@ public class DepartmentApi {
             httpMethod = ApiMethod.HttpMethod.GET
     )
     public List<Department> getDepartments(){
-        return OfyService.ofy().load().type(Department.class).list();
+        MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+        syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+
+        String key = "getDepartments";
+
+        if (syncCache.contains(key)){
+            return (List<Department>) syncCache.get(key);
+        }
+
+        List<Department> departments =  OfyService.ofy().load().type(Department.class).list();
+
+        Expiration expiration =  Expiration.byDeltaSeconds((int) TimeUnit.HOURS.toSeconds(3));
+        syncCache.put(key,departments,expiration);
+
+        return departments;
     }
 
     @ApiMethod(

@@ -25,11 +25,11 @@ public class ContentApi {
 
     @ApiMethod(
             name = "getContent",
-            path = "contentApi/{QRId}",
+            path = "contentApi/{id}",
             httpMethod = ApiMethod.HttpMethod.GET
     )
-    public Content getContent(@Named("QRId") String qrId){
-        return OfyService.ofy().load().type(Content.class).filter("QRId", qrId).first().now();
+    public Content getContent(@Named("id") Long id){
+        return OfyService.ofy().load().type(Content.class).filter("id", id).first().now();
     }
 
     @ApiMethod(

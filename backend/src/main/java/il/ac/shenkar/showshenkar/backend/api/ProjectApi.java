@@ -4,8 +4,14 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.config.Named;
+import com.google.appengine.api.memcache.ErrorHandlers;
+import com.google.appengine.api.memcache.Expiration;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 import il.ac.shenkar.showshenkar.backend.OfyService;
 import il.ac.shenkar.showshenkar.backend.model.Project;
@@ -30,8 +36,8 @@ public class ProjectApi {
             path = "projectApi/{id}",
             httpMethod = ApiMethod.HttpMethod.GET
     )
-    public Project getProject(@Named("id") String id){
-        return OfyService.ofy().load().type(Project.class).filter("id", id).first().now();
+    public Project getProject(@Named("id") Long id){
+        return OfyService.ofy().load().type(Project.class).id(id).now();
     }
 
     @ApiMethod(
@@ -40,7 +46,22 @@ public class ProjectApi {
             httpMethod = ApiMethod.HttpMethod.GET
     )
     public List<Project> getProjectsByDepartment(@Named("department") String department){
-        return OfyService.ofy().load().type(Project.class).filter("department", department).list();
+
+        MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+        syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+
+        String key = String.format("getProjectsByDepartment_%s",department);
+
+        if (syncCache.contains(key)){
+            return (List<Project>) syncCache.get(key);
+        }
+
+        List<Project> projects =  OfyService.ofy().load().type(Project.class).filter("department", department).list();
+
+        Expiration expiration =  Expiration.byDeltaSeconds((int) TimeUnit.HOURS.toSeconds(3));
+        syncCache.put(key,projects,expiration);
+
+        return projects;
     }
 
     @ApiMethod(

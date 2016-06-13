@@ -1,5 +1,6 @@
 package il.ac.shenkar.showshenkar.backend.model;
 
+import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Index;
 
@@ -8,25 +9,13 @@ import com.googlecode.objectify.annotation.Index;
  * Description: Base Content Entity class for app content
  */
 @Entity
+@Cache(expirationSeconds=600)
 public class Content extends BaseEntity{
 
-    @Index
-    String QRId;
     String type;
-    Boolean isMedia;
-    Boolean isInfo;
-    Boolean isLocation;
     Media media;
     Info info;
     Location location;
-
-    public String getQRId() {
-        return QRId;
-    }
-
-    public void setQRId(String QRId) {
-        this.QRId = QRId;
-    }
 
     public String getType() {
         return type;
@@ -34,30 +23,6 @@ public class Content extends BaseEntity{
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public Boolean getIsMedia() {
-        return isMedia;
-    }
-
-    public void setIsMedia(Boolean isMedia) {
-        this.isMedia = isMedia;
-    }
-
-    public Boolean getIsInfo() {
-        return isInfo;
-    }
-
-    public void setIsInfo(Boolean isInfo) {
-        this.isInfo = isInfo;
-    }
-
-    public Boolean getIsLocation() {
-        return isLocation;
-    }
-
-    public void setIsLocation(Boolean isLocation) {
-        this.isLocation = isLocation;
     }
 
     public Media getMedia() {

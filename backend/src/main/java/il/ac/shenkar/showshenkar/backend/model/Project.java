@@ -1,5 +1,6 @@
 package il.ac.shenkar.showshenkar.backend.model;
 
+import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Index;
 
@@ -10,15 +11,15 @@ import java.util.List;
  * Description: Projects entity class
  */
 @Entity
+@Cache(expirationSeconds=600)
 public class Project extends BaseEntity {
 
-    @Index
     String name;
     @Index
     String department;
     List<String> studentNames;
-    String locationId;
-    List<String> contentIds;
+    List<String> studentEMail;
+    String contentId;
 
     public String getName() {
         return name;
@@ -44,19 +45,19 @@ public class Project extends BaseEntity {
         this.studentNames = studentNames;
     }
 
-    public String getLocationId() {
-        return locationId;
+    public List<String> getStudentEMail() {
+        return studentEMail;
     }
 
-    public void setLocationId(String locationId) {
-        this.locationId = locationId;
+    public void setStudentEMail(List<String> studentEMail) {
+        this.studentEMail = studentEMail;
     }
 
-    public List<String> getContentIds() {
-        return contentIds;
+    public String getContentIds() {
+        return contentId;
     }
 
-    public void setContentIds(List<String> contentIds) {
-        this.contentIds = contentIds;
+    public void setContentIds(String contentId) {
+        this.contentId = contentId;
     }
 }

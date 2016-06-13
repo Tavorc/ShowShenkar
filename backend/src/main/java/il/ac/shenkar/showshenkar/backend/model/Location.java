@@ -6,6 +6,7 @@ package il.ac.shenkar.showshenkar.backend.model;
  */
 public class Location {
     String name;
+    String description;
     Long lat;
     Long lng;
     String url;
@@ -16,6 +17,14 @@ public class Location {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Long getLat() {
