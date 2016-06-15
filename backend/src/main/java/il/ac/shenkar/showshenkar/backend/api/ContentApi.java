@@ -29,7 +29,7 @@ public class ContentApi {
             httpMethod = ApiMethod.HttpMethod.GET
     )
     public Content getContent(@Named("id") Long id){
-        return OfyService.ofy().load().type(Content.class).filter("id", id).first().now();
+        return OfyService.ofy().load().type(Content.class).id(id).now();
     }
 
     @ApiMethod(
