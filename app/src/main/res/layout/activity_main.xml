@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f0f0f0"
+    android:orientation="vertical"
     tools:context="il.ac.shenkar.showshenkar.activitiesar.showshenkar.MainActivity">
 
     <GridView
         android:id="@+id/gridView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="9"
         android:layout_margin="5dp"
         android:clickable="true"
         android:columnWidth="100dp"
@@ -20,4 +22,34 @@
         android:stretchMode="columnWidth"
         android:verticalSpacing="5dp" />
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layoutDirection="rtl"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:textDirection="rtl">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:id="@+id/btnFavRoutes"
+            android:text="@string/btn_fav_routes"
+            android:onClick="openRoutesActivity" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:id="@+id/btnMyRoutes"
+            android:text="@string/btn_my_routes"
+            android:onClick="openRoutesActivity" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:id="@+id/btnGeneral"
+            android:text="@string/btn_general"/>
+    </LinearLayout>
+
+</LinearLayout>

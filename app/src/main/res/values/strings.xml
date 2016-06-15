@@ -11,4 +11,9 @@
     <string name="dep_7">הנדסת תכנה</string>
     <string name="dep_8">הנדסת תכנה</string>
     <string name="dep_9">הנדסת תכנה</string>
+    <string name="route_name">שם המסלול</string>
+    <string name="btn_general">כללי</string>
+    <string name="btn_my_routes">המסלול שלי</string>
+    <string name="btn_fav_routes">מסלולים מומלצים</string>
+    <string name="title_fav_routes">מסלולים מומלצים</string>
 </resources>

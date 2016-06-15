@@ -21,15 +21,18 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.AudioActivity">
+        <activity android:name=".activities.AudioActivity" />
+        <activity android:name=".activities.DepartmentActivity" />
+        <activity android:name=".activities.VideoActivity" />
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.VideoActivity" />
-        <activity android:name=".activities.MainActivity"></activity>
+        <activity android:name=".activities.ProjectActivity" />
+        <activity android:name=".activities.RoutesActivity"></activity>
     </application>
 
 </manifest>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 
 import java.util.ArrayList;
@@ -92,4 +93,14 @@ public class MainActivity extends AppCompatActivity {
         }
         return imageItems;
     }
+
+    public void openRoutesActivity(View v) {
+        //Create intent
+        Intent intent = new Intent(this, RoutesActivity.class);
+        intent.putExtra("title", ((Button)v).getText().toString());
+
+        //Start details activity
+        startActivity(intent);
+    }
+
 }
