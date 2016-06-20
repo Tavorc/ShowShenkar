@@ -1,7 +1,6 @@
 package il.ac.shenkar.showshenkar.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
@@ -12,7 +11,7 @@ import il.ac.shenkar.showshenkar.R;
 import il.ac.shenkar.showshenkar.adapters.RoutesRecyclerAdapter;
 import il.ac.shenkar.showshenkar.model.Route;
 
-public class RoutesActivity extends AppCompatActivity {
+public class RoutesActivity extends ShenkarActivity {
 
     private ArrayList<Route> mRoutes;
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ShowShenkar</string>
+    <string name="app_name">Show Shenkar</string>
     <string name="dep_project_name">שם הפרויקט</string>
     <string name="dep_project_student">שם הסטודנט</string>
     <string name="dep_1">הנדסת תכנה</string>
@@ -16,4 +16,5 @@
     <string name="btn_my_routes">המסלול שלי</string>
     <string name="btn_fav_routes">מסלולים מומלצים</string>
     <string name="title_fav_routes">מסלולים מומלצים</string>
+    <string name="camera_btn">מצלמה</string>
 </resources>
