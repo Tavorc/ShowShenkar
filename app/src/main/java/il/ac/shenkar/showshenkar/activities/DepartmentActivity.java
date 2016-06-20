@@ -3,12 +3,10 @@ package il.ac.shenkar.showshenkar.activities;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +17,7 @@ import il.ac.shenkar.showshenkar.model.DepProject;
 
 
 
-public class DepartmentActivity extends AppCompatActivity {
+public class DepartmentActivity extends ShenkarActivity {
     private List<DepProject> mProjects;
 
     @Override

@@ -3,7 +3,6 @@ package il.ac.shenkar.showshenkar.activities;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -17,7 +16,7 @@ import il.ac.shenkar.showshenkar.model.DepImageItem;
 
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ShenkarActivity {
 
     private GridView gridView;
     private DepGridViewAdapter gridAdapter;
@@ -102,5 +101,4 @@ public class MainActivity extends AppCompatActivity {
         //Start details activity
         startActivity(intent);
     }
-
 }
