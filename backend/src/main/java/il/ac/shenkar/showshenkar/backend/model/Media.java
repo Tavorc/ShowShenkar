@@ -7,6 +7,7 @@ package il.ac.shenkar.showshenkar.backend.model;
 public class Media {
     String name;
     String url;
+    String imageKey;
 
     public String getName() {
         return name;
@@ -22,5 +23,13 @@ public class Media {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getImageKey() {
+        return imageKey;
+    }
+
+    public void setImageKey(String imageKey) {
+        this.imageKey = imageKey;
     }
 }

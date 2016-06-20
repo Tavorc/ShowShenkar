@@ -19,7 +19,7 @@ public class Project extends BaseEntity {
     String department;
     List<String> studentNames;
     List<String> studentEMail;
-    String contentId;
+    List<String> contentIds;
 
     public String getName() {
         return name;
@@ -53,11 +53,11 @@ public class Project extends BaseEntity {
         this.studentEMail = studentEMail;
     }
 
-    public String getContentIds() {
-        return contentId;
+    public List<String> getContentIds() {
+        return contentIds;
     }
 
-    public void setContentIds(String contentId) {
-        this.contentId = contentId;
+    public void setContentIds(List<String> contentIds) {
+        this.contentIds = contentIds;
     }
 }
