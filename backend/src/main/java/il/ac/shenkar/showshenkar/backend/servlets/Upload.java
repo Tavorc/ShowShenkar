@@ -41,24 +41,28 @@ public class Upload extends HttpServlet {
 
         Content content;
         ImagesService imagesService;
+        String type = req.getParameter("type");
+        String name;
+        String description;
+        String url;
+        String infoText;
+        String projDepartment;
+        String studentNames;
+        String studentEMails;
+        String projectIds;
+        String contentIds;
+        Long lat;
+        Long lng;
 
         Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(req);
         List<BlobKey> blobKeys = blobs.get("myFile");
-        String type = req.getParameter("type");
-        String name = req.getParameter("name");
-        String description = req.getParameter("description");
-        String url = req.getParameter("url");
-        String infoText = req.getParameter("infoText");
-        String projDepartment = req.getParameter("department");
-        String studentNames = req.getParameter("studentNames");
-        String studentEMails = req.getParameter("studentEMails");
-        String projectIds = req.getParameter("projectIds");
-        String contentIds = req.getParameter("contentIds");
-        Long lat = Long.valueOf(req.getParameter("lat"));
-        Long lng = Long.valueOf(req.getParameter("lng"));
 
         switch (type){
             case "LocationImg" :
+                name = req.getParameter("name");
+                lat = Long.valueOf(req.getParameter("lat"));
+                lng = Long.valueOf(req.getParameter("lng"));
+                description = req.getParameter("description");
                 content = new Content();
                 imagesService = ImagesServiceFactory.getImagesService();
                 content.setType("location");
@@ -74,6 +78,7 @@ public class Upload extends HttpServlet {
                 OfyService.ofy().save().entity(content).now();
                 break;
             case "Img" :
+                name = req.getParameter("name");
                 content = new Content();
                 imagesService = ImagesServiceFactory.getImagesService();
                 content.setType("image");
@@ -86,6 +91,8 @@ public class Upload extends HttpServlet {
                 OfyService.ofy().save().entity(content).now();
                 break;
             case "Video" :
+                url = req.getParameter("url");
+                name = req.getParameter("name");
                 content = new Content();
                 content.setType("video");
                 content.setCreated(new Date());
@@ -97,6 +104,8 @@ public class Upload extends HttpServlet {
                 OfyService.ofy().save().entity(content).now();
                 break;
             case "Audio" :
+                url = req.getParameter("url");
+                name = req.getParameter("name");
                 content = new Content();
                 content.setType("audio");
                 content.setCreated(new Date());
@@ -108,6 +117,7 @@ public class Upload extends HttpServlet {
                 OfyService.ofy().save().entity(content).now();
                 break;
             case "Info" :
+                infoText = req.getParameter("infoText");
                 content = new Content();
                 content.setType("info");
                 content.setCreated(new Date());
@@ -118,6 +128,8 @@ public class Upload extends HttpServlet {
                 OfyService.ofy().save().entity(content).now();
                 break;
             case "Route" :
+                name = req.getParameter("name");
+                projectIds = req.getParameter("projectIds");
                 Route route = new Route();
                 route.setCreated(new Date());
                 route.setModified(new Date());
@@ -131,6 +143,11 @@ public class Upload extends HttpServlet {
                 OfyService.ofy().save().entity(route).now();
                 break;
             case "Project" :
+                name = req.getParameter("name");
+                projDepartment = req.getParameter("department");
+                studentNames = req.getParameter("studentNames");
+                studentEMails = req.getParameter("studentEMails");
+                contentIds = req.getParameter("contentIds");
                 Project project = new Project();
                 project.setCreated(new Date());
                 project.setModified(new Date());
@@ -145,6 +162,7 @@ public class Upload extends HttpServlet {
                 OfyService.ofy().save().entity(project).now();
                 break;
             case "Department" :
+                name = req.getParameter("name");
                 Department department = new Department();
                 imagesService = ImagesServiceFactory.getImagesService();
                 department.setCreated(new Date());
