@@ -3,6 +3,9 @@ package il.ac.shenkar.showshenkar.backend.servlets;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ServingUrlOptions;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +40,7 @@ public class Upload extends HttpServlet {
             throws ServletException, IOException {
 
         Content content;
+        ImagesService imagesService;
 
         Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(req);
         List<BlobKey> blobKeys = blobs.get("myFile");
@@ -56,11 +60,12 @@ public class Upload extends HttpServlet {
         switch (type){
             case "LocationImg" :
                 content = new Content();
+                imagesService = ImagesServiceFactory.getImagesService();
                 content.setType("location");
                 content.setCreated(new Date());
                 content.setModified(new Date());
                 Location location = new Location();
-                location.setImageKey(blobKeys.get(0).getKeyString());
+                location.setUrl(imagesService.getServingUrl(ServingUrlOptions.Builder.withBlobKey(blobKeys.get(0))));
                 location.setDescription(description);
                 location.setLat(lat);
                 location.setLng(lng);
@@ -70,12 +75,13 @@ public class Upload extends HttpServlet {
                 break;
             case "Img" :
                 content = new Content();
+                imagesService = ImagesServiceFactory.getImagesService();
                 content.setType("image");
                 content.setCreated(new Date());
                 content.setModified(new Date());
                 Media img = new Media();
                 img.setName(name);
-                img.setImageKey(blobKeys.get(0).getKeyString());
+                img.setUrl(imagesService.getServingUrl(ServingUrlOptions.Builder.withBlobKey(blobKeys.get(0))));
                 content.setMedia(img);
                 OfyService.ofy().save().entity(content).now();
                 break;
@@ -140,10 +146,11 @@ public class Upload extends HttpServlet {
                 break;
             case "Department" :
                 Department department = new Department();
+                imagesService = ImagesServiceFactory.getImagesService();
                 department.setCreated(new Date());
                 department.setModified(new Date());
                 department.setName(name);
-                department.setImageKey(blobKeys.get(0).getKeyString());
+                department.setImageUrl(imagesService.getServingUrl(ServingUrlOptions.Builder.withBlobKey(blobKeys.get(0))));
                 OfyService.ofy().save().entity(department).now();
                 break;
             default:

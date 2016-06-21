@@ -9,7 +9,7 @@ public class Location {
     String description;
     Long lat;
     Long lng;
-    String imageKey;
+    String url;
 
     public String getName() {
         return name;
@@ -43,11 +43,11 @@ public class Location {
         this.lng = lng;
     }
 
-    public String getImageKey() {
-        return imageKey;
+    public String getUrl() {
+        return url;
     }
 
-    public void setImageKey(String imageKey) {
-        this.imageKey = imageKey;
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

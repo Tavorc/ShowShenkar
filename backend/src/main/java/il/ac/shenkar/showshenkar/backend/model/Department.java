@@ -12,7 +12,7 @@ import com.googlecode.objectify.annotation.Index;
 public class Department extends BaseEntity {
     @Index
     String name;
-    String imageKey;
+    String imageUrl;
 
     public String getName() {
         return name;
@@ -22,11 +22,11 @@ public class Department extends BaseEntity {
         this.name = name;
     }
 
-    public String getImageKey() {
-        return imageKey;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageKey(String imageKey) {
-        this.imageKey = imageKey;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
