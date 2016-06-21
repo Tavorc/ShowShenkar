@@ -17,9 +17,6 @@ import com.google.appengine.api.images.ServingUrlOptions;
 
 import il.ac.shenkar.showshenkar.backend.OfyService;
 import il.ac.shenkar.showshenkar.backend.model.Content;
-import il.ac.shenkar.showshenkar.backend.model.Department;
-import il.ac.shenkar.showshenkar.backend.model.Media;
-import il.ac.shenkar.showshenkar.backend.model.Project;
 
 public class Upload extends HttpServlet {
     private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();

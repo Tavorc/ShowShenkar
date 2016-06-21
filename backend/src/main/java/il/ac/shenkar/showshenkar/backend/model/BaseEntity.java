@@ -14,10 +14,6 @@ public class BaseEntity implements Serializable {
 
     @Id
     Long id;
-    @Index
-    Date created;
-    @Index
-    Date modified;
 
     public Long getId() {
         return id;
@@ -27,19 +23,4 @@ public class BaseEntity implements Serializable {
         this.id = id;
     }
 
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getModified() {
-        return modified;
-    }
-
-    public void setModified(Date modified) {
-        this.modified = modified;
-    }
 }
