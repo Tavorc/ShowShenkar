@@ -47,21 +47,7 @@ public class DepartmentApi {
             httpMethod = ApiMethod.HttpMethod.GET
     )
     public List<Department> getDepartments(){
-        MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-        syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
-
-        String key = "getDepartments";
-
-        if (syncCache.contains(key)){
-            return (List<Department>) syncCache.get(key);
-        }
-
-        List<Department> departments =  OfyService.ofy().load().type(Department.class).list();
-
-        Expiration expiration =  Expiration.byDeltaSeconds((int) TimeUnit.HOURS.toSeconds(3));
-        syncCache.put(key,departments,expiration);
-
-        return departments;
+        return OfyService.ofy().load().type(Department.class).list();
     }
 
     @ApiMethod(
@@ -80,6 +66,15 @@ public class DepartmentApi {
 
         OfyService.ofy().save().entity(department).now();
         return department;
+    }
+
+    @ApiMethod(
+            name = "deleteDepartment",
+            path = "departmentApi/{id}",
+            httpMethod = ApiMethod.HttpMethod.DELETE
+    )
+    public void deleteDepartment(@Named("id") Long id){
+        OfyService.ofy().delete().type(Department.class).id(id).now();
     }
 
 }

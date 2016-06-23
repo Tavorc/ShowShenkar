@@ -46,22 +46,7 @@ public class ProjectApi {
             httpMethod = ApiMethod.HttpMethod.GET
     )
     public List<Project> getProjectsByDepartment(@Named("department") String department){
-
-        MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-        syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
-
-        String key = String.format("getProjectsByDepartment_%s",department);
-
-        if (syncCache.contains(key)){
-            return (List<Project>) syncCache.get(key);
-        }
-
-        List<Project> projects =  OfyService.ofy().load().type(Project.class).filter("department", department).list();
-
-        Expiration expiration =  Expiration.byDeltaSeconds((int) TimeUnit.HOURS.toSeconds(3));
-        syncCache.put(key,projects,expiration);
-
-        return projects;
+        return OfyService.ofy().load().type(Project.class).filter("department", department).list();
     }
 
     @ApiMethod(
@@ -96,19 +81,7 @@ public class ProjectApi {
             path = "projectApi/{id}",
             httpMethod = ApiMethod.HttpMethod.DELETE
     )
-    public Project deleteProject(@Named("id") String id){
-        //TODO: update stub
-        return null;
+    public void deleteProject(@Named("id") Long id){
+        OfyService.ofy().delete().type(Project.class).id(id).now();
     }
-
-    @ApiMethod(
-            name = "updateProject",
-            path = "projectApi/{id}",
-            httpMethod = ApiMethod.HttpMethod.PUT
-    )
-    Project updateProject(@Named("id") String id){
-        //TODO: update stub
-        return null;
-    }
-
 }
