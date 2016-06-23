@@ -36,7 +36,7 @@ public class Upload extends HttpServlet {
             String imageUrl = ImagesServiceFactory.getImagesService().getServingUrl(ServingUrlOptions.Builder.withBlobKey(blobKeys.get(0)));
             String id = req.getParameter("id");
             String type = req.getParameter("type");
-            if(Objects.equals(type, "dep")){
+            if(!Objects.equals(type, "dep")){
                 Content content = OfyService.ofy().load().type(Content.class).id(id).now();
                 if(content != null){
                     content.getMedia().setUrl(imageUrl);
