@@ -74,7 +74,7 @@ public class DepartmentApi {
             throw new IllegalStateException("Department is null");
         }
 
-        if (department.getName() != null) {
+        if (department.getId() != null) {
             throw new IllegalStateException("Department already exits");
         }
 
