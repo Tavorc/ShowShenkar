@@ -2,24 +2,33 @@ package il.ac.shenkar.showshenkar.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.json.jackson2.JacksonFactory;
+
+import java.io.IOException;
 import java.util.List;
 
 import il.ac.shenkar.showshenkar.R;
 import il.ac.shenkar.showshenkar.activities.DepartmentActivity;
-import il.ac.shenkar.showshenkar.model.Route;
+import il.ac.shenkar.showshenkar.backend.routeApi.RouteApi;
+import il.ac.shenkar.showshenkar.backend.routeApi.model.Route;
+import il.ac.shenkar.showshenkar.utils.Constants;
 
 public class RoutesRecyclerAdapter extends RecyclerView.Adapter<RoutesRecyclerAdapter.CustomViewHolder> {
-    private List<Route> routes;
+    private List<Route> mRoutes;
     private Context mContext;
 
     public RoutesRecyclerAdapter(Context context, List<Route> routes) {
-        this.routes = routes;
+        this.mRoutes = routes;
         this.mContext = context;
     }
 
@@ -32,14 +41,14 @@ public class RoutesRecyclerAdapter extends RecyclerView.Adapter<RoutesRecyclerAd
 
     @Override
     public void onBindViewHolder(CustomViewHolder customViewHolder, int i) {
-        Route route = routes.get(i);
+        Route route = mRoutes.get(i);
 
         customViewHolder.txtRouteName.setText(route.getName());
     }
 
     @Override
     public int getItemCount() {
-        return (null != routes ? routes.size() : 0);
+        return (null != mRoutes ? mRoutes.size() : 0);
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -57,11 +66,44 @@ public class RoutesRecyclerAdapter extends RecyclerView.Adapter<RoutesRecyclerAd
             Intent intent = new Intent(mContext, DepartmentActivity.class);
             intent.putExtra("title", txtRouteName.getText().toString());
 
-            // TODO: place the right image per route
-            intent.putExtra("image", R.drawable.image_1);
-
             //Start details activity
             mContext.startActivity(intent);
         }
+    }
+
+    public void refresh() {
+        final RouteApi routeApi = new RouteApi.Builder(
+                AndroidHttp.newCompatibleTransport(),
+                new JacksonFactory(),
+                new HttpRequestInitializer() {
+                    @Override
+                    public void initialize(HttpRequest request) throws IOException {
+
+                    }
+                }).setRootUrl(Constants.ROOT_URL).build();
+
+        new AsyncTask<Void, Void, List<Route>>() {
+            @Override
+            protected List<Route> doInBackground(Void... params) {
+                List<Route> routes = null;
+                try {
+                    routes = routeApi.getRoutes().execute().getItems();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return routes;
+            }
+
+            @Override
+            protected void onPostExecute(List<Route> routes) {
+                //show complition in UI
+                //fill grid view with data
+                if (routes != null) {
+                    mRoutes.clear();
+                    mRoutes.addAll(routes);
+                    notifyDataSetChanged();
+                }
+            }
+        }.execute();
     }
 }

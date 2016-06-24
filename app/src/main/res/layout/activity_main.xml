@@ -11,13 +11,14 @@
         android:id="@+id/gridView"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="9"
         android:layout_margin="5dp"
+        android:layout_weight="9"
         android:clickable="true"
         android:columnWidth="100dp"
         android:drawSelectorOnTop="true"
         android:focusable="true"
         android:gravity="center"
+        android:isScrollContainer="true"
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"
         android:verticalSpacing="5dp" />
@@ -26,30 +27,33 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:gravity="center_vertical"
         android:layoutDirection="rtl"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
         android:textDirection="rtl">
+
         <Button
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_weight="1"
             android:id="@+id/btnFavRoutes"
-            android:text="@string/btn_fav_routes"
-            android:onClick="openRoutesActivity" />
-        <Button
             android:layout_width="0dp"
             android:layout_height="80dp"
             android:layout_weight="1"
+            android:onClick="openRoutesActivity"
+            android:text="@string/btn_fav_routes" />
+
+        <Button
             android:id="@+id/btnMyRoutes"
-            android:text="@string/btn_my_routes"
-            android:onClick="openRoutesActivity" />
-        <Button
             android:layout_width="0dp"
             android:layout_height="80dp"
             android:layout_weight="1"
+            android:onClick="openMyRouteActivity"
+            android:text="@string/btn_my_routes" />
+
+        <Button
             android:id="@+id/btnGeneral"
-            android:text="@string/btn_general"/>
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:text="@string/btn_general" />
     </LinearLayout>
 
 </LinearLayout>

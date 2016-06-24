@@ -26,8 +26,20 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:padding="10dp"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
             android:textColor="#fff"
-            android:textSize="20dp" />
+            android:textDirection="rtl" />
+
+        <Button
+            android:id="@+id/btnLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:layoutDirection="rtl"
+            android:onClick="showDepartmentLocation"
+            android:padding="10dp"
+            android:text="@string/btn_dep_location"
+            android:textDirection="rtl" />
     </FrameLayout>
 
 
