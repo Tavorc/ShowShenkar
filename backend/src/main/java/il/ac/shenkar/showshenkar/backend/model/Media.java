@@ -11,8 +11,18 @@ import java.io.Serializable;
  */
 @Embed
 public class Media implements Serializable {
+
+    String type;
     String name;
     String url;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getName() {
         return name;
