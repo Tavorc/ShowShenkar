@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,8 +20,12 @@ import com.google.appengine.api.images.ServingUrlOptions;
 import il.ac.shenkar.showshenkar.backend.OfyService;
 import il.ac.shenkar.showshenkar.backend.model.Content;
 import il.ac.shenkar.showshenkar.backend.model.Department;
+import il.ac.shenkar.showshenkar.backend.model.Media;
 
 public class Upload extends HttpServlet {
+
+    private static final Logger log = Logger.getLogger(Upload.class.getName());
+
     private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
     @Override
@@ -34,23 +39,30 @@ public class Upload extends HttpServlet {
             res.sendRedirect("/");
         } else {
             String imageUrl = ImagesServiceFactory.getImagesService().getServingUrl(ServingUrlOptions.Builder.withBlobKey(blobKeys.get(0)));
-            String id = req.getParameter("id");
+            Long id = Long.valueOf(req.getParameter("id"));
             String type = req.getParameter("type");
-            if(!Objects.equals(type, "dep")){
+            log.info("id: " + id + '\n' + "type: " + type + '\n' + "URL: " + imageUrl + '\n');
+            if(type == null){
                 Content content = OfyService.ofy().load().type(Content.class).id(id).now();
                 if(content != null){
-                    content.getMedia().setUrl(imageUrl);
+                    log.info("Content found: " + content.toString() + '\n');
+                    Media media = new Media();
+                    media.setUrl(imageUrl);
+                    media.setName("");
+                    media.setType("Image");
+                    content.getMedia().add(media);
                     OfyService.ofy().save().entity(content).now();
                 }
             }
             else{
                 Department department = OfyService.ofy().load().type(Department.class).id(id).now();
                 if(department != null){
+                    log.info("Department found: " + department.toString() + '\n');
                     department.setImageUrl(imageUrl);
                     OfyService.ofy().save().entity(department).now();
                 }
             }
-            res.sendRedirect("/serve?blob-key=" + blobKeys.get(0).getKeyString());
+            res.sendRedirect(imageUrl);
         }
     }
 }
