@@ -39,7 +39,8 @@
             android:onClick="showDepartmentLocation"
             android:padding="10dp"
             android:text="@string/btn_dep_location"
-            android:textDirection="rtl" />
+            android:textDirection="rtl"
+            />
     </FrameLayout>
 
 

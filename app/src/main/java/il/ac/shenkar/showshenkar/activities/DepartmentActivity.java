@@ -1,14 +1,16 @@
 package il.ac.shenkar.showshenkar.activities;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,8 @@ public class DepartmentActivity extends ShenkarActivity {
     private Long mDepartmentId;
     private String mDepartmentName;
     private DepProjectsRecyclerAdapter adapter;
+    private Button buttonWhere;
+    private AlertDialog.Builder dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,7 @@ public class DepartmentActivity extends ShenkarActivity {
 
         mDepartmentId = getIntent().getLongExtra("id", 0);
         mDepartmentName = getIntent().getStringExtra("title");
+        buttonWhere=(Button) findViewById(R.id.btnLocation);
         final String imageUrl = getIntent().getStringExtra("image");
 
         TextView titleTextView = (TextView) findViewById(R.id.title);
@@ -81,6 +86,9 @@ public class DepartmentActivity extends ShenkarActivity {
     }
 
     public void showDepartmentLocation(View v) {
+        Intent i = new Intent(this, MapActivity.class);
+        startActivity(i);
+
         // TODO: show department location
     }
 
