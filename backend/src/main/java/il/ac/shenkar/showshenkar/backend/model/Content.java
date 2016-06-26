@@ -4,6 +4,8 @@ import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Index;
 
+import java.util.List;
+
 /**
  * Created by:  Gregory Kondratenko on 10/06/2016.
  * Description: Base Content Entity class for app content
@@ -12,24 +14,15 @@ import com.googlecode.objectify.annotation.Index;
 @Cache(expirationSeconds=600)
 public class Content extends BaseEntity{
 
-    String type;
-    Media media;
+    List<Media> media;
     Info info;
     Location location;
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Media getMedia() {
+    public List<Media> getMedia() {
         return media;
     }
 
-    public void setMedia(Media media) {
+    public void setMedia(List<Media> media) {
         this.media = media;
     }
 
