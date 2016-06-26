@@ -30,7 +30,6 @@ public class ProjectActivity extends YouTubeBaseActivity implements
         YouTubePlayer.OnInitializedListener{
 
     static class ProjectViewHolder {
-
         TextView txtProjectName;
         TextView txtStudentName;
         TextView txtLocation;
