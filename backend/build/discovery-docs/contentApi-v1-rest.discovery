@@ -1,0 +1,227 @@
+{
+ "kind": "discovery#restDescription",
+ "etag": "\"zRMgE0l9nVDW4S28VYYcYQF9UW4/8NwL1dWhtz6vhUoUsqiUkaKO_xA\"",
+ "discoveryVersion": "v1",
+ "id": "contentApi:v1",
+ "name": "contentApi",
+ "version": "v1",
+ "description": "This is an API",
+ "ownerDomain": "backend.showshenkar.shenkar.ac.il",
+ "ownerName": "backend.showshenkar.shenkar.ac.il",
+ "icons": {
+  "x16": "http://www.google.com/images/icons/product/search-16.gif",
+  "x32": "http://www.google.com/images/icons/product/search-32.gif"
+ },
+ "protocol": "rest",
+ "baseUrl": "https://shenkarshow.appspot.com/_ah/api/contentApi/v1/",
+ "basePath": "/_ah/api/contentApi/v1/",
+ "rootUrl": "https://shenkarshow.appspot.com/_ah/api/",
+ "servicePath": "contentApi/v1/",
+ "batchPath": "batch",
+ "parameters": {
+  "alt": {
+   "type": "string",
+   "description": "Data format for the response.",
+   "default": "json",
+   "enum": [
+    "json"
+   ],
+   "enumDescriptions": [
+    "Responses with Content-Type of application/json"
+   ],
+   "location": "query"
+  },
+  "fields": {
+   "type": "string",
+   "description": "Selector specifying which fields to include in a partial response.",
+   "location": "query"
+  },
+  "key": {
+   "type": "string",
+   "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+   "location": "query"
+  },
+  "oauth_token": {
+   "type": "string",
+   "description": "OAuth 2.0 token for the current user.",
+   "location": "query"
+  },
+  "prettyPrint": {
+   "type": "boolean",
+   "description": "Returns response with indentations and line breaks.",
+   "default": "true",
+   "location": "query"
+  },
+  "quotaUser": {
+   "type": "string",
+   "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+   "location": "query"
+  },
+  "userIp": {
+   "type": "string",
+   "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+   "location": "query"
+  }
+ },
+ "auth": {
+  "oauth2": {
+   "scopes": {
+    "https://www.googleapis.com/auth/userinfo.email": {
+     "description": "View your email address"
+    }
+   }
+  }
+ },
+ "schemas": {
+  "Content": {
+   "id": "Content",
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string",
+     "format": "int64"
+    },
+    "info": {
+     "$ref": "Info"
+    },
+    "location": {
+     "$ref": "Location"
+    },
+    "media": {
+     "type": "array",
+     "items": {
+      "$ref": "Media"
+     }
+    }
+   }
+  },
+  "Info": {
+   "id": "Info",
+   "type": "object",
+   "properties": {
+    "text": {
+     "type": "string"
+    }
+   }
+  },
+  "Location": {
+   "id": "Location",
+   "type": "object",
+   "properties": {
+    "description": {
+     "type": "string"
+    },
+    "lat": {
+     "type": "string",
+     "format": "int64"
+    },
+    "lng": {
+     "type": "string",
+     "format": "int64"
+    },
+    "name": {
+     "type": "string"
+    },
+    "url": {
+     "type": "string"
+    }
+   }
+  },
+  "Media": {
+   "id": "Media",
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string"
+    },
+    "type": {
+     "type": "string"
+    },
+    "url": {
+     "type": "string"
+    }
+   }
+  }
+ },
+ "methods": {
+  "deleteContent": {
+   "id": "contentApi.deleteContent",
+   "path": "contentApi/{id}",
+   "httpMethod": "DELETE",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "response": {
+    "$ref": "Content"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getContent": {
+   "id": "contentApi.getContent",
+   "path": "contentApi/{id}",
+   "httpMethod": "GET",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "response": {
+    "$ref": "Content"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "setContent": {
+   "id": "contentApi.setContent",
+   "path": "contentApi",
+   "httpMethod": "POST",
+   "request": {
+    "$ref": "Content",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "Content"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "updateContent": {
+   "id": "contentApi.updateContent",
+   "path": "contentApi/{id}",
+   "httpMethod": "PUT",
+   "parameters": {
+    "id": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "id"
+   ],
+   "response": {
+    "$ref": "Content"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  }
+ }
+}
