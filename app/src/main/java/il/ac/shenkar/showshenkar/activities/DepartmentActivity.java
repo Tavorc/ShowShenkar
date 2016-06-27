@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +89,8 @@ public class DepartmentActivity extends ShenkarActivity {
     public void showDepartmentLocation(View v) {
         Intent i = new Intent(this, MapActivity.class);
         startActivity(i);
+
+
 
         // TODO: show department location
     }
