@@ -1,6 +1,7 @@
 package il.ac.shenkar.showshenkar.backend.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -36,20 +37,24 @@ public class Upload extends HttpServlet {
         List<BlobKey> blobKeys = blobs.get("myFile");
 
         if (blobKeys == null || blobKeys.isEmpty()) {
+            
             res.sendRedirect("/");
         } else {
             String imageUrl = ImagesServiceFactory.getImagesService().getServingUrl(ServingUrlOptions.Builder.withBlobKey(blobKeys.get(0)));
             Long id = Long.valueOf(req.getParameter("id"));
             String type = req.getParameter("type");
             log.info("id: " + id + '\n' + "type: " + type + '\n' + "URL: " + imageUrl + '\n');
-            if(type == null){
+            if(Objects.equals(type, "")){
                 Content content = OfyService.ofy().load().type(Content.class).id(id).now();
                 if(content != null){
                     log.info("Content found: " + content.toString() + '\n');
                     Media media = new Media();
                     media.setUrl(imageUrl);
-                    media.setName("");
                     media.setType("Image");
+                    if(content.getMedia() == null){
+                        List<Media> mediaList = new ArrayList<>();
+                        content.setMedia(mediaList);
+                    }
                     content.getMedia().add(media);
                     OfyService.ofy().save().entity(content).now();
                 }
