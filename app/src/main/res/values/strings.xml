@@ -18,4 +18,5 @@
     <string name="title_fav_routes">מסלולים מומלצים</string>
     <string name="camera_btn">מצלמה</string>
     <string name="btn_dep_location">איפה המחלקה?</string>
+    <string name="department">מיקום מחלקה</string>
 </resources>
