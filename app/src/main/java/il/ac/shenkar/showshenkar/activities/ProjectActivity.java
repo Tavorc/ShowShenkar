@@ -20,16 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 //import com.google.android.youtube.player.YouTubeBaseActivity;
-import com.google.android.youtube.player.YouTubeBaseActivity;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerView;
-import com.google.api.client.extensions.android.http.AndroidHttp;
 
 import java.io.IOException;
 
 import il.ac.shenkar.showshenkar.R;
-import il.ac.shenkar.showshenkar.backend.contentApi.ContentApi;
 
 public class ProjectActivity extends AppCompatActivity {
 
@@ -76,7 +70,7 @@ public class ProjectActivity extends AppCompatActivity {
         playVd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Intent i = new Intent(ProjectActivity.this, MainYouTube.class);
+               Intent i = new Intent(ProjectActivity.this, YouTubeActivity.class);
                 startActivity(i);
             }
         });

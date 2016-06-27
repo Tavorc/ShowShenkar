@@ -41,6 +41,7 @@
             android:allowBackup="true"
             />
         <activity android:name=".activities.MyRouteActivity"></activity>
+        <activity android:name=".activities.YouTubeActivity"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
