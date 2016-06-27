@@ -4,10 +4,12 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,17 +19,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
+import com.google.api.client.extensions.android.http.AndroidHttp;
 
 import java.io.IOException;
 
 import il.ac.shenkar.showshenkar.R;
+import il.ac.shenkar.showshenkar.backend.contentApi.ContentApi;
 
-public class ProjectActivity extends YouTubeBaseActivity implements
-        YouTubePlayer.OnInitializedListener{
+public class ProjectActivity extends AppCompatActivity {
 
     static class ProjectViewHolder {
         TextView txtProjectName;
@@ -46,53 +50,39 @@ public class ProjectActivity extends YouTubeBaseActivity implements
         }
     }
 
-    public static final String API_KEY = "AIzaSyCBu6Kh-XTr-XW3D1w8ZzlpFfEBmCotjuk";
+
     Button playVd;
     Button playSD;
-    private YouTubePlayerView playtube;
-    private YouTubePlayer youTubeP;
+
     private MediaPlayer mediaPlayer;
     private double startTime = 0;
     private AlertDialog.Builder dialog;
-
     private ProjectViewHolder views;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
-
         // initialize all the project's views
         views = new ProjectViewHolder(this);
-
         String project = getIntent().getStringExtra("project");
         views.txtProjectName.setText(project);
         String student = getIntent().getStringExtra("student");
         views.txtStudentName.setText(student);
-        playtube=(YouTubePlayerView) findViewById(R.id.viewVideo);
-        playtube.setVisibility(View.GONE);
         mediaPlayer = new MediaPlayer();
         playVd=(Button) findViewById(R.id.buttonVideo);
         playSD=(Button) findViewById(R.id.buttonSoundM);
         dialog=new AlertDialog.Builder(this);
-        playtube.initialize(API_KEY, this);
         playVd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                youTubeP.setFullscreen(true);
+               Intent i = new Intent(ProjectActivity.this, MainYouTube.class);
+                startActivity(i);
             }
         });
 
     }
 
-    @Override
-    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-        youTubeP=youTubePlayer;
-        youTubePlayer.cueVideo("JRfuAukYTKg");
-    }
-    @Override
-    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-    }
 
     public void shareProject(View v)
     {

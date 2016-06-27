@@ -105,12 +105,7 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <com.google.android.youtube.player.YouTubePlayerView
-        android:id="@+id/viewVideo"
-        android:layout_width="wrap_content"
-        android:layout_height="300dp"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+
 
 
 </FrameLayout>
