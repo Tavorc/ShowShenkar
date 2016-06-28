@@ -86,7 +86,8 @@ public class DepartmentActivity extends ShenkarActivity {
         //mProjects.add(new DepProject("project 1", "student 1"));
     }
 
-    public void showDepartmentLocation(View v) {
+    public void showDepartmentLocation( View v ) {
+        // try to get v.getID() to find from which department was the click
         Intent i = new Intent(this, MapActivity.class);
         startActivity(i);
 
