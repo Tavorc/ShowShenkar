@@ -11,7 +11,7 @@ import com.google.android.youtube.player.YouTubePlayerView;
 
 import il.ac.shenkar.showshenkar.R;
 
-public class MainYouTube   extends YouTubeBaseActivity implements
+public class YouTubeActivity extends YouTubeBaseActivity implements
 
         YouTubePlayer.OnInitializedListener {
 
