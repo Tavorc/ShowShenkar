@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -24,6 +23,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,21 +39,21 @@ public class MapActivity extends FragmentActivity implements ActivityCompat.OnRe
 
     private Location mLastLocation;
 
-    private static final int TRANSPARENCY_MAX = 100;
+    private static final LatLng PERNIK = new LatLng(32.09006641826965 , 34.80311807245016);
+
+    private static final LatLng MITSHLE = new LatLng(32.09005278383782, 34.80274926871061);
+
+    private static final LatLng INTERIOR_DESIGN = new LatLng(32.09030615669672, 34.803183311601877);
 
     private static final LatLng SHENKAR = new LatLng(32.09039421212218, 34.8030037432909);
-    private static final LatLng ELIT = new LatLng(32.08264557800064, 34.80440218001604);
 
-    private static final LatLng SHENKAR_OVERVIEW = new LatLng(SHENKAR.latitude - 0.001, SHENKAR.longitude - 0.001);
+    private static final LatLng ELIT = new LatLng(32.08264557800064, 34.80440218001604);
 
     private final List<BitmapDescriptor> mImages = new ArrayList<BitmapDescriptor>();
 
     private GroundOverlay mGroundOverlay;
+
     private GroundOverlay mGroundOverlay2;
-
-    private GroundOverlay mGroundOverlayRotated;
-
-    private SeekBar mTransparencyBar;
 
     private int mCurrentEntry = 0;
 
@@ -115,6 +115,11 @@ public class MapActivity extends FragmentActivity implements ActivityCompat.OnRe
         mGroundOverlay2 = depatmentMap.addGroundOverlay(new GroundOverlayOptions()
                 .image(mImages.get(1))
                 .position(ELIT, 190f, 150f));
+
+        depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("des")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        depatmentMap.addMarker(new MarkerOptions().position(MITSHLE).title("Mitshle").snippet("des"));
+        depatmentMap.addMarker(new MarkerOptions().position(INTERIOR_DESIGN).title("Interior Design").snippet("des"));
     }
 
     protected void onStart() {
