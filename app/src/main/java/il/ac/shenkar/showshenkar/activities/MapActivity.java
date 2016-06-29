@@ -126,9 +126,9 @@ public class MapActivity extends FragmentActivity implements ActivityCompat.OnRe
             depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("Design MDes curriculum")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         }else if(mDepartmentId == 5085604337418240L){ // admission-requirements-engineering
-            depatmentMap.addMarker(new MarkerOptions().position(MITSHLE).title("Mitshle").snippet("Admission requirements engineering"));
+            depatmentMap.addMarker(new MarkerOptions().position(MITSHLE).title("Mitchell").snippet("Admission requirements engineering"));
         }else if(mDepartmentId == 5644406560391168L){ // design-visual-communication-contact
-            depatmentMap.addMarker(new MarkerOptions().position(MITSHLE).title("Mitshle").snippet("Design visual communication"));
+            depatmentMap.addMarker(new MarkerOptions().position(MITSHLE).title("Mitchell").snippet("Design visual communication"));
         }else if(mDepartmentId == 5649391675244544L){ // design-interior-building-and-environment-registaration
             depatmentMap.addMarker(new MarkerOptions().position(INTERIOR_DESIGN).title("Interior Design").snippet("Design interior building and environment registaration"));
         }else if(mDepartmentId == 5654313976201216L){ // design-jewelry-department
