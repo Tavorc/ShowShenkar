@@ -19,6 +19,8 @@
     <string name="camera_btn">מצלמה</string>
     <string name="btn_dep_location">איפה המחלקה?</string>
     <string name="department">מיקום מחלקה</string>
+    <string name="project_name">שם פרוייקט</string>
+    <string name="project_location">מיקום פרוייקט</string>
 
 
     <!--    Permissions    -->
