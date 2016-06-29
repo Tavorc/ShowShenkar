@@ -12,13 +12,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.Api;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import il.ac.shenkar.showshenkar.R;
 import il.ac.shenkar.showshenkar.adapters.DepProjectsRecyclerAdapter;
+import il.ac.shenkar.showshenkar.backend.contentApi.ContentApi;
+import il.ac.shenkar.showshenkar.backend.contentApi.model.Content;
 import il.ac.shenkar.showshenkar.backend.departmentApi.model.Department;
 import il.ac.shenkar.showshenkar.backend.projectApi.model.Project;
+import il.ac.shenkar.showshenkar.model.DBHelper;
 import il.ac.shenkar.showshenkar.utils.BitmapDownloader;
 
 
@@ -89,10 +95,8 @@ public class DepartmentActivity extends ShenkarActivity {
     public void showDepartmentLocation( View v ) {
         // try to get v.getID() to find from which department was the click
         Intent i = new Intent(this, MapActivity.class);
+        i.putExtra("id", mDepartmentId);
         startActivity(i);
-
-
-
         // TODO: show department location
     }
 

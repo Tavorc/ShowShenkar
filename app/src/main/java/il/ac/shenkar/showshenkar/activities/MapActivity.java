@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -38,6 +39,8 @@ public class MapActivity extends FragmentActivity implements ActivityCompat.OnRe
     private GoogleApiClient mGoogleApiClient;
 
     private Location mLastLocation;
+
+    private Long mDepartmentId;
 
     private static final LatLng PERNIK = new LatLng(32.09006641826965 , 34.80311807245016);
 
@@ -75,6 +78,8 @@ public class MapActivity extends FragmentActivity implements ActivityCompat.OnRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        // Set department id
+        mDepartmentId = getIntent().getLongExtra("id", 0);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.department_map);
@@ -101,7 +106,7 @@ public class MapActivity extends FragmentActivity implements ActivityCompat.OnRe
         // Register a listener to respond to clicks on GroundOverlays.
         //depatmentMap.setOnGroundOverlayClickListener(this);
 
-        depatmentMap.moveCamera(CameraUpdateFactory.newLatLngZoom(  SHENKAR  , 18  ));
+        depatmentMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SHENKAR, 18));
 
         mImages.clear();
         mImages.add(BitmapDescriptorFactory.fromResource(R.mipmap.overview));
@@ -109,17 +114,43 @@ public class MapActivity extends FragmentActivity implements ActivityCompat.OnRe
 
         // Add a large overlay at Newark on top of the smaller overlay.
         mGroundOverlay = depatmentMap.addGroundOverlay(new GroundOverlayOptions()
-                .image(mImages.get(mCurrentEntry))
+                .image(mImages.get(0))
                 .position(SHENKAR, 190f, 150f));
 
         mGroundOverlay2 = depatmentMap.addGroundOverlay(new GroundOverlayOptions()
                 .image(mImages.get(1))
                 .position(ELIT, 190f, 150f));
 
-        depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("des")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        depatmentMap.addMarker(new MarkerOptions().position(MITSHLE).title("Mitshle").snippet("des"));
-        depatmentMap.addMarker(new MarkerOptions().position(INTERIOR_DESIGN).title("Interior Design").snippet("des"));
+        // Set marker by department id
+        if(mDepartmentId == 5085604337418240L){ // design-MDes-curriculum
+            depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("Design MDes curriculum")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        }else if(mDepartmentId == 5085604337418240L){ // admission-requirements-engineering
+            depatmentMap.addMarker(new MarkerOptions().position(MITSHLE).title("Mitshle").snippet("Admission requirements engineering"));
+        }else if(mDepartmentId == 5644406560391168L){ // design-visual-communication-contact
+            depatmentMap.addMarker(new MarkerOptions().position(MITSHLE).title("Mitshle").snippet("Design visual communication"));
+        }else if(mDepartmentId == 5649391675244544L){ // design-interior-building-and-environment-registaration
+            depatmentMap.addMarker(new MarkerOptions().position(INTERIOR_DESIGN).title("Interior Design").snippet("Design interior building and environment registaration"));
+        }else if(mDepartmentId == 5654313976201216L){ // design-jewelry-department
+            depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("Design jewelry department")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        }else if(mDepartmentId == 5659313586569216L){ // design-textile-department
+            depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("Design textile department")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        }else if(mDepartmentId == 5682617542246400L){ // multi-disciplinary-art-school
+            depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("Multi disciplinary art school")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        }else if(mDepartmentId == 5707702298738688L){ // engineering-software-department
+            depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("Engineering software department")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        }else if(mDepartmentId == 5722646637445120L){ // design-fashion-department
+            depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("Design fashion department")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        }else{
+            depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("Pernik")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        }
+
     }
 
     protected void onStart() {
