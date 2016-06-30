@@ -73,7 +73,6 @@ public class DepProjectsRecyclerAdapter extends RecyclerView.Adapter<DepProjects
 
         @Override
         public void onClick(View v) {
-
             //Create intent
             Intent intent = new Intent(mContext, ProjectActivity.class);
             intent.putExtra("project", txtProjectName.getText().toString());

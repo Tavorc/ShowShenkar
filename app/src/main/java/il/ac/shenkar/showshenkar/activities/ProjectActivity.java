@@ -19,11 +19,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import com.google.android.youtube.player.YouTubeBaseActivity;
-
 import java.io.IOException;
 
 import il.ac.shenkar.showshenkar.R;
+
+//import com.google.android.youtube.player.YouTubeBaseActivity;
 
 public class ProjectActivity extends AppCompatActivity {
 
@@ -52,6 +52,8 @@ public class ProjectActivity extends AppCompatActivity {
     private double startTime = 0;
     private AlertDialog.Builder dialog;
     private ProjectViewHolder views;
+    private Long id;
+    private String project;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +61,13 @@ public class ProjectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_project);
         // initialize all the project's views
         views = new ProjectViewHolder(this);
-        String project = getIntent().getStringExtra("project");
+        project = getIntent().getStringExtra("project");
         views.txtProjectName.setText(project);
         String student = getIntent().getStringExtra("student");
         views.txtStudentName.setText(student);
+        id = getIntent().getLongExtra("id",0);
+        //test
+        //Toast.makeText(this, id.toString() , Toast.LENGTH_LONG).show();
         mediaPlayer = new MediaPlayer();
         playVd=(Button) findViewById(R.id.buttonVideo);
         playSD=(Button) findViewById(R.id.buttonSoundM);
@@ -86,8 +91,11 @@ public class ProjectActivity extends AppCompatActivity {
 
     public void showLocation(View v)
     {
-        // TODO: implement show location
-        Toast.makeText(this, "הראה מיקום", Toast.LENGTH_LONG).show();
+        Intent toProjectLocationMap = new Intent(this, ProjectLocationMap.class);
+        toProjectLocationMap.putExtra("name", project);
+        toProjectLocationMap.putExtra("id", id);
+        //toProjectLocationMap.putExtra("LL", new LatLng(0.0,0.0));
+        startActivity(toProjectLocationMap);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

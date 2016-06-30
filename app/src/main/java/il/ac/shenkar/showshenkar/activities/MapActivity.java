@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -32,7 +30,7 @@ import java.util.List;
 import il.ac.shenkar.showshenkar.R;
 import il.ac.shenkar.showshenkar.utils.PermissionUtils;
 
-public class MapActivity extends FragmentActivity implements ActivityCompat.OnRequestPermissionsResultCallback,OnMapReadyCallback,GoogleMap.OnMyLocationButtonClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MapActivity extends ShenkarActivity implements ActivityCompat.OnRequestPermissionsResultCallback,OnMapReadyCallback,GoogleMap.OnMyLocationButtonClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap depatmentMap;
 
@@ -122,6 +120,7 @@ public class MapActivity extends FragmentActivity implements ActivityCompat.OnRe
                 .position(ELIT, 190f, 150f));
 
         // Set marker by department id
+        // ----- need to change everything to hebrew ------
         if(mDepartmentId == 5085604337418240L){ // design-MDes-curriculum
             depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("Design MDes curriculum")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
@@ -192,6 +191,7 @@ public class MapActivity extends FragmentActivity implements ActivityCompat.OnRe
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(this, "Connection problem", Toast.LENGTH_LONG).show();
 
     }
 
@@ -229,7 +229,7 @@ public class MapActivity extends FragmentActivity implements ActivityCompat.OnRe
 
     @Override
     public boolean onMyLocationButtonClick() {
-        Toast.makeText(this, "Welcome to ShowShenkar Map", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Welcome to ShowShenkar Map", Toast.LENGTH_SHORT).show();
         // Return false so that we don't consume the event and the default behavior still occurs
         // (the camera animates to the user's current position).
         return false;

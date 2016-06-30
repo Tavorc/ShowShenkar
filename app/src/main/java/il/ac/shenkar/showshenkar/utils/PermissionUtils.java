@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import il.ac.shenkar.showshenkar.R;
 import il.ac.shenkar.showshenkar.activities.MapActivity;
+import il.ac.shenkar.showshenkar.activities.ProjectLocationMap;
 
 /**
  * Utility class for access to runtime permissions.
@@ -39,6 +40,23 @@ public abstract class PermissionUtils {
      * be shown to the user, displays a dialog that triggers the request.
      */
     public static void requestPermission(MapActivity activity, int requestId,
+                                         String permission, boolean finishActivity) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
+            // Display a dialog with rationale.
+            PermissionUtils.RationaleDialog.newInstance(requestId, finishActivity)
+                    .show(activity.getSupportFragmentManager(), "dialog");
+        } else {
+            // Location permission has not been granted yet, request it.
+            ActivityCompat.requestPermissions(activity, new String[]{permission}, requestId);
+
+        }
+    }
+
+    /**
+     * Requests the fine location permission. If a rationale with an additional explanation should
+     * be shown to the user, displays a dialog that triggers the request.
+     */
+    public static void requestPermission(ProjectLocationMap activity, int requestId,
                                          String permission, boolean finishActivity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
             // Display a dialog with rationale.
