@@ -100,7 +100,6 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_margin="5dp"
-                android:onClick="playSound"
                 android:text="שמע" />
         </RelativeLayout>
     </LinearLayout>
