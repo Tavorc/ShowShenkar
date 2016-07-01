@@ -17,9 +17,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 
 import java.io.IOException;
@@ -86,44 +88,41 @@ public class ProjectActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final Dialog dialogT = new Dialog(context);
                 dialogT.setContentView(R.layout.custom);
-                dialogT.setTitle("האזן");
-                Button dialogButtonPlay = (Button) dialogT.findViewById(R.id.buttonPlaySound);
+                ImageButton dialogButtonPlay = (ImageButton) dialogT.findViewById(R.id.imageButtonPlay);
                 // if button is clicked, close the custom dialog
                 dialogButtonPlay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(), "מנגן", Toast.LENGTH_SHORT).show();
                         String url = "http://programmerguru.com/android-tutorial/wp-content/uploads/2013/04/hosannatelugu.mp3";
                         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                         try {
                             mediaPlayer.setDataSource(url);
                         } catch (IllegalArgumentException e) {
-                            Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG).show();
+
                         } catch (SecurityException e) {
-                            Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG).show();
+
                         } catch (IllegalStateException e) {
-                            Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG).show();
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         try {
                             mediaPlayer.prepare();
                         } catch (IllegalStateException e) {
-                            Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG).show();
+
                         } catch (IOException e) {
-                            Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG).show();
+
                         }
                         mediaPlayer.start();
                     }
                 });
 
-                Button dialogButtonStop = (Button) dialogT.findViewById(R.id.buttonStop);
+                ImageButton dialogButtonStop = (ImageButton) dialogT.findViewById(R.id.imageButtonStop);
                 // if button is clicked, close the custom dialog
                 dialogButtonStop.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(), "הפסיק", Toast.LENGTH_SHORT).show();
                         mediaPlayer.stop();
                     }
                 });
