@@ -13,7 +13,6 @@ import java.io.Serializable;
 public class Media implements Serializable {
 
     String type;
-    String name;
     String url;
 
     public String getType() {
@@ -22,14 +21,6 @@ public class Media implements Serializable {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUrl() {
