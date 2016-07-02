@@ -12,7 +12,8 @@ import java.util.List;
 import il.ac.shenkar.showshenkar.R;
 import il.ac.shenkar.showshenkar.adapters.DepGridViewAdapter;
 import il.ac.shenkar.showshenkar.backend.departmentApi.model.Department;
-
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 
 public class MainActivity extends ShenkarActivity {
 
@@ -24,7 +25,8 @@ public class MainActivity extends ShenkarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
         mDepartments = new ArrayList<>();
         gridView = (GridView) findViewById(R.id.gridView);
         gridAdapter = new DepGridViewAdapter(this, R.layout.dep_grid_item_layout, mDepartments);

@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,12 +22,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.facebook.FacebookSdk;
+import com.facebook.share.model.ShareLinkContent;
 
 
-
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 import il.ac.shenkar.showshenkar.R;
+import il.ac.shenkar.showshenkar.model.DBHelper;
 
 //import com.google.android.youtube.player.YouTubeBaseActivity;
 
@@ -60,6 +65,7 @@ public class ProjectActivity extends AppCompatActivity {
     private Long id;
     private String project;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +85,7 @@ public class ProjectActivity extends AppCompatActivity {
         playVd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                Intent i = new Intent(ProjectActivity.this, YouTubeActivity.class);
                 startActivity(i);
             }
@@ -133,9 +140,24 @@ public class ProjectActivity extends AppCompatActivity {
     }
     public void shareProject(View v)
     {
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        Uri screenshotUri = Uri.parse("android.resource://il.ac.shenkar.showshenkar.activities/*");
+        try {
+            InputStream stream = getContentResolver().openInputStream(screenshotUri);
+        }
+
+        catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+      sharingIntent.setType("image/jpeg");
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+        startActivity(Intent.createChooser(sharingIntent, "Share image using"));
         // TODO: implement share project
         Toast.makeText(this, "שתף פרויקט", Toast.LENGTH_LONG).show();
     }
+
 
     public void showLocation(View v)
     {
