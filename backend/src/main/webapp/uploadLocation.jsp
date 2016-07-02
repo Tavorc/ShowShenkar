@@ -11,9 +11,11 @@
         <title>Upload Test</title>
     </head>
     <body>
-        <form action="<%= blobstoreService.createUploadUrl("/upload") %>" method="post" enctype="multipart/form-data">
+        <form action="<%= blobstoreService.createUploadUrl("/uploadLocaition") %>" method="post" enctype="multipart/form-data">
             <label>id</label><input type="text" name="id"><br><br>
-            <label>type</label><input type="text" name="type"><br><br>
+            <label>lat</label><input type="text" name="lat"><br><br>
+            <label>lng</label><input type="text" name="lng"><br><br>
+            <label>description</label><input type="text" name="description"><br><br>
             <label>myFile</label><input type="file" name="myFile"><br><br>
             <input type="submit" value="Submit">
         </form>

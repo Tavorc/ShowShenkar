@@ -38,7 +38,7 @@ public class Upload extends HttpServlet {
 
         if (blobKeys == null || blobKeys.isEmpty()) {
             
-            res.sendRedirect("/");
+            res.sendRedirect("/uploadImage.jsp?updated=no");
         } else {
             String imageUrl = ImagesServiceFactory.getImagesService().getServingUrl(ServingUrlOptions.Builder.withBlobKey(blobKeys.get(0)));
             Long id = Long.valueOf(req.getParameter("id"));
@@ -67,7 +67,7 @@ public class Upload extends HttpServlet {
                     OfyService.ofy().save().entity(department).now();
                 }
             }
-            res.sendRedirect(imageUrl);
+            res.sendRedirect("/uploadImage.jsp?updated=yes");
         }
     }
 }

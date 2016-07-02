@@ -10,19 +10,10 @@ import java.io.Serializable;
  */
 @Embed
 public class Location implements Serializable {
-    String name;
     String description;
     Long lat;
     Long lng;
     String url;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getDescription() {
         return description;

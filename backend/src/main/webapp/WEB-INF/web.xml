@@ -36,8 +36,8 @@
     </servlet>
 
     <servlet>
-        <servlet-name>Serve</servlet-name>
-        <servlet-class>il.ac.shenkar.showshenkar.backend.servlets.Serve</servlet-class>
+        <servlet-name>UploadLocation</servlet-name>
+        <servlet-class>il.ac.shenkar.showshenkar.backend.servlets.UploadLocation</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -46,8 +46,8 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>Serve</servlet-name>
-        <url-pattern>/serve</url-pattern>
+        <servlet-name>UploadLocation</servlet-name>
+        <url-pattern>/uploadLocation</url-pattern>
     </servlet-mapping>
 
 </web-app>
