@@ -2,15 +2,16 @@ package il.ac.shenkar.showshenkar.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import il.ac.shenkar.showshenkar.R;
-import il.ac.shenkar.showshenkar.adapters.IntentIntegrator;
-import il.ac.shenkar.showshenkar.adapters.IntentResult;
 
 public class ShenkarActivity extends AppCompatActivity {
 
@@ -28,27 +29,38 @@ public class ShenkarActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_camera)
         {
-            OpenScanner();
+            OpenScanner();  //call for the scanner func
         }
         return true;
     }
 
-    public void OpenScanner()
-    {
-        IntentIntegrator scanIntegrator = new IntentIntegrator(this);
-        scanIntegrator.initiateScan();
+    /*
+    * calling for the scanner to start and using zxing package for different customize options
+    * */
+    public void OpenScanner(){
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+        integrator.setPrompt("waiting for code to scan");
+        integrator.setOrientationLocked(true);
+        integrator.setBeepEnabled(true);
+        integrator.initiateScan();
     }
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanningResult != null) {
-            String scanContent = scanningResult.getContents();
-            //String scanFormat = scanningResult.getFormatName();
-            Qrlocation = scanContent;
-        }
-        else{
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "No scan data received!", Toast.LENGTH_SHORT);
-            toast.show();
+
+    /*
+    * working the result of the scan*/
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Log.d("MainActivity", "Cancelled scan");
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Log.d("MainActivity", "Scanned");
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+            Qrlocation = result.getContents();
         }
     }
 }
