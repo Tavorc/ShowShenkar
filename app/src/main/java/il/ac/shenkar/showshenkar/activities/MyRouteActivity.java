@@ -9,7 +9,7 @@ import java.util.List;
 import il.ac.shenkar.showshenkar.R;
 import il.ac.shenkar.showshenkar.model.DepProject;
 
-public class MyRouteActivity extends AppCompatActivity {
+public class MyRouteActivity extends ShenkarActivity {
     private List<DepProject> mProjects;
 
     @Override

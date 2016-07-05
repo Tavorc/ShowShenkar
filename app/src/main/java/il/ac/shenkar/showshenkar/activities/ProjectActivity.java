@@ -35,7 +35,7 @@ import il.ac.shenkar.showshenkar.model.DBHelper;
 
 //import com.google.android.youtube.player.YouTubeBaseActivity;
 
-public class ProjectActivity extends AppCompatActivity {
+public class ProjectActivity extends ShenkarActivity {
 
     final Context context = this;
     static class ProjectViewHolder {
@@ -166,27 +166,5 @@ public class ProjectActivity extends AppCompatActivity {
         toProjectLocationMap.putExtra("id", id);
         //toProjectLocationMap.putExtra("LL", new LatLng(0.0,0.0));
         startActivity(toProjectLocationMap);
-    }
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.action_bar_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_camera)
-        {
-            // TODO: implement camera QR logic
-            Toast.makeText(this, R.string.camera_btn, Toast.LENGTH_LONG).show();
-        }
-
-        return true;
     }
 }
