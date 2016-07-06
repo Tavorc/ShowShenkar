@@ -2,12 +2,16 @@ package il.ac.shenkar.showshenkar.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -23,11 +27,20 @@ import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.json.jackson2.JacksonFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import il.ac.shenkar.showshenkar.R;
+import il.ac.shenkar.showshenkar.backend.departmentApi.DepartmentApi;
+import il.ac.shenkar.showshenkar.backend.departmentApi.model.Department;
+import il.ac.shenkar.showshenkar.utils.Constants;
 import il.ac.shenkar.showshenkar.utils.PermissionUtils;
 
 public class MapActivity extends ShenkarActivity implements ActivityCompat.OnRequestPermissionsResultCallback,OnMapReadyCallback,GoogleMap.OnMyLocationButtonClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -50,11 +63,7 @@ public class MapActivity extends ShenkarActivity implements ActivityCompat.OnReq
 
     private static final LatLng ELIT = new LatLng(32.08264557800064, 34.80440218001604);
 
-    private final List<BitmapDescriptor> mImages = new ArrayList<BitmapDescriptor>();
-
     private GroundOverlay mGroundOverlay;
-
-    private GroundOverlay mGroundOverlay2;
 
     private int mCurrentEntry = 0;
 
@@ -70,6 +79,8 @@ public class MapActivity extends ShenkarActivity implements ActivityCompat.OnReq
      * {@link #onRequestPermissionsResult(int, String[], int[])}.
      */
     private boolean mPermissionDenied = false;
+
+    private Department _department = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +103,87 @@ public class MapActivity extends ShenkarActivity implements ActivityCompat.OnReq
                     .build();
         }
 
+        // Loads department
+        LoadDepartmentById(mDepartmentId);
+
+    }
+
+    /*
+    *   Loads department by id
+    * */
+    public void LoadDepartmentById(final Long id){
+        final DepartmentApi departmentApi = new DepartmentApi.Builder(
+                AndroidHttp.newCompatibleTransport(),
+                new JacksonFactory(),
+                new HttpRequestInitializer() {
+                    @Override
+                    public void initialize(HttpRequest request) throws IOException {
+
+                    }
+                }).setRootUrl(Constants.ROOT_URL).build();
+
+        new AsyncTask<Void, Void, Department>() {
+            @Override
+            protected Department doInBackground(Void... params) {
+                Department department = null;
+                try {
+                    department = departmentApi.getDepartment(id).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return department;
+            }
+
+            @Override
+            protected void onPostExecute(Department department) {
+                // init department
+                _department = department;
+
+                // gets an image
+
+                // todo: Update the data in a database
+                //  String imageUrl = department.getImageUrl();
+                String imageUrl = "http://megastar.co.il/ShenkarImages/Mitshle/enterance.jpg";
+
+                // updates overlay image
+                new DownloadImageTask().execute(imageUrl);
+
+                // add marker
+                depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title(_department.getName()).snippet(_department.getName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+
+            }
+        }.execute();
+    }
+
+    /*
+    *  Download image task
+    * */
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+
+        public DownloadImageTask() {
+
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            // Add a large overlay at Newark on top of the smaller overlay.
+            mGroundOverlay = depatmentMap.addGroundOverlay(new GroundOverlayOptions()
+                    .image(BitmapDescriptorFactory.fromBitmap(result))
+                    .position(SHENKAR, 190f, 150f));
+        }
     }
 
     @Override
@@ -101,54 +193,7 @@ public class MapActivity extends ShenkarActivity implements ActivityCompat.OnReq
         depatmentMap.setOnMyLocationButtonClickListener(this);
         enableMyLocation();
 
-        // Register a listener to respond to clicks on GroundOverlays.
-        //depatmentMap.setOnGroundOverlayClickListener(this);
-
         depatmentMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SHENKAR, 18));
-
-        mImages.clear();
-        mImages.add(BitmapDescriptorFactory.fromResource(R.mipmap.overview));
-        mImages.add(BitmapDescriptorFactory.fromResource(R.mipmap.elit));
-
-        // Add a large overlay at Newark on top of the smaller overlay.
-        mGroundOverlay = depatmentMap.addGroundOverlay(new GroundOverlayOptions()
-                .image(mImages.get(0))
-                .position(SHENKAR, 190f, 150f));
-
-        mGroundOverlay2 = depatmentMap.addGroundOverlay(new GroundOverlayOptions()
-                .image(mImages.get(1))
-                .position(ELIT, 190f, 150f));
-
-        // Set marker by department id
-        // ----- need to change everything to hebrew ------
-        if(mDepartmentId == 5085604337418240L){ // design-MDes-curriculum
-            depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("Design MDes curriculum")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        }else if(mDepartmentId == 5085604337418240L){ // admission-requirements-engineering
-            depatmentMap.addMarker(new MarkerOptions().position(MITSHLE).title("Mitchell").snippet("Admission requirements engineering"));
-        }else if(mDepartmentId == 5644406560391168L){ // design-visual-communication-contact
-            depatmentMap.addMarker(new MarkerOptions().position(MITSHLE).title("Mitchell").snippet("Design visual communication"));
-        }else if(mDepartmentId == 5649391675244544L){ // design-interior-building-and-environment-registaration
-            depatmentMap.addMarker(new MarkerOptions().position(INTERIOR_DESIGN).title("Interior Design").snippet("Design interior building and environment registaration"));
-        }else if(mDepartmentId == 5654313976201216L){ // design-jewelry-department
-            depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("Design jewelry department")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        }else if(mDepartmentId == 5659313586569216L){ // design-textile-department
-            depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("Design textile department")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        }else if(mDepartmentId == 5682617542246400L){ // multi-disciplinary-art-school
-            depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("Multi disciplinary art school")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        }else if(mDepartmentId == 5707702298738688L){ // engineering-software-department
-            depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("Engineering software department")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        }else if(mDepartmentId == 5722646637445120L){ // design-fashion-department
-            depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("Design fashion department")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        }else{
-            depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title("Pernik").snippet("Pernik")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        }
 
     }
 
@@ -252,5 +297,7 @@ public class MapActivity extends ShenkarActivity implements ActivityCompat.OnReq
         PermissionUtils.PermissionDeniedDialog
                 .newInstance(true).show(getSupportFragmentManager(), "dialog");
     }
+
+
 }
 
