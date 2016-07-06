@@ -62,13 +62,49 @@
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
             android:textDirection="rtl" />
 
-        <ImageView
-            android:id="@+id/imgScreenShot"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="5dp"
-            android:src="@drawable/image_2" />
+            android:background="@color/shenkarYellow"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="10dp">
+
+            <ScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center"
+                android:layout_margin="5dp"
+                android:background="@color/shenkarYellow">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <view
+                        android:id="@+id/project_tumbs"
+                        class="android.support.v7.widget.RecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp" />
+
+                </LinearLayout>
+            </ScrollView>
+
+            <ImageView
+                android:id="@+id/imgScreenShot"
+                android:layout_width="200dp"
+                android:layout_height="150dp"
+                android:layout_alignTop="@+id/scrollView"
+                android:layout_gravity="left|center"
+                android:background="@color/shenkarYellow"
+                android:src="@android:drawable/gallery_thumb" />
+
+        </FrameLayout>
+
 
         <TextView
             android:id="@+id/txtProjectDesc"
@@ -103,8 +139,6 @@
                 android:text="שמע" />
         </RelativeLayout>
     </LinearLayout>
-
-
 
 
 </FrameLayout>

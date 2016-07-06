@@ -1,43 +1,50 @@
 package il.ac.shenkar.showshenkar.activities;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.facebook.FacebookSdk;
-import com.facebook.share.model.ShareLinkContent;
 
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.json.jackson2.JacksonFactory;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import il.ac.shenkar.showshenkar.R;
-import il.ac.shenkar.showshenkar.model.DBHelper;
-
-//import com.google.android.youtube.player.YouTubeBaseActivity;
+import il.ac.shenkar.showshenkar.adapters.ProjectGalleryRecyclerAdapter;
+import il.ac.shenkar.showshenkar.backend.contentApi.ContentApi;
+import il.ac.shenkar.showshenkar.backend.contentApi.model.Content;
+import il.ac.shenkar.showshenkar.backend.contentApi.model.Info;
+import il.ac.shenkar.showshenkar.backend.contentApi.model.Media;
+import il.ac.shenkar.showshenkar.backend.projectApi.ProjectApi;
+import il.ac.shenkar.showshenkar.backend.projectApi.model.Project;
+import il.ac.shenkar.showshenkar.utils.Constants;
 
 public class ProjectActivity extends ShenkarActivity {
 
     final Context context = this;
+    private ProjectGalleryRecyclerAdapter adapter;
+    private List<Media> mProjectTumbs;
+
     static class ProjectViewHolder {
         TextView txtProjectName;
         TextView txtStudentName;
@@ -45,8 +52,7 @@ public class ProjectActivity extends ShenkarActivity {
         TextView txtProjectDesc;
         ImageView imgScreenShot;
 
-        public ProjectViewHolder(Activity activity)
-        {
+        public ProjectViewHolder(Activity activity) {
             txtProjectName = (TextView) activity.findViewById(R.id.txtProjectName);
             txtStudentName = (TextView) activity.findViewById(R.id.txtStudentName);
             txtLocation = (TextView) activity.findViewById(R.id.txtLocation);
@@ -62,31 +68,53 @@ public class ProjectActivity extends ShenkarActivity {
     private MediaPlayer mediaPlayer;
     private double startTime = 0;
     private ProjectViewHolder views;
-    private Long id;
     private String project;
-
+    private Long projectId;
+    private Project mProject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
+
         // initialize all the project's views
         views = new ProjectViewHolder(this);
+
         project = getIntent().getStringExtra("project");
         views.txtProjectName.setText(project);
-        String student = getIntent().getStringExtra("student");
-        views.txtStudentName.setText(student);
-        id = getIntent().getLongExtra("id",0);
-        //test
-        //Toast.makeText(this, id.toString() , Toast.LENGTH_LONG).show();
+        String students = getIntent().getStringExtra("students");
+        views.txtStudentName.setText(students);
+
+        projectId = getIntent().getLongExtra("id", 0);
+
+
+        // Initialize recycler view
+        RecyclerView rvProjects = (RecyclerView) findViewById(R.id.project_tumbs);
+        rvProjects.setLayoutManager(new LinearLayoutManager(this));
+
+        mProjectTumbs = new ArrayList<>();
+
+        Media temp = new Media();
+        temp.setUrl("http://lh3.googleusercontent.com/alNfn7CNCfSgaTGXb6T06AnXiwGFi18a_eepmFPKnxhf73QXu7CqVQU0ODKOIYsAzBPx86lE0mJDLyXbciIcFplR");
+
+        mProjectTumbs.add(temp);
+        mProjectTumbs.add(temp);
+        mProjectTumbs.add(temp);
+        mProjectTumbs.add(temp);
+        mProjectTumbs.add(temp);
+        mProjectTumbs.add(temp);
+
+        adapter = new ProjectGalleryRecyclerAdapter(this, views.imgScreenShot, mProjectTumbs);
+        rvProjects.setAdapter(adapter);
+
+
         mediaPlayer = new MediaPlayer();
-        playVd=(Button) findViewById(R.id.buttonVideo);
-        playSD=(Button) findViewById(R.id.buttonSoundM);
+        playVd = (Button) findViewById(R.id.buttonVideo);
+        playSD = (Button) findViewById(R.id.buttonSoundM);
         playVd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-               Intent i = new Intent(ProjectActivity.this, YouTubeActivity.class);
+                Intent i = new Intent(ProjectActivity.this, YouTubeActivity.class);
                 startActivity(i);
             }
         });
@@ -138,32 +166,106 @@ public class ProjectActivity extends ShenkarActivity {
             }
         });
     }
-    public void shareProject(View v)
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refresh();
+    }
+
+    public void refresh() {
+        final ProjectApi projectApi = new ProjectApi.Builder(
+                AndroidHttp.newCompatibleTransport(),
+                new JacksonFactory(),
+                new HttpRequestInitializer() {
+                    @Override
+                    public void initialize(HttpRequest request) throws IOException {
+
+                    }
+                }).setRootUrl(Constants.ROOT_URL).build();
+
+
+        new AsyncTask<Void, Void, Project>() {
+            @Override
+            protected Project doInBackground(Void... params) {
+                try {
+                    return projectApi.getProject(projectId).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Project project) {
+                if (project != null) {
+                    mProject = project;
+                    refreshContent(Long.parseLong(mProject.getContentId()));
+                }
+            }
+        }.execute();
+    }
+
+    private void refreshContent(final Long contentId)
     {
+        final ContentApi contentApi = new ContentApi.Builder(
+                AndroidHttp.newCompatibleTransport(),
+                new JacksonFactory(),
+                new HttpRequestInitializer() {
+                    @Override
+                    public void initialize(HttpRequest request) throws IOException {
+
+                    }
+                }).setRootUrl(Constants.ROOT_URL).build();
+
+        new AsyncTask<Void, Void, Content>() {
+            @Override
+            protected Content doInBackground(Void... params) {
+                try {
+                    return contentApi.getContent(contentId).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Content result) {
+                if (result != null) {
+                    adapter.refresh(result.getMedia());
+                    Info info = result.getInfo();
+                    if (info != null) {
+                        views.txtProjectDesc.setText(info.getText());
+                    }
+                }
+            }
+        }.execute();
+    }
+
+
+    public void shareProject(View v) {
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         Uri screenshotUri = Uri.parse("android.resource://il.ac.shenkar.showshenkar.activities/*");
         try {
             InputStream stream = getContentResolver().openInputStream(screenshotUri);
-        }
-
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-      sharingIntent.setType("image/jpeg");
+        sharingIntent.setType("image/jpeg");
         sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
         startActivity(Intent.createChooser(sharingIntent, "Share image using"));
         // TODO: implement share project
         Toast.makeText(this, "שתף פרויקט", Toast.LENGTH_LONG).show();
+
+        MyRouteActivity.addProjectId(this, projectId);
     }
 
-
-    public void showLocation(View v)
-    {
+    public void showLocation(View v) {
         Intent toProjectLocationMap = new Intent(this, ProjectLocationMap.class);
         toProjectLocationMap.putExtra("name", project);
-        toProjectLocationMap.putExtra("id", id);
+        toProjectLocationMap.putExtra("id", projectId);
         //toProjectLocationMap.putExtra("LL", new LatLng(0.0,0.0));
         startActivity(toProjectLocationMap);
     }

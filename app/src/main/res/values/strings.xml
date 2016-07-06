@@ -21,6 +21,9 @@
     <string name="department">מיקום מחלקה</string>
     <string name="project_name">שם פרוייקט</string>
     <string name="project_location">מיקום פרוייקט</string>
+    <string name="preference_file_key">showshenkar_pref</string>
+    <string name="preference_ids_key">showshenkar_ids</string>
+    <string name="map_btn">מפה</string>
 
     <string name="facebook_app_id">1555398778103189</string>
     <!--    Permissions    -->

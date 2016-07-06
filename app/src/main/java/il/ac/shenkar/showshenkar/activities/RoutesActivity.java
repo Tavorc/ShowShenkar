@@ -34,5 +34,4 @@ public class RoutesActivity extends ShenkarActivity {
         super.onResume();
         adapter.refresh();
     }
-
 }

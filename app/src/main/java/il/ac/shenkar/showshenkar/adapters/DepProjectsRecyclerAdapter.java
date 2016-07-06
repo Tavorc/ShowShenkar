@@ -26,12 +26,10 @@ import il.ac.shenkar.showshenkar.utils.Constants;
 public class DepProjectsRecyclerAdapter extends RecyclerView.Adapter<DepProjectsRecyclerAdapter.CustomViewHolder> {
     private List<Project> depProjectList;
     private Context mContext;
-    private String mDepartment;
 
-    public DepProjectsRecyclerAdapter(Context context, String department, List<Project> depProjectList) {
+    public DepProjectsRecyclerAdapter(Context context, List<Project> depProjectList) {
         this.depProjectList = depProjectList;
         this.mContext = context;
-        this.mDepartment = department;
     }
 
     @Override
@@ -48,9 +46,13 @@ public class DepProjectsRecyclerAdapter extends RecyclerView.Adapter<DepProjects
         customViewHolder.projectId = depProject.getId();
         customViewHolder.txtProjectName.setText(depProject.getName());
         List<String> names = depProject.getStudentNames();
-        if (names.size() > 0) {
-            customViewHolder.txtProjectStudent.setText(names.get(0));
+
+        String namesStr = "";
+        for (String name : names) {
+            namesStr += name + "\n";
         }
+
+        customViewHolder.txtProjectStudent.setText(namesStr);
     }
 
     @Override
@@ -76,7 +78,7 @@ public class DepProjectsRecyclerAdapter extends RecyclerView.Adapter<DepProjects
             //Create intent
             Intent intent = new Intent(mContext, ProjectActivity.class);
             intent.putExtra("project", txtProjectName.getText().toString());
-            intent.putExtra("student", txtProjectStudent.getText().toString());
+            intent.putExtra("students", txtProjectStudent.getText().toString());
             intent.putExtra("id", projectId);
 
             //Start details activity
@@ -84,7 +86,7 @@ public class DepProjectsRecyclerAdapter extends RecyclerView.Adapter<DepProjects
         }
     }
 
-    public void refresh() {
+    public void refresh(final String department) {
         final ProjectApi projectApi = new ProjectApi.Builder(
                 AndroidHttp.newCompatibleTransport(),
                 new JacksonFactory(),
@@ -100,7 +102,18 @@ public class DepProjectsRecyclerAdapter extends RecyclerView.Adapter<DepProjects
             protected List<Project> doInBackground(Void... params) {
                 List<Project> projects = null;
                 try {
-                    projects = projectApi.getProjectsByDepartment(mDepartment).execute().getItems();
+                    /*Project proj = new Project();
+                    proj.setName("בדיקה");
+                    List<String> names = new ArrayList<>();
+                    names.add("יוסי");
+                    names.add("חיים");
+                    names.add("יוסי");
+                    proj.setStudentNames(names);
+                    projects = new ArrayList<Project>();
+                    proj.setDepartment(mDepartment);
+                    proj = projectApi.setProject(proj).execute();*/
+
+                    projects = projectApi.getProjectsByDepartment(department).execute().getItems();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -118,5 +131,45 @@ public class DepProjectsRecyclerAdapter extends RecyclerView.Adapter<DepProjects
                 }
             }
         }.execute();
+    }
+
+    public void refresh(final Long projectId) {
+        final ProjectApi projectApi = new ProjectApi.Builder(
+                AndroidHttp.newCompatibleTransport(),
+                new JacksonFactory(),
+                new HttpRequestInitializer() {
+                    @Override
+                    public void initialize(HttpRequest request) throws IOException {
+
+                    }
+                }).setRootUrl(Constants.ROOT_URL).build();
+
+        new AsyncTask<Void, Void, Project>() {
+            @Override
+            protected Project doInBackground(Void... params) {
+                Project project = null;
+                try {
+                    project = projectApi.getProject(projectId).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return project;
+            }
+
+            @Override
+            protected void onPostExecute(Project project) {
+                //show complition in UI
+                //fill grid view with data
+                if (project != null) {
+                    depProjectList.add(project);
+                    notifyDataSetChanged();
+                }
+            }
+        }.execute();
+    }
+
+    public void clear()
+    {
+        depProjectList.clear();
     }
 }

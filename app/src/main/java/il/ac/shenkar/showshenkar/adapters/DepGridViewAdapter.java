@@ -2,7 +2,6 @@ package il.ac.shenkar.showshenkar.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +21,8 @@ import java.util.List;
 import il.ac.shenkar.showshenkar.R;
 import il.ac.shenkar.showshenkar.backend.departmentApi.DepartmentApi;
 import il.ac.shenkar.showshenkar.backend.departmentApi.model.Department;
-import il.ac.shenkar.showshenkar.utils.BitmapDownloader;
 import il.ac.shenkar.showshenkar.utils.Constants;
+import il.ac.shenkar.showshenkar.utils.DownloadImageTask;
 
 public class DepGridViewAdapter extends ArrayAdapter<Department> {
 
@@ -57,22 +56,7 @@ public class DepGridViewAdapter extends ArrayAdapter<Department> {
         final Department item = data.get(position);
         holder.imageTitle.setText(item.getName());
 
-        new AsyncTask<Void, Void, Bitmap>() {
-
-            @Override
-            protected Bitmap doInBackground(Void... params) {
-                return BitmapDownloader.getBitmapFromURL(item.getImageUrl());
-            }
-
-            @Override
-            protected void onPostExecute(Bitmap bitmap) {
-                //show complition in UI
-                //fill grid view with data
-                if (bitmap != null) {
-                    holder.image.setImageBitmap(bitmap);
-                }
-            }
-        }.execute();
+        new DownloadImageTask(holder.image).execute(item.getImageUrl());
 
         return row;
     }

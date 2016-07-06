@@ -53,7 +53,8 @@
             android:layout_width="0dp"
             android:layout_height="80dp"
             android:layout_weight="1"
-            android:text="@string/btn_general" />
+            android:text="@string/btn_general"
+            android:onClick="openGeneralActivity" />
     </LinearLayout>
 
 </LinearLayout>

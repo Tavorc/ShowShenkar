@@ -6,14 +6,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import il.ac.shenkar.showshenkar.R;
 import il.ac.shenkar.showshenkar.adapters.DepGridViewAdapter;
 import il.ac.shenkar.showshenkar.backend.departmentApi.model.Department;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 
 public class MainActivity extends ShenkarActivity {
 
@@ -56,7 +57,7 @@ public class MainActivity extends ShenkarActivity {
     }
 
     @Override
-         public void onResume() {
+    public void onResume() {
         super.onResume();
         gridAdapter.refresh();
     }
@@ -68,6 +69,11 @@ public class MainActivity extends ShenkarActivity {
 
     public void openMyRouteActivity(View v) {
         Intent intent = new Intent(this, MyRouteActivity.class);
+        startActivity(intent);
+    }
+
+    public void openGeneralActivity(View v) {
+        Intent intent = new Intent(this, GeneralActivity.class);
         startActivity(intent);
     }
 }

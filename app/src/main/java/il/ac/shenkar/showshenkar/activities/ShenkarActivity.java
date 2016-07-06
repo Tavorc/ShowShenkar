@@ -31,6 +31,10 @@ public class ShenkarActivity extends AppCompatActivity {
         {
             OpenScanner();  //call for the scanner func
         }
+        if (id == R.id.action_map)
+        {
+            // TODO: show map
+        }
         return true;
     }
 
@@ -62,5 +66,10 @@ public class ShenkarActivity extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
             Qrlocation = result.getContents();
         }
+
+        /*
+            read the project id from the QR code then add it to my route using the following code
+            MyRouteActivity.addProjectId(this, projectId);
+         */
     }
 }

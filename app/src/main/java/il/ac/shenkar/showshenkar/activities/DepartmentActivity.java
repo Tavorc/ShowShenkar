@@ -2,8 +2,6 @@ package il.ac.shenkar.showshenkar.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,20 +10,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.Api;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import il.ac.shenkar.showshenkar.R;
 import il.ac.shenkar.showshenkar.adapters.DepProjectsRecyclerAdapter;
-import il.ac.shenkar.showshenkar.backend.contentApi.ContentApi;
-import il.ac.shenkar.showshenkar.backend.contentApi.model.Content;
 import il.ac.shenkar.showshenkar.backend.departmentApi.model.Department;
 import il.ac.shenkar.showshenkar.backend.projectApi.model.Project;
-import il.ac.shenkar.showshenkar.model.DBHelper;
-import il.ac.shenkar.showshenkar.utils.BitmapDownloader;
+import il.ac.shenkar.showshenkar.utils.DownloadImageTask;
 
 
 public class DepartmentActivity extends ShenkarActivity {
@@ -51,22 +43,7 @@ public class DepartmentActivity extends ShenkarActivity {
         titleTextView.setText(mDepartmentName);
 
         final ImageView imageView = (ImageView) findViewById(R.id.image);
-        new AsyncTask<Void, Void, Bitmap>() {
-
-            @Override
-            protected Bitmap doInBackground(Void... params) {
-                return BitmapDownloader.getBitmapFromURL(imageUrl);
-            }
-
-            @Override
-            protected void onPostExecute(Bitmap bitmap) {
-                //show complition in UI
-                //fill grid view with data
-                if (bitmap != null) {
-                    imageView.setImageBitmap(bitmap);
-                }
-            }
-        }.execute();
+        new DownloadImageTask(imageView).execute(imageUrl);
 
         // Initialize recycler view
         RecyclerView rvProjects = (RecyclerView) findViewById(R.id.projects);
@@ -74,22 +51,14 @@ public class DepartmentActivity extends ShenkarActivity {
 
         mProjects = new ArrayList<>();
 
-        adapter = new DepProjectsRecyclerAdapter(this, mDepartmentName, mProjects);
+        adapter = new DepProjectsRecyclerAdapter(this, mProjects);
         rvProjects.setAdapter(adapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        adapter.refresh();
-    }
-
-    private void setDummyProject() {
-        //mProjects = new ArrayList<>();
-        //mProjects.add(new DepProject("project 1", "student 1"));
-        //mProjects.add(new DepProject("project 1", "student 1"));
-        //mProjects.add(new DepProject("project 1", "student 1"));
-        //mProjects.add(new DepProject("project 1", "student 1"));
+        adapter.refresh(mDepartmentName);
     }
 
     public void showDepartmentLocation( View v ) {
