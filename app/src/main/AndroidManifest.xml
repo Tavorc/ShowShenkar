@@ -43,6 +43,7 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".activities.MyRouteActivity" />
         <activity android:name=".activities.YouTubeActivity" />
+        <activity android:name=".activities.GeneralActivity"/>
         <activity
             android:name=".activities.ProjectLocationMap"
             android:label="@string/project_location"
