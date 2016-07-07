@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layoutDirection="rtl"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -118,27 +119,35 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_weight="4.55">
 
-            <Button
-                android:id="@+id/buttonVideo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_margin="5dp"
-                android:text="וידאו" />
 
-            <Button
-                android:id="@+id/buttonSoundM"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_margin="5dp"
-                android:text="שמע" />
         </RelativeLayout>
     </LinearLayout>
 
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/imageButtonVideo"
+        android:src="@drawable/videoico"
+        android:layout_alignTop="@+id/imageButtonSound"
+        android:layout_above="@+id/buttonVideo"
+        android:layout_alignLeft="@+id/buttonVideo"
+        android:layout_alignStart="@+id/buttonVideo"
+        android:layout_gravity="left|bottom"
+        android:layout_marginBottom="60dp"
+        android:layout_marginLeft="40dp"/>
 
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/imageButtonSound"
+        android:src="@drawable/audioic"
+        android:layout_above="@+id/buttonSoundM"
+        android:layout_alignRight="@+id/buttonSoundM"
+        android:layout_alignEnd="@+id/buttonSoundM"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="60dp"
+        android:layout_marginRight="40dp"/>
 </FrameLayout>

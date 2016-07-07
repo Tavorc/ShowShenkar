@@ -18,6 +18,7 @@ public class YouTubeActivity extends YouTubeBaseActivity implements
     public static final String API_KEY = "AIzaSyCBu6Kh-XTr-XW3D1w8ZzlpFfEBmCotjuk";
     private YouTubePlayerView playtube;
     private YouTubePlayer youTubeP;
+    private String urlVideo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,13 +26,18 @@ public class YouTubeActivity extends YouTubeBaseActivity implements
         playtube=(YouTubePlayerView) findViewById(R.id.viewVideo);
         playtube.setVisibility(View.GONE);
         playtube.initialize(API_KEY, this);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null)
+        {
+            urlVideo = extras.getString("url");
+        }
 
     }
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
         youTubeP=youTubePlayer;
-        youTubePlayer.cueVideo("JRfuAukYTKg");
+        youTubePlayer.cueVideo(urlVideo);
         youTubeP.setFullscreen(true);
     }
 

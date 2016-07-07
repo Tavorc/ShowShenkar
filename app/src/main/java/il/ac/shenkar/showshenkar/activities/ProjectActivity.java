@@ -37,6 +37,7 @@ import il.ac.shenkar.showshenkar.backend.contentApi.model.Info;
 import il.ac.shenkar.showshenkar.backend.contentApi.model.Media;
 import il.ac.shenkar.showshenkar.backend.projectApi.ProjectApi;
 import il.ac.shenkar.showshenkar.backend.projectApi.model.Project;
+import il.ac.shenkar.showshenkar.model.DBHelper;
 import il.ac.shenkar.showshenkar.utils.Constants;
 
 public class ProjectActivity extends ShenkarActivity {
@@ -44,7 +45,15 @@ public class ProjectActivity extends ShenkarActivity {
     final Context context = this;
     private ProjectGalleryRecyclerAdapter adapter;
     private List<Media> mProjectTumbs;
-
+    private DBHelper dbhelper;
+    private   ContentApi contentApi;
+    private  Content content;
+    private ProjectApi projectApi;
+    private Project projectM;
+    private List<Media> listM;
+    private String urlVideo="none";
+    private String urlAudio="none";
+    private String idContent;
     static class ProjectViewHolder {
         TextView txtProjectName;
         TextView txtStudentName;
@@ -62,11 +71,11 @@ public class ProjectActivity extends ShenkarActivity {
     }
 
 
-    Button playVd;
-    Button playSD;
-
+    //Button playVd;
+   // Button playSD;
+    private ImageButton playVd ;
+    private ImageButton playSD ;
     private MediaPlayer mediaPlayer;
-    private double startTime = 0;
     private ProjectViewHolder views;
     private String project;
     private Long projectId;
@@ -86,7 +95,8 @@ public class ProjectActivity extends ShenkarActivity {
         views.txtStudentName.setText(students);
 
         projectId = getIntent().getLongExtra("id", 0);
-
+        playVd = (ImageButton) findViewById(R.id.imageButtonVideo);
+        playSD = (ImageButton) findViewById(R.id.imageButtonSound);
 
         // Initialize recycler view
         RecyclerView rvProjects = (RecyclerView) findViewById(R.id.project_tumbs);
@@ -107,62 +117,108 @@ public class ProjectActivity extends ShenkarActivity {
         adapter = new ProjectGalleryRecyclerAdapter(this, views.imgScreenShot, mProjectTumbs);
         rvProjects.setAdapter(adapter);
 
-
         mediaPlayer = new MediaPlayer();
-        playVd = (Button) findViewById(R.id.buttonVideo);
-        playSD = (Button) findViewById(R.id.buttonSoundM);
+       // playVd = (Button) findViewById(R.id.buttonVideo);
+      //  playSD = (Button) findViewById(R.id.buttonSoundM);
+
+        dbhelper=new DBHelper();
+        projectApi=dbhelper.getProjectApi();
+
+        new AsyncTask<Void, Void, Project>() {
+            @Override
+            protected Project doInBackground(Void... params) {
+                try {
+                    projectM=projectApi.getProject(projectId).execute();
+                    idContent=projectM.getContentId();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return projectM;
+            }
+        }.execute();
+
+        contentApi=dbhelper.getContentApi();
+        new AsyncTask<Void, Void, Content>() {
+            @Override
+            protected Content doInBackground(Void... params) {
+                try {
+                    content=contentApi.getContent(Long.valueOf(idContent)).execute();
+                    listM=content.getMedia();
+                    for(int i=0;i<listM.size();i++)
+                    {
+                        if(listM.get(i).getType()=="video")
+                        {
+                            urlVideo=listM.get(i).getUrl();
+                        }
+                        if(listM.get(i).getType()=="audio")
+                        {
+                            urlAudio=listM.get(i).getUrl();
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return content;
+            }
+        }.execute();
+
         playVd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ProjectActivity.this, YouTubeActivity.class);
-                startActivity(i);
+                if (urlVideo != "none") {
+                    Intent i = new Intent(ProjectActivity.this, YouTubeActivity.class);
+                    i.putExtra("url", urlVideo );
+                    startActivity(i);
+                }
             }
         });
         playSD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog dialogT = new Dialog(context);
-                dialogT.setContentView(R.layout.custom);
-                ImageButton dialogButtonPlay = (ImageButton) dialogT.findViewById(R.id.imageButtonPlay);
-                // if button is clicked, close the custom dialog
-                dialogButtonPlay.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String url = "http://programmerguru.com/android-tutorial/wp-content/uploads/2013/04/hosannatelugu.mp3";
-                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                        try {
-                            mediaPlayer.setDataSource(url);
-                        } catch (IllegalArgumentException e) {
+                if (urlAudio != "none") {
+                    final Dialog dialogT = new Dialog(context);
+                    dialogT.setContentView(R.layout.custom);
+                    ImageButton dialogButtonPlay = (ImageButton) dialogT.findViewById(R.id.imageButtonPlay);
+                    // if button is clicked, close the custom dialog
+                    dialogButtonPlay.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //  String url = "http://programmerguru.com/android-tutorial/wp-content/uploads/2013/04/hosannatelugu.mp3";
+                            String url =urlAudio;
+                            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                            try {
+                                mediaPlayer.setDataSource(url);
+                            } catch (IllegalArgumentException e) {
 
-                        } catch (SecurityException e) {
+                            } catch (SecurityException e) {
 
-                        } catch (IllegalStateException e) {
+                            } catch (IllegalStateException e) {
 
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                mediaPlayer.prepare();
+                            } catch (IllegalStateException e) {
+
+                            } catch (IOException e) {
+
+                            }
+                            mediaPlayer.start();
                         }
-                        try {
-                            mediaPlayer.prepare();
-                        } catch (IllegalStateException e) {
+                    });
+                    ImageButton dialogButtonStop = (ImageButton) dialogT.findViewById(R.id.imageButtonStop);
+                    // if button is clicked, close the custom dialog
+                    dialogButtonStop.setOnClickListener(new View.OnClickListener() {
 
-                        } catch (IOException e) {
-
+                        @Override
+                        public void onClick(View v) {
+                            mediaPlayer.stop();
                         }
-                        mediaPlayer.start();
-                    }
-                });
+                    });
 
-                ImageButton dialogButtonStop = (ImageButton) dialogT.findViewById(R.id.imageButtonStop);
-                // if button is clicked, close the custom dialog
-                dialogButtonStop.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        mediaPlayer.stop();
-                    }
-                });
-
-                dialogT.show();
+                    dialogT.show();
+                }
             }
         });
     }
