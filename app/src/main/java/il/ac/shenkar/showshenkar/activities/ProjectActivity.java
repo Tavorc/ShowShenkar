@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -170,6 +171,11 @@ public class ProjectActivity extends ShenkarActivity {
                     i.putExtra("url", urlVideo );
                     startActivity(i);
                 }
+                if (urlVideo== "none")
+                {
+                    Toast.makeText(ProjectActivity.this, "אין וידאו לפרוייקט",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
         playSD.setOnClickListener(new View.OnClickListener() {
@@ -219,7 +225,13 @@ public class ProjectActivity extends ShenkarActivity {
 
                     dialogT.show();
                 }
+                if (urlAudio== "none")
+                {
+                    Toast.makeText(ProjectActivity.this, "אין קטע שמיעה",
+                            Toast.LENGTH_LONG).show();
+                }
             }
+
         });
     }
 
@@ -300,7 +312,8 @@ public class ProjectActivity extends ShenkarActivity {
 
 
     public void shareProject(View v) {
-        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+
+       Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         Uri screenshotUri = Uri.parse("android.resource://il.ac.shenkar.showshenkar.activities/*");
         try {
             InputStream stream = getContentResolver().openInputStream(screenshotUri);
@@ -308,13 +321,11 @@ public class ProjectActivity extends ShenkarActivity {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
         sharingIntent.setType("image/jpeg");
         sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
         startActivity(Intent.createChooser(sharingIntent, "Share image using"));
         // TODO: implement share project
         Toast.makeText(this, "שתף פרויקט", Toast.LENGTH_LONG).show();
-
         MyRouteActivity.addProjectId(this, projectId);
     }
 
