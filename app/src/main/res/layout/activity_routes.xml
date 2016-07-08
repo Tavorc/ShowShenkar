@@ -8,25 +8,16 @@
     tools:context="il.ac.shenkar.showshenkar.activitiesar.showshenkar.RoutesActivity">
 
     <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layoutDirection="rtl"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/shenkarYellow"
+        android:gravity="center"
         android:text="@string/btn_fav_routes"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textDirection="rtl" />
-
-    <TextView
-        android:id="@+id/route_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="5dp"
-        android:layoutDirection="rtl"
-        android:text="@string/route_name"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textDirection="rtl" />
+        android:textColor="@color/black"
+        android:layout_marginBottom="5dp"
+        android:textSize="25dp"
+        android:textDirection="rtl"
+        android:textStyle="bold" />
 
     <view
         android:id="@+id/routes"

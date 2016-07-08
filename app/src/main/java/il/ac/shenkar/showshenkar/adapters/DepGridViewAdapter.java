@@ -1,6 +1,7 @@
 package il.ac.shenkar.showshenkar.adapters;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ public class DepGridViewAdapter extends ArrayAdapter<Department> {
     private Context context;
     private int layoutResourceId;
     private List<Department> data;
+    private ProgressDialog mProgressDialog;
 
     public DepGridViewAdapter(Context context, int layoutResourceId, List<Department> data) {
         super(context, layoutResourceId, data);
@@ -74,6 +76,12 @@ public class DepGridViewAdapter extends ArrayAdapter<Department> {
 
         new AsyncTask<Void, Void, List<Department>>() {
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mProgressDialog = ProgressDialog.show(context, "טוען נתונים", "מעדכן מחלקות", true, true);
+            }
+
+            @Override
             protected List<Department> doInBackground(Void... params) {
                 List<Department> departments = null;
                 try {
@@ -88,6 +96,7 @@ public class DepGridViewAdapter extends ArrayAdapter<Department> {
             protected void onPostExecute(List<Department> departments) {
                 //show complition in UI
                 //fill grid view with data
+                mProgressDialog.dismiss();
                 if (departments != null) {
                     data.clear();
                     data.addAll(departments);

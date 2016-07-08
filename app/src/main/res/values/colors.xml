@@ -6,5 +6,9 @@
     <color name="blue">#00abea</color>
     <color name="white">#ffffff</color>
     <color name="red">#bc0000</color>
+    <color name="black">#000000</color>
+    <color name="grey">#525252</color>
+    <color name="dep_project_row">#cccccc</color>
+    <color name="project_footer_bg">#cccccc</color>
     <color name="shenkarYellow">#f6d808</color>
 </resources>

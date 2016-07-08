@@ -1,5 +1,6 @@
 package il.ac.shenkar.showshenkar.adapters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -15,7 +16,9 @@ import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import il.ac.shenkar.showshenkar.R;
 import il.ac.shenkar.showshenkar.activities.ProjectActivity;
@@ -26,6 +29,7 @@ import il.ac.shenkar.showshenkar.utils.Constants;
 public class DepProjectsRecyclerAdapter extends RecyclerView.Adapter<DepProjectsRecyclerAdapter.CustomViewHolder> {
     private List<Project> depProjectList;
     private Context mContext;
+    private ProgressDialog mProgressDialog;
 
     public DepProjectsRecyclerAdapter(Context context, List<Project> depProjectList) {
         this.depProjectList = depProjectList;
@@ -34,7 +38,7 @@ public class DepProjectsRecyclerAdapter extends RecyclerView.Adapter<DepProjects
 
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.dep_project_row, null);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.dep_project_row, viewGroup, false);
 
         return new CustomViewHolder(view);
     }
@@ -42,6 +46,10 @@ public class DepProjectsRecyclerAdapter extends RecyclerView.Adapter<DepProjects
     @Override
     public void onBindViewHolder(CustomViewHolder customViewHolder, int i) {
         Project depProject = depProjectList.get(i);
+        if (depProject == null)
+        {
+            return;
+        }
 
         customViewHolder.projectId = depProject.getId();
         customViewHolder.txtProjectName.setText(depProject.getName());
@@ -98,22 +106,58 @@ public class DepProjectsRecyclerAdapter extends RecyclerView.Adapter<DepProjects
                 }).setRootUrl(Constants.ROOT_URL).build();
 
         new AsyncTask<Void, Void, List<Project>>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mProgressDialog = ProgressDialog.show(mContext, "טוען נתונים", "מעדכן פרויקטים", true, true);
+            }
+
+
             @Override
             protected List<Project> doInBackground(Void... params) {
                 List<Project> projects = null;
                 try {
-                    /*Project proj = new Project();
-                    proj.setName("בדיקה");
-                    List<String> names = new ArrayList<>();
-                    names.add("יוסי");
-                    names.add("חיים");
-                    names.add("יוסי");
-                    proj.setStudentNames(names);
-                    projects = new ArrayList<Project>();
-                    proj.setDepartment(mDepartment);
-                    proj = projectApi.setProject(proj).execute();*/
-
                     projects = projectApi.getProjectsByDepartment(department).execute().getItems();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return projects;
+            }
+
+            @Override
+            protected void onPostExecute(List<Project> projects) {
+                //show complition in UI
+                //fill grid view with data
+                mProgressDialog.dismiss();
+                if (projects != null) {
+                    depProjectList.clear();
+                    depProjectList.addAll(projects);
+                    notifyDataSetChanged();
+                }
+            }
+        }.execute();
+    }
+
+    public void refresh(final Set<String> projectIds) {
+        final ProjectApi projectApi = new ProjectApi.Builder(
+                AndroidHttp.newCompatibleTransport(),
+                new JacksonFactory(),
+                new HttpRequestInitializer() {
+                    @Override
+                    public void initialize(HttpRequest request) throws IOException {
+
+                    }
+                }).setRootUrl(Constants.ROOT_URL).build();
+
+        new AsyncTask<Void, Void, List<Project>>() {
+            @Override
+            protected List<Project> doInBackground(Void... params) {
+                List<Project> projects = new ArrayList<Project>();
+                try {
+                    for (String projectId : projectIds) {
+                        projects.add(projectApi.getProject(Long.parseLong(projectId)).execute());
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -127,41 +171,6 @@ public class DepProjectsRecyclerAdapter extends RecyclerView.Adapter<DepProjects
                 if (projects != null) {
                     depProjectList.clear();
                     depProjectList.addAll(projects);
-                    notifyDataSetChanged();
-                }
-            }
-        }.execute();
-    }
-
-    public void refresh(final Long projectId) {
-        final ProjectApi projectApi = new ProjectApi.Builder(
-                AndroidHttp.newCompatibleTransport(),
-                new JacksonFactory(),
-                new HttpRequestInitializer() {
-                    @Override
-                    public void initialize(HttpRequest request) throws IOException {
-
-                    }
-                }).setRootUrl(Constants.ROOT_URL).build();
-
-        new AsyncTask<Void, Void, Project>() {
-            @Override
-            protected Project doInBackground(Void... params) {
-                Project project = null;
-                try {
-                    project = projectApi.getProject(projectId).execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return project;
-            }
-
-            @Override
-            protected void onPostExecute(Project project) {
-                //show complition in UI
-                //fill grid view with data
-                if (project != null) {
-                    depProjectList.add(project);
                     notifyDataSetChanged();
                 }
             }

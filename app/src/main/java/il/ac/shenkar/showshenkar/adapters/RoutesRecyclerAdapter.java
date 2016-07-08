@@ -1,5 +1,6 @@
 package il.ac.shenkar.showshenkar.adapters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -26,6 +27,7 @@ import il.ac.shenkar.showshenkar.utils.Constants;
 public class RoutesRecyclerAdapter extends RecyclerView.Adapter<RoutesRecyclerAdapter.CustomViewHolder> {
     private List<Route> mRoutes;
     private Context mContext;
+    private ProgressDialog mProgressDialog;
 
     public RoutesRecyclerAdapter(Context context, List<Route> routes) {
         this.mRoutes = routes;
@@ -84,6 +86,12 @@ public class RoutesRecyclerAdapter extends RecyclerView.Adapter<RoutesRecyclerAd
 
         new AsyncTask<Void, Void, List<Route>>() {
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mProgressDialog = ProgressDialog.show(mContext, "טוען נתונים", "מעדכן מסלולים", true, true);
+            }
+
+            @Override
             protected List<Route> doInBackground(Void... params) {
                 List<Route> routes = null;
                 try {
@@ -98,6 +106,7 @@ public class RoutesRecyclerAdapter extends RecyclerView.Adapter<RoutesRecyclerAd
             protected void onPostExecute(List<Route> routes) {
                 //show complition in UI
                 //fill grid view with data
+                mProgressDialog.dismiss();
                 if (routes != null) {
                     mRoutes.clear();
                     mRoutes.addAll(routes);

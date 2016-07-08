@@ -2,6 +2,8 @@ package il.ac.shenkar.showshenkar.activities;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -52,17 +54,17 @@ public class ProjectActivity extends ShenkarActivity {
     private String urlVideo="none";
     private String urlAudio="none";
     private String idContent;
+    private ProgressDialog mProgressDialog;
+
     static class ProjectViewHolder {
         TextView txtProjectName;
         TextView txtStudentName;
-        TextView txtLocation;
         TextView txtProjectDesc;
         ImageView imgScreenShot;
 
         public ProjectViewHolder(Activity activity) {
             txtProjectName = (TextView) activity.findViewById(R.id.txtProjectName);
             txtStudentName = (TextView) activity.findViewById(R.id.txtStudentName);
-            txtLocation = (TextView) activity.findViewById(R.id.txtLocation);
             txtProjectDesc = (TextView) activity.findViewById(R.id.txtProjectDesc);
             imgScreenShot = (ImageView) activity.findViewById(R.id.imgScreenShot);
         }
@@ -242,6 +244,12 @@ public class ProjectActivity extends ShenkarActivity {
 
         new AsyncTask<Void, Void, Project>() {
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mProgressDialog = ProgressDialog.show(ProjectActivity.this, "טוען נתונים", "מעדכן נתוני פרויקט", true, true);
+            }
+
+            @Override
             protected Project doInBackground(Void... params) {
                 try {
                     return projectApi.getProject(projectId).execute();
@@ -253,6 +261,7 @@ public class ProjectActivity extends ShenkarActivity {
 
             @Override
             protected void onPostExecute(Project project) {
+                mProgressDialog.dismiss();
                 if (project != null) {
                     mProject = project;
                     refreshContent(Long.parseLong(mProject.getContentId()));
@@ -321,5 +330,32 @@ public class ProjectActivity extends ShenkarActivity {
         i.putExtra("objectId", projectId);
         i.putExtra("objectType", "project");
         startActivity(i);
+    }
+
+    public void sendEmail(View v) {
+        if (mProject.getStudentEMail() == null || mProject.getStudentEMail().isEmpty())
+        {
+            Toast.makeText(this, "אין מיילים זמינים לפרויקט", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        List<String> emails = new ArrayList<>();
+        for (String email : mProject.getStudentEMail())
+        {
+            emails.add(email);
+        }
+
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("application/octet-stream");
+        i.putExtra(Intent.EXTRA_EMAIL, emails.toArray(new String[emails.size()]));
+        i.putExtra(Intent.EXTRA_SUBJECT, "הודעה משנקר");
+
+        try
+        {
+            startActivity(Intent.createChooser(i, "Send invite"));
+        } catch (ActivityNotFoundException ex)
+        {
+            Toast.makeText(this, "No email clients installed", Toast.LENGTH_SHORT);
+        }
     }
 }

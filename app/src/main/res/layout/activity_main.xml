@@ -3,9 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f0f0f0"
+    android:background="@color/white"
     android:orientation="vertical"
-    tools:context="il.ac.shenkar.showshenkar.activitiesar.showshenkar.MainActivity">
+    tools:context="il.ac.shenkar.showshenkar.activities.MainActivity">
+
+    <il.ac.shenkar.showshenkar.utils.BoldAlefTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/shenkarYellow"
+        android:gravity="center"
+        android:text="@string/shenkar_title"
+        android:textColor="@color/black"
+        android:textSize="50dp"
+        android:textStyle="bold" />
 
     <GridView
         android:id="@+id/gridView"
@@ -23,38 +33,49 @@
         android:stretchMode="columnWidth"
         android:verticalSpacing="5dp" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:layoutDirection="rtl"
-        android:orientation="horizontal"
-        android:textDirection="rtl">
+        android:layout_weight="2"
+        android:background="@color/grey">
 
-        <Button
-            android:id="@+id/btnFavRoutes"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_weight="1"
-            android:onClick="openRoutesActivity"
-            android:text="@string/btn_fav_routes" />
-
-        <Button
+        <ImageButton
             android:id="@+id/btnMyRoutes"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_weight="1"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="5dp"
+            android:background="@null"
             android:onClick="openMyRouteActivity"
-            android:text="@string/btn_my_routes" />
+            android:scaleType="fitXY"
+            android:src="@drawable/myroutebtn" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnGeneral"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_weight="1"
-            android:text="@string/btn_general"
-            android:onClick="openGeneralActivity" />
-    </LinearLayout>
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:background="@null"
+            android:onClick="openGeneralActivity"
+            android:scaleType="fitXY"
+            android:src="@drawable/generalbtn" />
+
+        <ImageButton
+            android:id="@+id/btnFavRoutes"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp"
+            android:background="@null"
+            android:onClick="openRoutesActivity"
+            android:scaleType="fitXY"
+            android:src="@drawable/favroutesbtn" />
+
+    </RelativeLayout>
 
 </LinearLayout>

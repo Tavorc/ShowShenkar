@@ -24,7 +24,7 @@ public class MyRouteActivity extends ShenkarActivity {
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        Set<String> projectIdsStr = sharedPref.getStringSet(context.getString(R.string.preference_ids_key), new HashSet<String>());
+        Set<String> projectIdsStr = new HashSet<>(sharedPref.getStringSet(context.getString(R.string.preference_ids_key), new HashSet<String>()));
         projectIdsStr.add(Long.toString(projectId));
 
         editor.putStringSet(context.getString(R.string.preference_ids_key), projectIdsStr);
@@ -53,9 +53,7 @@ public class MyRouteActivity extends ShenkarActivity {
 
         SharedPreferences sharedPref = getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        Set<String> projectIdsStr = sharedPref.getStringSet(getString(R.string.preference_ids_key), new HashSet<String>());
-        for (String projectId : projectIdsStr) {
-            adapter.refresh(Long.parseLong(projectId));
-        }
+        Set<String> projectIds = sharedPref.getStringSet(getString(R.string.preference_ids_key), new HashSet<String>());
+        adapter.refresh(projectIds);
     }
 }

@@ -5,149 +5,188 @@
     android:layout_height="match_parent"
     tools:context="il.ac.shenkar.showshenkar.activities.ProjectActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ScrollView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layoutDirection="rtl"
-        android:orientation="vertical"
-        android:weightSum="1">
+        android:layout_gravity="center_horizontal">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/btnShare"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_margin="5dp"
-                android:onClick="shareProject"
-                android:src="@drawable/ic_photo_camera_black_24dp" />
-
-            <ImageView
-                android:id="@+id/btnLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_toRightOf="@id/btnShare"
-                android:onClick="showLocation"
-                android:src="@drawable/ic_photo_camera_black_24dp" />
-
-            <TextView
-                android:id="@+id/txtLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_toRightOf="@id/btnLocation"
-                android:text="מיקום"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                android:textDirection="rtl" />
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/txtProjectName"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="שם הפרוייקט"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-            android:textDirection="rtl" />
+            android:layoutDirection="rtl"
+            android:orientation="vertical"
+            android:weightSum="1">
 
-        <TextView
-            android:id="@+id/txtStudentName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="שם הסטודנט"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-            android:textDirection="rtl" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/shenkarYellow"
+                android:gravity="center"
+                android:orientation="vertical">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/shenkarYellow"
-            android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:paddingTop="10dp">
+                <TextView
+                    android:id="@+id/txtProjectName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/shenkarYellow"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textDirection="rtl"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
-            <ScrollView
-                android:id="@+id/scrollView"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/txtStudentName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/shenkarYellow"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textDirection="rtl"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center"
-                android:layout_margin="5dp"
-                android:background="@color/shenkarYellow">
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/shenkarYellow"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:paddingTop="10dp">
 
-                <LinearLayout
+                <ScrollView
+                    android:id="@+id/scrollView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_gravity="right|center"
+                    android:layout_margin="5dp"
+                    android:background="@color/shenkarYellow">
 
-                    <view
-                        android:id="@+id/project_tumbs"
-                        class="android.support.v7.widget.RecyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="150dp" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                </LinearLayout>
-            </ScrollView>
+                        <view
+                            android:id="@+id/project_tumbs"
+                            class="android.support.v7.widget.RecyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp" />
 
-            <ImageView
-                android:id="@+id/imgScreenShot"
-                android:layout_width="200dp"
-                android:layout_height="150dp"
-                android:layout_alignTop="@+id/scrollView"
-                android:layout_gravity="left|center"
-                android:background="@color/shenkarYellow"
-                android:src="@android:drawable/gallery_thumb" />
+                    </LinearLayout>
+                </ScrollView>
 
-        </FrameLayout>
+                <ImageView
+                    android:id="@+id/imgScreenShot"
+                    android:layout_width="200dp"
+                    android:layout_height="150dp"
+                    android:layout_alignTop="@+id/scrollView"
+                    android:layout_gravity="left|center"
+                    android:background="@color/shenkarYellow"
+                    android:src="@drawable/shenkaricon" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btnEmail"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/shenkarYellow"
+                    android:scaleType="fitXY"
+                    android:onClick="sendEmail"
+                    android:src="@drawable/email" />
+
+                <ImageButton
+                    android:id="@+id/btnLocation"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/shenkarYellow"
+                    android:onClick="showLocation"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/location" />
 
 
-        <TextView
-            android:id="@+id/txtProjectDesc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="תיאור הפרוייקט"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-            android:textDirection="rtl" />
+                <ImageButton
+                    android:id="@+id/btnShare"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/shenkarYellow"
+                    android:onClick="shareProject"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/share" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="4.55">
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtProjectDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="תיאור הפרוייקט"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                android:textColor="@color/black"
+                android:textDirection="rtl" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4.55"
+                android:orientation="horizontal">
 
 
-        </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:background="@color/project_footer_bg"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <ImageButton
+            android:id="@+id/imageButtonSound"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="1dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/sound" />
+
+        <ImageButton
+            android:id="@+id/imageButtonVideo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="1dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/video" />
+
     </LinearLayout>
-
-    <ImageButton
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:id="@+id/imageButtonVideo"
-        android:src="@drawable/videoico"
-        android:layout_alignTop="@+id/imageButtonSound"
-        android:layout_above="@+id/buttonVideo"
-        android:layout_alignLeft="@+id/buttonVideo"
-        android:layout_alignStart="@+id/buttonVideo"
-        android:layout_gravity="left|bottom"
-        android:layout_marginBottom="60dp"
-        android:layout_marginLeft="40dp"/>
-
-    <ImageButton
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:id="@+id/imageButtonSound"
-        android:src="@drawable/audioic"
-        android:layout_above="@+id/buttonSoundM"
-        android:layout_alignRight="@+id/buttonSoundM"
-        android:layout_alignEnd="@+id/buttonSoundM"
-        android:layout_gravity="right|bottom"
-        android:layout_marginBottom="60dp"
-        android:layout_marginRight="40dp"/>
 </FrameLayout>
