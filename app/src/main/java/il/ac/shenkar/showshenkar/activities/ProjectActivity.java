@@ -330,10 +330,9 @@ public class ProjectActivity extends ShenkarActivity {
     }
 
     public void showLocation(View v) {
-        Intent toProjectLocationMap = new Intent(this, ProjectLocationMap.class);
-        toProjectLocationMap.putExtra("name", project);
-        toProjectLocationMap.putExtra("id", projectId);
-        //toProjectLocationMap.putExtra("LL", new LatLng(0.0,0.0));
-        startActivity(toProjectLocationMap);
+        Intent i = new Intent(this, MapActivity.class);
+        i.putExtra("objectId", projectId);
+        i.putExtra("objectType", "project");
+        startActivity(i);
     }
 }

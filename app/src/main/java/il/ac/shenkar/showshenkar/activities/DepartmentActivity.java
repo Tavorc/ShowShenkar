@@ -62,11 +62,10 @@ public class DepartmentActivity extends ShenkarActivity {
     }
 
     public void showDepartmentLocation( View v ) {
-        // try to get v.getID() to find from which department was the click
         Intent i = new Intent(this, MapActivity.class);
-        i.putExtra("id", mDepartmentId);
+        i.putExtra("objectId", mDepartmentId);
+        i.putExtra("objectType", "department");
         startActivity(i);
-        // TODO: show department location
     }
 
 }
