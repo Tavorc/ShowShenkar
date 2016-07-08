@@ -12,7 +12,7 @@
         android:background="@color/shenkarYellow"
         android:orientation="vertical">
 
-        <TextView
+        <il.ac.shenkar.showshenkar.utils.BoldAlefTextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

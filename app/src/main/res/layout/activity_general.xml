@@ -4,9 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="il.ac.shenkar.showshenkar.activities.GeneralActivity">
+    tools:context="il.ac.shenkar.showshenkar.activities.GeneralActivity"
+    android:weightSum="1">
 
-    <TextView
+    <il.ac.shenkar.showshenkar.utils.BoldAlefTextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/shenkarYellow"
@@ -18,4 +19,42 @@
         android:textDirection="rtl"
         android:textStyle="bold" />
 
+
+
+    <il.ac.shenkar.showshenkar.utils.AlefTextView
+        android:id="@+id/txtGeneralInfo"
+        android:layout_width="match_parent"
+        android:layout_height="330dp"
+        android:layout_margin="5dp"
+        android:text=
+            "
+תערוכת סוף שנה שנקר 2016 \n
+אפליקציה זו מאפשרת למבקרים: \n
+1. להתמצא בתערוכה דרך מפה כללית של
+שנקר ומפות של המחלקות השונות. \n
+2. לנווט לפרוייקטים ספציפים. \n
+3. לקבל מידע נוסף על הפרויקטים והסטודנטים. \n
+4. לקבל המלצות למסלולים על פי תמה משותפת. \n
+5. לשתף את הפרויקטים ברשתות החברתיות. \n
+"
+        android:textSize="18dp"
+        android:textColor="@color/black"
+        android:textDirection="rtl" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    <ImageView
+        android:id="@+id/alldepartments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:src="@drawable/alldepartments"
+        android:scaleType="fitXY" />
+
+     </RelativeLayout>
+
 </LinearLayout>
+

@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context="il.ac.shenkar.showshenkar.activities.MyRouteActivity">
 
-    <TextView
+    <il.ac.shenkar.showshenkar.utils.BoldAlefTextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/shenkarYellow"

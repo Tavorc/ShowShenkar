@@ -9,7 +9,7 @@
     android:layout_marginBottom="5dp"
     android:layoutDirection="rtl"
     android:orientation="horizontal">
-    <TextView
+    <il.ac.shenkar.showshenkar.utils.AlefTextView
         android:id="@+id/project_student"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
         android:textColor="@color/black" />
 
 
-    <TextView
+    <il.ac.shenkar.showshenkar.utils.AlefTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -27,7 +27,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/black" />
 
-    <TextView
+    <il.ac.shenkar.showshenkar.utils.AlefTextView
         android:id="@+id/project_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

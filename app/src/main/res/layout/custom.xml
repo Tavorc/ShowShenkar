@@ -10,7 +10,7 @@
         android:id="@+id/imageButtonPlay"
         android:src="@drawable/sound"/>
 
-    <TextView
+    <il.ac.shenkar.showshenkar.utils.AlefTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"

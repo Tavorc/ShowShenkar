@@ -7,7 +7,7 @@
     android:layoutDirection="rtl"
     android:orientation="horizontal">
 
-    <TextView
+    <il.ac.shenkar.showshenkar.utils.AlefTextView
         android:id="@+id/route_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
