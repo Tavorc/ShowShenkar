@@ -146,6 +146,7 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
             protected void onPostExecute(Department department) {
                 if (department != null) {
                     SetMapByDepartmentName(department.getName());
+                    mMap.setInfoWindowAdapter(new PopupAdapter(getLayoutInflater(),department.getImageUrl()));
                 }
             }
         }.execute();
@@ -214,8 +215,11 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
             protected void onPostExecute(Content content) {
                 if (content != null) {
                     // Add a marker of project by content-location
-                    // LatLng location = new LatLng(content.getLocation().getLat(),content.getLocation().getLng());
-                    // mMap.addMarker(new MarkerOptions().position(location).title(text));
+                    LatLng location = null;
+                    if(content.getLocation()!= null)
+                        location = new LatLng(content.getLocation().getLat(),content.getLocation().getLng());
+                    else
+                        mMap.addMarker(new MarkerOptions().position(location).title(text));
                 }
             }
         }.execute();
@@ -283,12 +287,12 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
 
         switch (building){
             case "Pernik" :{
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(PERNIK,18));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(PERNIK,20));
                 AddMarker(PERNIK, department + " -  בניין פרניק");
             break;
             }
             case "Mitchle" :{
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MITSHLE,18));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MITSHLE,20));
                 AddMarker(MITSHLE, department + " - בניין מיטשל");
                 break;
             }
