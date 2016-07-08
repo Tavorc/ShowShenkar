@@ -21,51 +21,55 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.GroundOverlay;
-import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.TileProvider;
+import com.google.android.gms.maps.model.UrlTileProvider;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Locale;
 
 import il.ac.shenkar.showshenkar.R;
+import il.ac.shenkar.showshenkar.backend.contentApi.ContentApi;
+import il.ac.shenkar.showshenkar.backend.contentApi.model.Content;
 import il.ac.shenkar.showshenkar.backend.departmentApi.DepartmentApi;
 import il.ac.shenkar.showshenkar.backend.departmentApi.model.Department;
+import il.ac.shenkar.showshenkar.backend.projectApi.ProjectApi;
+import il.ac.shenkar.showshenkar.backend.projectApi.model.Project;
 import il.ac.shenkar.showshenkar.utils.Constants;
 import il.ac.shenkar.showshenkar.utils.PermissionUtils;
+import il.ac.shenkar.showshenkar.adapters.*;
 
-public class MapActivity extends ShenkarActivity implements ActivityCompat.OnRequestPermissionsResultCallback,OnMapReadyCallback,GoogleMap.OnMyLocationButtonClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-
-    private GoogleMap depatmentMap;
+public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleApiClient mGoogleApiClient;
 
     private Location mLastLocation;
 
-    private Long mDepartmentId;
+    private GoogleMap mMap;
 
-    private static final LatLng PERNIK = new LatLng(32.09006641826965 , 34.80311807245016);
+    private static final LatLng PERNIK = new LatLng(32.0900466 , 34.8035959);
 
-    private static final LatLng MITSHLE = new LatLng(32.09005278383782, 34.80274926871061);
+    private static final LatLng MITSHLE = new LatLng(32.089928, 34.802239);
 
     private static final LatLng INTERIOR_DESIGN = new LatLng(32.09030615669672, 34.803183311601877);
 
-    private static final LatLng SHENKAR = new LatLng(32.09039421212218, 34.8030037432909);
+    private static final LatLng SHENKAR = new LatLng(32.090023, 34.803151);
 
     private static final LatLng ELIT = new LatLng(32.08264557800064, 34.80440218001604);
 
-    private GroundOverlay mGroundOverlay;
+    private Long objectId;
 
-    private int mCurrentEntry = 0;
+    private String objectType;
+
 
     /**
      * Request code for location permission request.
@@ -80,15 +84,10 @@ public class MapActivity extends ShenkarActivity implements ActivityCompat.OnReq
      */
     private boolean mPermissionDenied = false;
 
-    private Department _department = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-
-        // Set department id
-        mDepartmentId = getIntent().getLongExtra("id", 0);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.department_map);
@@ -103,15 +102,25 @@ public class MapActivity extends ShenkarActivity implements ActivityCompat.OnReq
                     .build();
         }
 
-        // Loads department
-        LoadDepartmentById(mDepartmentId);
-
+        objectId = getIntent().getLongExtra("objectId", 0);
+        objectType = getIntent().getStringExtra("objectType");
     }
 
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        enableMyLocation();
+        if (objectType.equals("project")){
+            SetProjectMap(objectId);
+        }else if (objectType.equals("department")){
+            SetDepartmentMap(objectId);
+        }
+    }
     /*
-    *   Loads department by id
-    * */
-    public void LoadDepartmentById(final Long id){
+     *   Set Department Map
+     * */
+    public void SetDepartmentMap(final Long departmentId){
         final DepartmentApi departmentApi = new DepartmentApi.Builder(
                 AndroidHttp.newCompatibleTransport(),
                 new JacksonFactory(),
@@ -125,77 +134,193 @@ public class MapActivity extends ShenkarActivity implements ActivityCompat.OnReq
         new AsyncTask<Void, Void, Department>() {
             @Override
             protected Department doInBackground(Void... params) {
-                Department department = null;
                 try {
-                    department = departmentApi.getDepartment(id).execute();
+                    return departmentApi.getDepartment(departmentId).execute();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                return department;
+                return null;
             }
 
             @Override
             protected void onPostExecute(Department department) {
-                // init department
-                _department = department;
-
-                // gets an image
-
-                // todo: Update the data in a database
-                //  String imageUrl = department.getImageUrl();
-                String imageUrl = "http://megastar.co.il/ShenkarImages/Mitshle/enterance.jpg";
-
-                // updates overlay image
-                new DownloadImageTask().execute(imageUrl);
-
-                // add marker
-                depatmentMap.addMarker(new MarkerOptions().position(PERNIK).title(_department.getName()).snippet(_department.getName())
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-
+                if (department != null) {
+                    SetMapByDepartmentName(department.getName());
+                }
             }
         }.execute();
     }
 
     /*
-    *  Download image task
-    * */
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+     *   Set Project Map
+     * */
+    public void SetProjectMap(final Long projectId) {
+        final ProjectApi projectApi = new ProjectApi.Builder(
+                AndroidHttp.newCompatibleTransport(),
+                new JacksonFactory(),
+                new HttpRequestInitializer() {
+                    @Override
+                    public void initialize(HttpRequest request) throws IOException {
 
-        public DownloadImageTask() {
+                    }
+                }).setRootUrl(Constants.ROOT_URL).build();
 
-        }
 
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+        new AsyncTask<Void, Void, Project>() {
+            @Override
+            protected Project doInBackground(Void... params) {
+                try {
+                    return projectApi.getProject(projectId).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
             }
-            return mIcon11;
-        }
 
-        protected void onPostExecute(Bitmap result) {
-            // Add a large overlay at Newark on top of the smaller overlay.
-            mGroundOverlay = depatmentMap.addGroundOverlay(new GroundOverlayOptions()
-                    .image(BitmapDescriptorFactory.fromBitmap(result))
-                    .position(SHENKAR, 190f, 150f));
-        }
+            @Override
+            protected void onPostExecute(Project project) {
+                if (project != null) {
+                    SetMapByDepartmentName(project.getDepartment());
+                    AddMarkerByLocationContent(Long.parseLong(project.getContentId()), project.getName());
+                }
+            }
+        }.execute();
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        depatmentMap = googleMap;
+    private void AddMarkerByLocationContent(final Long contentId, final String text){
+        final ContentApi contentApi = new ContentApi.Builder(
+                AndroidHttp.newCompatibleTransport(),
+                new JacksonFactory(),
+                new HttpRequestInitializer() {
+                    @Override
+                    public void initialize(HttpRequest request) throws IOException {
 
-        depatmentMap.setOnMyLocationButtonClickListener(this);
-        enableMyLocation();
+                    }
+                }).setRootUrl(Constants.ROOT_URL).build();
 
-        depatmentMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SHENKAR, 18));
+        new AsyncTask<Void, Void,Content>() {
+            @Override
+            protected Content doInBackground(Void... params) {
+                Content content = null;
+                try {
+                    content = contentApi.getContent(contentId).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return content;
+            }
 
+            @Override
+            protected void onPostExecute(Content content) {
+                if (content != null) {
+                    // Add a marker of project by content-location
+                    // LatLng location = new LatLng(content.getLocation().getLat(),content.getLocation().getLng());
+                    // mMap.addMarker(new MarkerOptions().position(location).title(text));
+                }
+            }
+        }.execute();
     }
+
+    void AddMarker(LatLng location,String text){
+        mMap.addMarker(new MarkerOptions().position(location).title(text));
+    }
+
+    private void SetMapByDepartmentName(String department){
+        String path = null;
+        String building = null;
+        switch (department) {
+            case "עיצוב תכשיטים": {
+                path = "Mitchle/3";
+                building = "Mitchle";
+                break;
+            }
+            case "תואר שני בעיצוב": {
+                path = "Mitchle/7";
+                building = "Mitchle";
+                //לרחבת הכניסה של בניין פרניק
+                break;
+            }
+            case "עיצוב תעשייתי": {
+                path = "Mitchle/4";
+                building = "Mitchle";
+                break;
+            }
+            case "תקשורת חזותית": {
+                path = "Mitchle/6";
+                building = "Mitchle";
+                //path = "Mitchle/5";
+                break;
+            }
+            case "עיצוב פנים מבנה וסביבה": {
+                path = "Mitchle/5";
+                building = "Mitchle";
+                break;
+            }
+            case "עיצוב טקסטיל": {
+                path = "Pernik/-1";
+                building = "Pernik";
+                break;
+            }
+            case "אומנות רב תחומית": {
+                path = "Mitchle/7";
+                building = "Mitchle";
+                // בבנין עלית ההיסטורי
+                break;
+            }
+            case "הנדסת תוכנה": {
+                path = "Pernik/2";
+                building = "Pernik";
+                // Shenkar.ac.il says Mitchle
+                break;
+            }
+            case "עיצוב אופנה": {
+                path = "Pernik/4";
+                building = "Pernik";
+                //  path = "Permik/3";
+                break;
+            }
+        }
+
+        switch (building){
+            case "Pernik" :{
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(PERNIK,18));
+                AddMarker(PERNIK, department + " -  בניין פרניק");
+            break;
+            }
+            case "Mitchle" :{
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MITSHLE,18));
+                AddMarker(MITSHLE, department + " - בניין מיטשל");
+                break;
+            }
+        }
+
+        setUpMap(path);
+    }
+
+    private void setUpMap(final String path) {
+
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        TileProvider tileProvider = new UrlTileProvider(256, 256) {
+            @Override
+            public synchronized URL getTileUrl(int x, int y, int zoom) {
+                // The moon tile coordinate system is reversed.  This is not normal.
+                int reversedY = (1 << zoom) - y - 2;
+                String s = String.format(Locale.US, "http://megastar.co.il/EPSG3857/"+ path +"/%d/%d/%d.png", zoom, x, y);
+                URL url = null;
+                try {
+                    url = new URL(s);
+                } catch (MalformedURLException e) {
+                    throw new AssertionError(e);
+                }
+                return url;
+            }
+        };
+
+        mMap.addTileOverlay(new TileOverlayOptions().tileProvider(tileProvider));
+    }
+
+
 
     protected void onStart() {
         mGoogleApiClient.connect();
@@ -208,7 +333,7 @@ public class MapActivity extends ShenkarActivity implements ActivityCompat.OnReq
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
+    public void onConnected(Bundle bundle) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -235,26 +360,8 @@ public class MapActivity extends ShenkarActivity implements ActivityCompat.OnReq
     }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    public void onConnectionFailed(ConnectionResult connectionResult) {
         Toast.makeText(this, "Connection problem", Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
-            return;
-        }
-
-        if (PermissionUtils.isPermissionGranted(permissions, grantResults,
-                Manifest.permission.ACCESS_FINE_LOCATION)) {
-            // Enable the my location layer if the permission has been granted.
-            enableMyLocation();
-        } else {
-            // Display the missing permission error dialog when the fragments resume.
-            mPermissionDenied = true;
-        }
     }
 
     /**
@@ -266,38 +373,11 @@ public class MapActivity extends ShenkarActivity implements ActivityCompat.OnReq
             // Permission to access the location is missing.
             PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
                     Manifest.permission.ACCESS_FINE_LOCATION, true);
-        } else if (depatmentMap != null) {
+        } else if (mMap != null) {
             // Access to the location has been granted to the app.
-            depatmentMap.setMyLocationEnabled(true);
+            mMap.setMyLocationEnabled(true);
         }
     }
-
-    @Override
-    public boolean onMyLocationButtonClick() {
-        //Toast.makeText(this, "Welcome to ShowShenkar Map", Toast.LENGTH_SHORT).show();
-        // Return false so that we don't consume the event and the default behavior still occurs
-        // (the camera animates to the user's current position).
-        return false;
-    }
-
-    @Override
-    protected void onResumeFragments() {
-        super.onResumeFragments();
-        if (mPermissionDenied) {
-            // Permission was not granted, display error dialog.
-            showMissingPermissionError();
-            mPermissionDenied = false;
-        }
-    }
-
-    /**
-     * Displays a dialog with error message explaining that the location permission is missing.
-     */
-    private void showMissingPermissionError() {
-        PermissionUtils.PermissionDeniedDialog
-                .newInstance(true).show(getSupportFragmentManager(), "dialog");
-    }
-
 
 }
 
