@@ -216,10 +216,12 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
                 if (content != null) {
                     // Add a marker of project by content-location
                     LatLng location = null;
-                    if(content.getLocation()!= null)
-                        location = new LatLng(content.getLocation().getLat(),content.getLocation().getLng());
-                    else
-                        mMap.addMarker(new MarkerOptions().position(location).title(text));
+                   try {
+                       location = new LatLng(content.getLocation().getLat(), content.getLocation().getLng());
+                       mMap.addMarker(new MarkerOptions().position(location).title(text));
+                   }catch (Exception exc) {
+                       mMap.addMarker(new MarkerOptions().position(SHENKAR).title(text));
+                   }
                 }
             }
         }.execute();
