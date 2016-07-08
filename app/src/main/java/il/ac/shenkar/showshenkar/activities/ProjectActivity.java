@@ -9,11 +9,9 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,10 +45,9 @@ public class ProjectActivity extends ShenkarActivity {
     private ProjectGalleryRecyclerAdapter adapter;
     private List<Media> mProjectTumbs;
     private DBHelper dbhelper;
-    private   ContentApi contentApi;
-    private  Content content;
+    private ContentApi contentApi;
+    private Content content;
     private ProjectApi projectApi;
-    private Project projectM;
     private List<Media> listM;
     private String urlVideo="none";
     private String urlAudio="none";
@@ -105,16 +102,6 @@ public class ProjectActivity extends ShenkarActivity {
 
         mProjectTumbs = new ArrayList<>();
 
-        Media temp = new Media();
-        temp.setUrl("http://lh3.googleusercontent.com/alNfn7CNCfSgaTGXb6T06AnXiwGFi18a_eepmFPKnxhf73QXu7CqVQU0ODKOIYsAzBPx86lE0mJDLyXbciIcFplR");
-
-        mProjectTumbs.add(temp);
-        mProjectTumbs.add(temp);
-        mProjectTumbs.add(temp);
-        mProjectTumbs.add(temp);
-        mProjectTumbs.add(temp);
-        mProjectTumbs.add(temp);
-
         adapter = new ProjectGalleryRecyclerAdapter(this, views.imgScreenShot, mProjectTumbs);
         rvProjects.setAdapter(adapter);
 
@@ -129,12 +116,12 @@ public class ProjectActivity extends ShenkarActivity {
             @Override
             protected Project doInBackground(Void... params) {
                 try {
-                    projectM=projectApi.getProject(projectId).execute();
-                    idContent=projectM.getContentId();
+                    mProject=projectApi.getProject(projectId).execute();
+                    idContent=mProject.getContentId();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                return projectM;
+                return mProject;
             }
         }.execute();
 

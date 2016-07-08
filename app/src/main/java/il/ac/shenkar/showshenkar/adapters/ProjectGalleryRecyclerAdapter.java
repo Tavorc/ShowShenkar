@@ -64,7 +64,7 @@ public class ProjectGalleryRecyclerAdapter extends RecyclerView.Adapter<ProjectG
         boolean isNew = mImages.isEmpty();
         mImages.clear();
         for (Media media : medias) {
-            if (media.getType() == "image") {
+            if ("Image".equalsIgnoreCase(media.getType())) {
                 mImages.add(media);
             }
         }
