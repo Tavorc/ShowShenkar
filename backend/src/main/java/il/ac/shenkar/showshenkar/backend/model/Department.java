@@ -12,6 +12,8 @@ public class Department extends BaseEntity {
     @Index
     String name;
     String imageUrl;
+    String largeImageUrl;
+    String locDescruption;
 
     public String getName() {
         return name;
@@ -27,5 +29,21 @@ public class Department extends BaseEntity {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getLargeImageUrl() {
+        return largeImageUrl;
+    }
+
+    public void setLargeImageUrl(String largeImageUrl) {
+        this.largeImageUrl = largeImageUrl;
+    }
+
+    public String getLocDescruption() {
+        return locDescruption;
+    }
+
+    public void setLocDescruption(String locDescruption) {
+        this.locDescruption = locDescruption;
     }
 }

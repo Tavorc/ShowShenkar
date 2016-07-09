@@ -59,11 +59,19 @@ public class Upload extends HttpServlet {
                     OfyService.ofy().save().entity(content).now();
                 }
             }
-            else{
+            else if(Objects.equals(type, "dep")){
                 Department department = OfyService.ofy().load().type(Department.class).id(id).now();
                 if(department != null){
                     log.info("Department found: " + department.toString() + '\n');
                     department.setImageUrl(imageUrl);
+                    OfyService.ofy().save().entity(department).now();
+                }
+            }
+            else{
+                Department department = OfyService.ofy().load().type(Department.class).id(id).now();
+                if(department != null){
+                    log.info("Department found: " + department.toString() + '\n');
+                    department.setLargeImageUrl(imageUrl);
                     OfyService.ofy().save().entity(department).now();
                 }
             }
