@@ -42,7 +42,7 @@ public class MainActivity extends ShenkarActivity {
                 Intent intent = new Intent(MainActivity.this, DepartmentActivity.class);
                 intent.putExtra("title", item.getName());
                 intent.putExtra("id", item.getId());
-                intent.putExtra("image", item.getImageUrl());
+                intent.putExtra("image", item.getLargeImageUrl());
 
                 //Start details activity
                 startActivity(intent);
