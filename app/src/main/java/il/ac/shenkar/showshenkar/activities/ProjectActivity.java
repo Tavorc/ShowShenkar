@@ -75,6 +75,8 @@ public class ProjectActivity extends ShenkarActivity {
    // Button playSD;
     private ImageButton playVd ;
     private ImageButton playSD ;
+    private ImageButton playVdGray;
+    private ImageButton playSDGray;
     private MediaPlayer mediaPlayer;
     private ProjectViewHolder views;
     private String project;
@@ -97,7 +99,8 @@ public class ProjectActivity extends ShenkarActivity {
         projectId = getIntent().getLongExtra("id", 0);
         playVd = (ImageButton) findViewById(R.id.imageButtonVideo);
         playSD = (ImageButton) findViewById(R.id.imageButtonSound);
-
+        playVdGray = (ImageButton) findViewById(R.id.imageButtonVideo2);
+        playSDGray = (ImageButton) findViewById(R.id.imageButtonSound2);
         // Initialize recycler view
         RecyclerView rvProjects = (RecyclerView) findViewById(R.id.project_tumbs);
         rvProjects.setLayoutManager(new LinearLayoutManager(this));
@@ -108,18 +111,18 @@ public class ProjectActivity extends ShenkarActivity {
         rvProjects.setAdapter(adapter);
 
         mediaPlayer = new MediaPlayer();
-       // playVd = (Button) findViewById(R.id.buttonVideo);
-      //  playSD = (Button) findViewById(R.id.buttonSoundM);
+        // playVd = (Button) findViewById(R.id.buttonVideo);
+        //  playSD = (Button) findViewById(R.id.buttonSoundM);
 
-        dbhelper=new DBHelper();
-        projectApi=dbhelper.getProjectApi();
+        dbhelper = new DBHelper();
+        projectApi = dbhelper.getProjectApi();
 
         new AsyncTask<Void, Void, Project>() {
             @Override
             protected Project doInBackground(Void... params) {
                 try {
-                    mProject=projectApi.getProject(projectId).execute();
-                    idContent=mProject.getContentId();
+                    mProject = projectApi.getProject(projectId).execute();
+                    idContent = mProject.getContentId();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -127,22 +130,19 @@ public class ProjectActivity extends ShenkarActivity {
             }
         }.execute();
 
-        contentApi=dbhelper.getContentApi();
+        contentApi = dbhelper.getContentApi();
         new AsyncTask<Void, Void, Content>() {
             @Override
             protected Content doInBackground(Void... params) {
                 try {
-                    content=contentApi.getContent(Long.valueOf(idContent)).execute();
-                    listM=content.getMedia();
-                    for(int i=0;i<listM.size();i++)
-                    {
-                        if(listM.get(i).getType()=="video")
-                        {
-                            urlVideo=listM.get(i).getUrl();
+                    content = contentApi.getContent(Long.valueOf(idContent)).execute();
+                    listM = content.getMedia();
+                    for (int i = 0; i < listM.size(); i++) {
+                        if (listM.get(i).getType() == "video") {
+                            urlVideo = listM.get(i).getUrl();
                         }
-                        if(listM.get(i).getType()=="audio")
-                        {
-                            urlAudio=listM.get(i).getUrl();
+                        if (listM.get(i).getType() == "audio") {
+                            urlAudio = listM.get(i).getUrl();
                         }
                     }
                 } catch (IOException e) {
@@ -151,77 +151,95 @@ public class ProjectActivity extends ShenkarActivity {
                 return content;
             }
         }.execute();
-
-        playVd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (urlVideo != "none") {
+        // playVdGray
+        // playSDGray
+        if (urlVideo == "none") {
+            playVd.setVisibility(View.GONE);
+            playVdGray.setVisibility(View.VISIBLE);
+            playVdGray.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(ProjectActivity.this, "אין וידאו לפרוייקט", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+        if (urlVideo != "none") {
+            playVdGray.setVisibility(View.GONE);
+            playVd.setVisibility(View.VISIBLE);
+            playVd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     Intent i = new Intent(ProjectActivity.this, YouTubeActivity.class);
-                    i.putExtra("url", urlVideo );
+                    i.putExtra("url", urlVideo);
                     startActivity(i);
                 }
-                if (urlVideo== "none")
-                {
-                    Toast.makeText(ProjectActivity.this, "אין וידאו לפרוייקט",
-                            Toast.LENGTH_LONG).show();
+            });
+        }
+        if (urlAudio == "none") {
+            playSD.setVisibility(View.GONE);
+            playSDGray.setVisibility(View.VISIBLE);
+            playSDGray.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(ProjectActivity.this, "אין קטע שמיעה", Toast.LENGTH_LONG).show();
                 }
-            }
-        });
-        playSD.setOnClickListener(new View.OnClickListener() {
+            });
+
+        }
+          if (urlAudio != "none") {
+              playSDGray.setVisibility(View.GONE);
+              playSD.setVisibility(View.VISIBLE);
+            playSD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (urlAudio != "none") {
-                    final Dialog dialogT = new Dialog(context);
-                    dialogT.setContentView(R.layout.custom);
-                    ImageButton dialogButtonPlay = (ImageButton) dialogT.findViewById(R.id.imageButtonPlay);
-                    // if button is clicked, close the custom dialog
-                    dialogButtonPlay.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //  String url = "http://programmerguru.com/android-tutorial/wp-content/uploads/2013/04/hosannatelugu.mp3";
-                            String url =urlAudio;
-                            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                            try {
-                                mediaPlayer.setDataSource(url);
-                            } catch (IllegalArgumentException e) {
+                final Dialog dialogT = new Dialog(context);
+                dialogT.setContentView(R.layout.custom);
+                ImageButton dialogButtonPlay = (ImageButton) dialogT.findViewById(R.id.imageButtonPlay);
+                // if button is clicked, close the custom dialog
+                dialogButtonPlay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //  String url = "http://programmerguru.com/android-tutorial/wp-content/uploads/2013/04/hosannatelugu.mp3";
+                        String url = urlAudio;
+                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                        try {
+                            mediaPlayer.setDataSource(url);
+                        } catch (IllegalArgumentException e) {
 
-                            } catch (SecurityException e) {
+                        } catch (SecurityException e) {
 
-                            } catch (IllegalStateException e) {
+                        } catch (IllegalStateException e) {
 
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            try {
-                                mediaPlayer.prepare();
-                            } catch (IllegalStateException e) {
-
-                            } catch (IOException e) {
-
-                            }
-                            mediaPlayer.start();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    });
-                    ImageButton dialogButtonStop = (ImageButton) dialogT.findViewById(R.id.imageButtonStop);
-                    // if button is clicked, close the custom dialog
-                    dialogButtonStop.setOnClickListener(new View.OnClickListener() {
+                        try {
+                            mediaPlayer.prepare();
+                        } catch (IllegalStateException e) {
 
-                        @Override
-                        public void onClick(View v) {
-                            mediaPlayer.stop();
+                        } catch (IOException e) {
+
                         }
-                    });
+                        mediaPlayer.start();
+                    }
+                });
+                ImageButton dialogButtonStop = (ImageButton) dialogT.findViewById(R.id.imageButtonStop);
+                // if button is clicked, close the custom dialog
+                dialogButtonStop.setOnClickListener(new View.OnClickListener() {
 
-                    dialogT.show();
-                }
-                if (urlAudio== "none")
-                {
-                    Toast.makeText(ProjectActivity.this, "אין קטע שמיעה",
-                            Toast.LENGTH_LONG).show();
-                }
+                    @Override
+                    public void onClick(View v) {
+                        mediaPlayer.stop();
+                    }
+                });
+
+                dialogT.show();
+
             }
 
         });
+    }
     }
 
     @Override
