@@ -319,7 +319,7 @@ public class ProjectActivity extends ShenkarActivity {
         }
         sharingIntent.setType("image/jpeg");
         sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
-        startActivity(Intent.createChooser(sharingIntent, "Share image using"));
+        startActivity(Intent.createChooser(sharingIntent, "Share Project Using"));
         // TODO: implement share project
         Toast.makeText(this, "שתף פרויקט", Toast.LENGTH_LONG).show();
         MyRouteActivity.addProjectId(this, projectId);
@@ -352,7 +352,8 @@ public class ProjectActivity extends ShenkarActivity {
 
         try
         {
-            startActivity(Intent.createChooser(i, "Send invite"));
+            startActivity(Intent.createChooser(i, "Send Email"));
+            Toast.makeText(this, "שלחו מייל ליוצר/ת", Toast.LENGTH_LONG).show();
         } catch (ActivityNotFoundException ex)
         {
             Toast.makeText(this, "No email clients installed", Toast.LENGTH_SHORT);

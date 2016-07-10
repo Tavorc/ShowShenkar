@@ -51,16 +51,6 @@
             android:layout_gravity="center"
             android:scaleType="fitXY" />
 
-        <Button
-            android:id="@+id/btnLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|left"
-            android:layoutDirection="rtl"
-            android:onClick="showDepartmentLocation"
-            android:padding="10dp"
-            android:text="@string/btn_dep_location"
-            android:textDirection="rtl" />
     </FrameLayout>
 
 
