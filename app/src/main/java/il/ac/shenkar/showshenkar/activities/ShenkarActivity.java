@@ -51,7 +51,10 @@ public class ShenkarActivity extends AppCompatActivity {
     }
 
     private void showMap() {
-        // TODO: show map
+        Intent i = new Intent(this, MapActivity.class);
+        i.putExtra("objectId", "general");
+        i.putExtra("objectType", "general");
+        startActivity(i);
     }
 
     /*
