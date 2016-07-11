@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 public class Route extends BaseEntity {
     String name;
-    List<Project> projects;
+    List<String> projectIds;
 
     public String getName() {
         return name;
@@ -21,11 +21,11 @@ public class Route extends BaseEntity {
         this.name = name;
     }
 
-    public List<Project> getProjects() {
-        return projects;
+    public List<String> getProjectIds() {
+        return projectIds;
     }
 
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
+    public void setProjectIds(List<String> projectIds) {
+        this.projectIds = projectIds;
     }
 }

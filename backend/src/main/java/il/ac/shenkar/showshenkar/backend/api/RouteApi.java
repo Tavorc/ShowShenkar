@@ -47,22 +47,7 @@ public class RouteApi {
             httpMethod = ApiMethod.HttpMethod.GET
     )
     public List<Route> getRoutes(){
-        MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-        syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
-
-        String key = "getRoutes";
-
-        if (syncCache.contains(key)){
-            return (List<Route>) syncCache.get(key);
-        }
-
-        List<Route> routes = OfyService.ofy().load().type(Route.class).list();
-
-        Expiration expiration =  Expiration.byDeltaSeconds((int) TimeUnit.HOURS.toSeconds(3));
-        syncCache.put(key,routes,expiration);
-
-
-        return routes;
+        return OfyService.ofy().load().type(Route.class).list();
     }
 
     @ApiMethod(

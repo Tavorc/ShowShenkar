@@ -13,7 +13,7 @@ public class Department extends BaseEntity {
     String name;
     String imageUrl;
     String largeImageUrl;
-    String locDescruption;
+    String locationDescription;
 
     public String getName() {
         return name;
@@ -39,11 +39,11 @@ public class Department extends BaseEntity {
         this.largeImageUrl = largeImageUrl;
     }
 
-    public String getLocDescruption() {
-        return locDescruption;
+    public String getLocationDescription() {
+        return locationDescription;
     }
 
-    public void setLocDescruption(String locDescruption) {
-        this.locDescruption = locDescruption;
+    public void setLocationDescription(String locationDescription) {
+        this.locationDescription = locationDescription;
     }
 }
