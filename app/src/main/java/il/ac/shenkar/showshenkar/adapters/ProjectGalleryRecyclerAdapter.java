@@ -18,6 +18,7 @@ public class ProjectGalleryRecyclerAdapter extends RecyclerView.Adapter<ProjectG
     private final ImageView mMainImage;
     private List<Media> mImages;
     private Context mContext;
+    private String currentMainImageUrl;
 
     public ProjectGalleryRecyclerAdapter(Context context, ImageView mainImage, List<Media> mImages) {
         this.mImages = mImages;
@@ -25,9 +26,14 @@ public class ProjectGalleryRecyclerAdapter extends RecyclerView.Adapter<ProjectG
         this.mMainImage = mainImage;
     }
 
+    public String getCurrentMainImageUrl()
+    {
+        return currentMainImageUrl;
+    }
+
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.project_tumb, null);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.project_tumb, viewGroup, false);
 
         return new CustomViewHolder(view);
     }
@@ -36,6 +42,7 @@ public class ProjectGalleryRecyclerAdapter extends RecyclerView.Adapter<ProjectG
     public void onBindViewHolder(CustomViewHolder customViewHolder, int i) {
         Media image = mImages.get(i);
 
+        customViewHolder.imgUrl = image.getUrl();
         new DownloadImageTask(customViewHolder.imgTumb).execute(image.getUrl());
     }
 
@@ -46,6 +53,7 @@ public class ProjectGalleryRecyclerAdapter extends RecyclerView.Adapter<ProjectG
 
     public class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         protected ImageView imgTumb;
+        protected String imgUrl;
 
         public CustomViewHolder(View view) {
             super(view);
@@ -57,12 +65,19 @@ public class ProjectGalleryRecyclerAdapter extends RecyclerView.Adapter<ProjectG
         public void onClick(View v) {
             ImageView image = (ImageView) v;
             mMainImage.setImageBitmap(((BitmapDrawable) image.getDrawable()).getBitmap());
+            ProjectGalleryRecyclerAdapter.this.currentMainImageUrl = imgUrl;
         }
     }
 
     public void refresh(final List<Media> medias) {
         boolean isNew = mImages.isEmpty();
         mImages.clear();
+
+        if (medias == null)
+        {
+            return;
+        }
+
         for (Media media : medias) {
             if ("Image".equalsIgnoreCase(media.getType())) {
                 mImages.add(media);
@@ -72,6 +87,7 @@ public class ProjectGalleryRecyclerAdapter extends RecyclerView.Adapter<ProjectG
         if (isNew && !mImages.isEmpty())
         {
             new DownloadImageTask(mMainImage).execute(mImages.get(0).getUrl());
+            currentMainImageUrl = mImages.get(0).getUrl();
         }
 
         notifyDataSetChanged();

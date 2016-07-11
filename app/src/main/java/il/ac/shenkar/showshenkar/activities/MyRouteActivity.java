@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,6 +21,8 @@ public class MyRouteActivity extends ShenkarActivity {
     private List<Project> mProjects;
 
     private DepProjectsRecyclerAdapter adapter;
+    private RecyclerView rvProjects;
+    private TextView emptyView;
 
     public static void addProjectId(Context context, Long projectId) {
         SharedPreferences sharedPref = context.getSharedPreferences(
@@ -38,9 +42,10 @@ public class MyRouteActivity extends ShenkarActivity {
 
 
         // Initialize recycler view
-        RecyclerView rvProjects = (RecyclerView) findViewById(R.id.projects);
+        rvProjects = (RecyclerView) findViewById(R.id.projects);
         rvProjects.setLayoutManager(new LinearLayoutManager(this));
 
+        emptyView = (TextView) findViewById(R.id.no_projects);
         mProjects = new ArrayList<>();
         adapter = new DepProjectsRecyclerAdapter(this, mProjects);
         rvProjects.setAdapter(adapter);
@@ -54,6 +59,15 @@ public class MyRouteActivity extends ShenkarActivity {
         SharedPreferences sharedPref = getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         Set<String> projectIds = sharedPref.getStringSet(getString(R.string.preference_ids_key), new HashSet<String>());
-        adapter.refresh(projectIds);
+
+        if (projectIds == null || projectIds.isEmpty()) {
+            rvProjects.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        }
+        else {
+            adapter.refresh(projectIds);
+            rvProjects.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
     }
 }

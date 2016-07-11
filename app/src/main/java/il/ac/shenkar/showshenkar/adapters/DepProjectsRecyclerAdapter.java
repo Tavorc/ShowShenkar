@@ -17,6 +17,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,6 +25,8 @@ import il.ac.shenkar.showshenkar.R;
 import il.ac.shenkar.showshenkar.activities.ProjectActivity;
 import il.ac.shenkar.showshenkar.backend.projectApi.ProjectApi;
 import il.ac.shenkar.showshenkar.backend.projectApi.model.Project;
+import il.ac.shenkar.showshenkar.backend.routeApi.RouteApi;
+import il.ac.shenkar.showshenkar.backend.routeApi.model.Route;
 import il.ac.shenkar.showshenkar.utils.Constants;
 
 public class DepProjectsRecyclerAdapter extends RecyclerView.Adapter<DepProjectsRecyclerAdapter.CustomViewHolder> {
@@ -92,6 +95,49 @@ public class DepProjectsRecyclerAdapter extends RecyclerView.Adapter<DepProjects
             //Start details activity
             mContext.startActivity(intent);
         }
+    }
+
+    public void refresh(final Long routeId) {
+        final RouteApi routeApi = new RouteApi.Builder(
+                AndroidHttp.newCompatibleTransport(),
+                new JacksonFactory(),
+                new HttpRequestInitializer() {
+                    @Override
+                    public void initialize(HttpRequest request) throws IOException {
+
+                    }
+                }).setRootUrl(Constants.ROOT_URL).build();
+
+        new AsyncTask<Void, Void, Route>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mProgressDialog = ProgressDialog.show(mContext, "טוען נתונים", "מעדכן פרויקטים", true, true);
+            }
+
+
+            @Override
+            protected Route doInBackground(Void... params) {
+                Route route = null;
+                try {
+                    route = routeApi.getRoute(routeId).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return route;
+            }
+
+            @Override
+            protected void onPostExecute(Route route) {
+                //show complition in UI
+                //fill grid view with data
+                mProgressDialog.dismiss();
+                if (route != null) {
+                    refresh(new HashSet<String>(route.getProjectIds()));
+                }
+            }
+        }.execute();
     }
 
     public void refresh(final String department) {

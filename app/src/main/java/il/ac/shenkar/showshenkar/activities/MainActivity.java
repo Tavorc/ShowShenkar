@@ -42,6 +42,7 @@ public class MainActivity extends ShenkarActivity {
                 Intent intent = new Intent(MainActivity.this, DepartmentActivity.class);
                 intent.putExtra("title", item.getName());
                 intent.putExtra("id", item.getId());
+                intent.putExtra("location", item.getLocationDescription());
                 intent.putExtra("image", item.getLargeImageUrl());
 
                 //Start details activity

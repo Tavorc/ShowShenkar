@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,8 +26,9 @@ public class DepartmentActivity extends ShenkarActivity {
     private Long mDepartmentId;
     private String mDepartmentName;
     private DepProjectsRecyclerAdapter adapter;
-    private Button buttonWhere;
+    private ImageButton buttonWhere;
     private AlertDialog.Builder dialog;
+    private String mLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +37,15 @@ public class DepartmentActivity extends ShenkarActivity {
 
         mDepartmentId = getIntent().getLongExtra("id", 0);
         mDepartmentName = getIntent().getStringExtra("title");
-        buttonWhere=(Button) findViewById(R.id.btnLocation);
+        mLocation = getIntent().getStringExtra("location");
+        buttonWhere = (ImageButton) findViewById(R.id.btnLocation);
         final String imageUrl = getIntent().getStringExtra("image");
 
         TextView titleTextView = (TextView) findViewById(R.id.title);
         titleTextView.setText(mDepartmentName);
+
+        TextView locationTextView = (TextView) findViewById(R.id.location);
+        locationTextView.setText(mLocation);
 
         final ImageView imageView = (ImageView) findViewById(R.id.image);
         new DownloadImageTask(imageView).execute(imageUrl);
@@ -61,7 +66,7 @@ public class DepartmentActivity extends ShenkarActivity {
         adapter.refresh(mDepartmentName);
     }
 
-    public void showDepartmentLocation( View v ) {
+    public void showDepartmentLocation(View v) {
         Intent i = new Intent(this, MapActivity.class);
         i.putExtra("objectId", mDepartmentId);
         i.putExtra("objectType", "department");

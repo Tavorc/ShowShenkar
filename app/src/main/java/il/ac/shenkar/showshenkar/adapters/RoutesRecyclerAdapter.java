@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 import il.ac.shenkar.showshenkar.R;
-import il.ac.shenkar.showshenkar.activities.DepartmentActivity;
+import il.ac.shenkar.showshenkar.activities.SuggestedRouteActivity;
 import il.ac.shenkar.showshenkar.backend.routeApi.RouteApi;
 import il.ac.shenkar.showshenkar.backend.routeApi.model.Route;
 import il.ac.shenkar.showshenkar.utils.Constants;
@@ -36,7 +36,7 @@ public class RoutesRecyclerAdapter extends RecyclerView.Adapter<RoutesRecyclerAd
 
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.route_row, null);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.route_row, viewGroup, false);
 
         return new CustomViewHolder(view);
     }
@@ -45,6 +45,7 @@ public class RoutesRecyclerAdapter extends RecyclerView.Adapter<RoutesRecyclerAd
     public void onBindViewHolder(CustomViewHolder customViewHolder, int i) {
         Route route = mRoutes.get(i);
 
+        customViewHolder.routeId = route.getId();
         customViewHolder.txtRouteName.setText(route.getName());
     }
 
@@ -55,6 +56,7 @@ public class RoutesRecyclerAdapter extends RecyclerView.Adapter<RoutesRecyclerAd
 
     public class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         protected TextView txtRouteName;
+        protected Long routeId;
 
         public CustomViewHolder(View view) {
             super(view);
@@ -65,7 +67,8 @@ public class RoutesRecyclerAdapter extends RecyclerView.Adapter<RoutesRecyclerAd
         @Override
         public void onClick(View v) {
             //Create intent
-            Intent intent = new Intent(mContext, DepartmentActivity.class);
+            Intent intent = new Intent(mContext, SuggestedRouteActivity.class);
+            intent.putExtra("id", routeId);
             intent.putExtra("title", txtRouteName.getText().toString());
 
             //Start details activity

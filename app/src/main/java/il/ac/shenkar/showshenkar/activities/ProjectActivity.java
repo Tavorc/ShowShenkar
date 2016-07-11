@@ -59,7 +59,7 @@ public class ProjectActivity extends ShenkarActivity {
     private String idContent;
     private ProgressDialog mProgressDialog;
 
-    static class ProjectViewHolder {
+    class ProjectViewHolder {
         TextView txtProjectName;
         TextView txtStudentName;
         TextView txtProjectDesc;
@@ -70,11 +70,24 @@ public class ProjectActivity extends ShenkarActivity {
             txtStudentName = (TextView) activity.findViewById(R.id.txtStudentName);
             txtProjectDesc = (TextView) activity.findViewById(R.id.txtProjectDesc);
             imgScreenShot = (ImageView) activity.findViewById(R.id.imgScreenShot);
+            imgScreenShot.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (adapter == null)
+                    {
+                        return;
+                    }
+
+                    Intent i = new Intent(ProjectActivity.this, ProjectImageActivity.class);
+                    i.putExtra("url", adapter.getCurrentMainImageUrl());
+                    startActivity(i);
+                }
+            });
         }
     }
 
-    private ImageButton playVd ;
-    private ImageButton playSD ;
+    private ImageButton playVd;
+    private ImageButton playSD;
     private ImageButton playVdGray;
     private ImageButton playSDGray;
     private MediaPlayer mediaPlayer;
@@ -115,15 +128,16 @@ public class ProjectActivity extends ShenkarActivity {
         playSDGray.setVisibility(View.GONE);
         refreshMedia();
     }
-    public void refreshMedia()
-    {
-         dbhelper = new DBHelper();
-         projectApi = dbhelper.getProjectApi();
+
+    public void refreshMedia() {
+        dbhelper = new DBHelper();
+        projectApi = dbhelper.getProjectApi();
         new AsyncTask<Void, Void, Project>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
             }
+
             @Override
             protected Project doInBackground(Void... params) {
                 try {
@@ -142,6 +156,7 @@ public class ProjectActivity extends ShenkarActivity {
             protected void onPreExecute() {
                 super.onPreExecute();
             }
+
             @Override
             protected Content doInBackground(Void... params) {
                 try {
@@ -152,22 +167,23 @@ public class ProjectActivity extends ShenkarActivity {
                 }
                 return content;
             }
+
             @TargetApi(Build.VERSION_CODES.KITKAT)
             @Override
             protected void onPostExecute(Content contents) {
-               super.onPostExecute(contents);
+                super.onPostExecute(contents);
 
-                   if (contents != null) {
-                       listM = contents.getMedia();
-                       for (int i = 0; i < listM.size(); ++i) {
-                           if (Objects.equals(listM.get(i).getType(), "video")) {
-                               urlVideo = listM.get(i).getUrl();
-                           }
-                           if (Objects.equals(listM.get(i).getType(), "audio")) {
-                               urlAudio = listM.get(i).getUrl();
-                           }
-                       }
-                   }
+                if ((contents != null) && (content.getMedia() != null)) {
+                    listM = contents.getMedia();
+                    for (int i = 0; i < listM.size(); ++i) {
+                        if (Objects.equals(listM.get(i).getType(), "video")) {
+                            urlVideo = listM.get(i).getUrl();
+                        }
+                        if (Objects.equals(listM.get(i).getType(), "audio")) {
+                            urlAudio = listM.get(i).getUrl();
+                        }
+                    }
+                }
                 if (urlVideo != null) {
                     playVd.setVisibility(View.VISIBLE);
                     playVd.setOnClickListener(new View.OnClickListener() {
@@ -246,12 +262,14 @@ public class ProjectActivity extends ShenkarActivity {
                     });
                 }
             }
+
             @Override
-            protected void onProgressUpdate( Void... params){
-               super.onProgressUpdate();
+            protected void onProgressUpdate(Void... params) {
+                super.onProgressUpdate();
             }
         }.execute();
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -285,6 +303,7 @@ public class ProjectActivity extends ShenkarActivity {
                 }
                 return null;
             }
+
             @Override
             protected void onPostExecute(Project project) {
                 mProgressDialog.dismiss();
@@ -293,16 +312,16 @@ public class ProjectActivity extends ShenkarActivity {
                     refreshContent(Long.parseLong(mProject.getContentId()));
                 }
             }
+
             @Override
-            protected void onProgressUpdate( Void... params){
+            protected void onProgressUpdate(Void... params) {
                 super.onProgressUpdate();
             }
 
         }.execute();
     }
 
-    private void refreshContent(final Long contentId)
-    {
+    private void refreshContent(final Long contentId) {
         final ContentApi contentApi = new ContentApi.Builder(
                 AndroidHttp.newCompatibleTransport(),
                 new JacksonFactory(),
@@ -322,6 +341,7 @@ public class ProjectActivity extends ShenkarActivity {
                 }
                 return null;
             }
+
             @Override
             protected void onPostExecute(Content result) {
                 if (result != null) {
@@ -338,7 +358,7 @@ public class ProjectActivity extends ShenkarActivity {
 
     public void shareProject(View v) {
 
-       Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         Uri screenshotUri = Uri.parse("android.resource://il.ac.shenkar.showshenkar.activities/*");
         try {
             InputStream stream = getContentResolver().openInputStream(screenshotUri);
@@ -362,15 +382,13 @@ public class ProjectActivity extends ShenkarActivity {
     }
 
     public void sendEmail(View v) {
-        if (mProject.getStudentEMail() == null || mProject.getStudentEMail().isEmpty())
-        {
+        if (mProject.getStudentEMail() == null || mProject.getStudentEMail().isEmpty()) {
             Toast.makeText(this, "אין מיילים זמינים לפרויקט", Toast.LENGTH_LONG).show();
             return;
         }
 
         List<String> emails = new ArrayList<>();
-        for (String email : mProject.getStudentEMail())
-        {
+        for (String email : mProject.getStudentEMail()) {
             emails.add(email);
         }
 
@@ -379,12 +397,10 @@ public class ProjectActivity extends ShenkarActivity {
         i.putExtra(Intent.EXTRA_EMAIL, emails.toArray(new String[emails.size()]));
         i.putExtra(Intent.EXTRA_SUBJECT, "הודעה משנקר");
 
-        try
-        {
+        try {
             startActivity(Intent.createChooser(i, "Send Email"));
             Toast.makeText(this, "שלחו מייל ליוצר/ת", Toast.LENGTH_LONG).show();
-        } catch (ActivityNotFoundException ex)
-        {
+        } catch (ActivityNotFoundException ex) {
             Toast.makeText(this, "No email clients installed", Toast.LENGTH_SHORT);
         }
     }

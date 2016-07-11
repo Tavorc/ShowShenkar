@@ -5,134 +5,135 @@
     android:layout_height="match_parent"
     tools:context="il.ac.shenkar.showshenkar.activities.ProjectActivity">
 
-    <ScrollView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_marginBottom="50dp"
+        android:layoutDirection="rtl"
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layoutDirection="rtl"
-            android:orientation="vertical"
-            android:weightSum="1">
+            android:layout_height="50dp"
+            android:background="@color/shenkarYellow"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@color/shenkarYellow"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <il.ac.shenkar.showshenkar.utils.BoldAlefTextView
-                    android:id="@+id/txtProjectName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/shenkarYellow"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textDirection="rtl"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
-
-                <il.ac.shenkar.showshenkar.utils.BoldAlefTextView
-                    android:id="@+id/txtStudentName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/shenkarYellow"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textDirection="rtl"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <FrameLayout
+            <il.ac.shenkar.showshenkar.utils.BoldAlefTextView
+                android:id="@+id/txtProjectName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
                 android:background="@color/shenkarYellow"
-                android:orientation="horizontal"
-                android:paddingBottom="10dp"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
-                android:paddingTop="10dp">
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textDirection="rtl"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
-                <ScrollView
-                    android:id="@+id/scrollView"
+            <il.ac.shenkar.showshenkar.utils.BoldAlefTextView
+                android:id="@+id/txtStudentName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/shenkarYellow"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textDirection="rtl"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/shenkarYellow"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="10dp">
+
+            <ScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center"
+                android:layout_margin="5dp"
+                android:background="@color/shenkarYellow">
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right|center"
-                    android:layout_margin="5dp"
-                    android:background="@color/shenkarYellow">
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                    <view
+                        android:id="@+id/project_tumbs"
+                        class="android.support.v7.widget.RecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp" />
 
-                        <view
-                            android:id="@+id/project_tumbs"
-                            class="android.support.v7.widget.RecyclerView"
-                            android:layout_width="match_parent"
-                            android:layout_height="150dp" />
+                </LinearLayout>
+            </ScrollView>
 
-                    </LinearLayout>
-                </ScrollView>
+            <ImageView
+                android:id="@+id/imgScreenShot"
+                android:layout_width="200dp"
+                android:layout_height="150dp"
+                android:layout_alignTop="@+id/scrollView"
+                android:layout_gravity="left|center"
+                android:background="@color/shenkarYellow"
+                android:src="@drawable/shenkaricon" />
 
-                <ImageView
-                    android:id="@+id/imgScreenShot"
-                    android:layout_width="200dp"
-                    android:layout_height="150dp"
-                    android:layout_alignTop="@+id/scrollView"
-                    android:layout_gravity="left|center"
-                    android:background="@color/shenkarYellow"
-                    android:src="@drawable/shenkaricon" />
+        </FrameLayout>
 
-            </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@color/white"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/btnEmail"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@color/shenkarYellow"
+                android:onClick="sendEmail"
+                android:scaleType="fitXY"
+                android:src="@drawable/email" />
 
-                <ImageButton
-                    android:id="@+id/btnEmail"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:background="@color/shenkarYellow"
-                    android:scaleType="fitXY"
-                    android:onClick="sendEmail"
-                    android:src="@drawable/email" />
-
-                <ImageButton
-                    android:id="@+id/btnLocation"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:background="@color/shenkarYellow"
-                    android:onClick="showLocation"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/location" />
+            <ImageButton
+                android:id="@+id/btnLocation"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@color/shenkarYellow"
+                android:onClick="showLocation"
+                android:scaleType="fitXY"
+                android:src="@drawable/location" />
 
 
-                <ImageButton
-                    android:id="@+id/btnShare"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/shenkarYellow"
-                    android:onClick="shareProject"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/share" />
+            <ImageButton
+                android:id="@+id/btnShare"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/shenkarYellow"
+                android:onClick="shareProject"
+                android:scaleType="fitXY"
+                android:src="@drawable/share" />
 
-            </LinearLayout>
+        </LinearLayout>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <il.ac.shenkar.showshenkar.utils.AlefTextView
                 android:id="@+id/txtProjectDesc"
@@ -144,16 +145,9 @@
                 android:textColor="@color/black"
                 android:textDirection="rtl" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="4.55"
-                android:orientation="horizontal">
+        </ScrollView>
 
-
-            </RelativeLayout>
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -187,6 +181,7 @@
             android:background="@null"
             android:scaleType="fitXY"
             android:src="@drawable/video" />
+
         <ImageButton
             android:id="@+id/imageButtonSound2"
             android:layout_width="40dp"
