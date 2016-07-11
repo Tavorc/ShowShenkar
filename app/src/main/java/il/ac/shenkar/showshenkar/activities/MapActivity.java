@@ -110,7 +110,18 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
         }else if (objectType.equals("department")){
             SetDepartmentMap(objectId);
         }
+        else if (objectType.equals("general")){
+            SetGeneralMap();
+        }
     }
+    /*
+     *   Set General Map
+     * */
+    public void SetGeneralMap(){
+        SetMapByDepartmentName("שנקר");
+        mMap.setInfoWindowAdapter(new PopupAdapter(getLayoutInflater(),""));
+    }
+
     /*
      *   Set Department Map
      * */
@@ -279,6 +290,11 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
                 //  path = "Permik/3";
                 break;
             }
+            case "שנקר": {
+                path = "Anna";
+                building = "Shenkar";
+                break;
+            }
         }
 
         switch (building){
@@ -290,6 +306,12 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
             case "Mitchle" :{
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MITSHLE,20));
                 AddMarker(MITSHLE, department + " - בניין מיטשל");
+                break;
+            }
+            case "Shenkar" :
+            default:{
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SHENKAR,18));
+                AddMarker(SHENKAR, department);
                 break;
             }
         }
