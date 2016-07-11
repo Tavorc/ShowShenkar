@@ -33,11 +33,6 @@
         <activity android:name=".activities.DepartmentActivity" />
         <!-- <activity android:name=".activities.VideoActivity" /> -->
         <activity android:name=".activities.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".activities.ProjectActivity" />
         <activity android:name=".activities.RoutesActivity" />
@@ -68,7 +63,13 @@
             android:value="@string/facebook_app_id" />
 
         <activity android:name=".activities.SuggestedRouteActivity" />
-        <activity android:name=".activities.ProjectImageActivity"></activity>
+        <activity android:name=".activities.ProjectImageActivity" />
+        <activity android:name=".activities.LaunchActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
