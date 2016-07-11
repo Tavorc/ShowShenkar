@@ -8,10 +8,11 @@
         android:id="@+id/splash"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:src="@drawable/launch"
+
         android:contentDescription="@string/app_name"
         android:background="@color/shenkarYellow"
         android:layout_gravity="center"/>
 
 </FrameLayout>
 
+    <!--android:src="@drawable/launch"-->
