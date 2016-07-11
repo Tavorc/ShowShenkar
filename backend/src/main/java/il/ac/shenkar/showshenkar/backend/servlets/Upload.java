@@ -43,20 +43,37 @@ public class Upload extends HttpServlet {
             String imageUrl = ImagesServiceFactory.getImagesService().getServingUrl(ServingUrlOptions.Builder.withBlobKey(blobKeys.get(0)));
             Long id = Long.valueOf(req.getParameter("id"));
             String type = req.getParameter("type");
+            String url = req.getParameter("url");
             log.info("id: " + id + '\n' + "type: " + type + '\n' + "URL: " + imageUrl + '\n');
             if(Objects.equals(type, "")){
                 Content content = OfyService.ofy().load().type(Content.class).id(id).now();
-                if(content != null){
-                    log.info("Content found: " + content.toString() + '\n');
-                    Media media = new Media();
-                    media.setUrl(imageUrl);
-                    media.setType("Image");
-                    if(content.getMedia() == null){
-                        List<Media> mediaList = new ArrayList<>();
-                        content.setMedia(mediaList);
+                if(!Objects.equals(url, "")){
+                    if (content != null) {
+                        log.info("Content found: " + content.toString() + '\n');
+                        Media media = new Media();
+                        media.setUrl(url);
+                        media.setType("video");
+                        if (content.getMedia() == null) {
+                            List<Media> mediaList = new ArrayList<>();
+                            content.setMedia(mediaList);
+                        }
+                        content.getMedia().add(media);
+                        OfyService.ofy().save().entity(content).now();
                     }
-                    content.getMedia().add(media);
-                    OfyService.ofy().save().entity(content).now();
+                }
+                else {
+                    if (content != null) {
+                        log.info("Content found: " + content.toString() + '\n');
+                        Media media = new Media();
+                        media.setUrl(imageUrl);
+                        media.setType("Image");
+                        if (content.getMedia() == null) {
+                            List<Media> mediaList = new ArrayList<>();
+                            content.setMedia(mediaList);
+                        }
+                        content.getMedia().add(media);
+                        OfyService.ofy().save().entity(content).now();
+                    }
                 }
             }
             else if(Objects.equals(type, "dep")){
