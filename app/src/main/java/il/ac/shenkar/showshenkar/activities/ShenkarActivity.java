@@ -75,8 +75,11 @@ public class ShenkarActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Cancelled scan");
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                Log.d("MainActivity", "Scanned");
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                Long rContent = Long.valueOf(result.getContents()).longValue();
+                Intent to_mapActivity = new Intent(this, MapActivity.class);
+                to_mapActivity.putExtra("objectId",rContent) ;
+                to_mapActivity.putExtra("objectType", "project");
+                startActivity(to_mapActivity);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

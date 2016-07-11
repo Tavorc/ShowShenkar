@@ -2,16 +2,11 @@ package il.ac.shenkar.showshenkar.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -21,7 +16,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlayOptions;
@@ -38,6 +32,7 @@ import java.net.URL;
 import java.util.Locale;
 
 import il.ac.shenkar.showshenkar.R;
+import il.ac.shenkar.showshenkar.adapters.PopupAdapter;
 import il.ac.shenkar.showshenkar.backend.contentApi.ContentApi;
 import il.ac.shenkar.showshenkar.backend.contentApi.model.Content;
 import il.ac.shenkar.showshenkar.backend.departmentApi.DepartmentApi;
@@ -46,7 +41,6 @@ import il.ac.shenkar.showshenkar.backend.projectApi.ProjectApi;
 import il.ac.shenkar.showshenkar.backend.projectApi.model.Project;
 import il.ac.shenkar.showshenkar.utils.Constants;
 import il.ac.shenkar.showshenkar.utils.PermissionUtils;
-import il.ac.shenkar.showshenkar.adapters.*;
 
 public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
