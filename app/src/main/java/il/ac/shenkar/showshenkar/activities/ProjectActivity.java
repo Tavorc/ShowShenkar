@@ -1,5 +1,6 @@
 package il.ac.shenkar.showshenkar.activities;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -10,6 +11,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import il.ac.shenkar.showshenkar.R;
 import il.ac.shenkar.showshenkar.adapters.ProjectGalleryRecyclerAdapter;
@@ -51,8 +54,8 @@ public class ProjectActivity extends ShenkarActivity {
     private Content content;
     private ProjectApi projectApi;
     private List<Media> listM;
-    private String urlVideo="none";
-    private String urlAudio="none";
+    private String urlVideo;
+    private String urlAudio;
     private String idContent;
     private ProgressDialog mProgressDialog;
 
@@ -70,9 +73,6 @@ public class ProjectActivity extends ShenkarActivity {
         }
     }
 
-
-    //Button playVd;
-   // Button playSD;
     private ImageButton playVd ;
     private ImageButton playSD ;
     private ImageButton playVdGray;
@@ -106,18 +106,24 @@ public class ProjectActivity extends ShenkarActivity {
         rvProjects.setLayoutManager(new LinearLayoutManager(this));
 
         mProjectTumbs = new ArrayList<>();
-
         adapter = new ProjectGalleryRecyclerAdapter(this, views.imgScreenShot, mProjectTumbs);
         rvProjects.setAdapter(adapter);
-
         mediaPlayer = new MediaPlayer();
-        // playVd = (Button) findViewById(R.id.buttonVideo);
-        //  playSD = (Button) findViewById(R.id.buttonSoundM);
-
-        dbhelper = new DBHelper();
-        projectApi = dbhelper.getProjectApi();
-
+        playSD.setVisibility(View.GONE);
+        playVd.setVisibility(View.GONE);
+        playVdGray.setVisibility(View.GONE);
+        playSDGray.setVisibility(View.GONE);
+        refreshMedia();
+    }
+    public void refreshMedia()
+    {
+         dbhelper = new DBHelper();
+         projectApi = dbhelper.getProjectApi();
         new AsyncTask<Void, Void, Project>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
             @Override
             protected Project doInBackground(Void... params) {
                 try {
@@ -133,115 +139,119 @@ public class ProjectActivity extends ShenkarActivity {
         contentApi = dbhelper.getContentApi();
         new AsyncTask<Void, Void, Content>() {
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+            @Override
             protected Content doInBackground(Void... params) {
                 try {
                     content = contentApi.getContent(Long.valueOf(idContent)).execute();
-                    listM = content.getMedia();
-                    for (int i = 0; i < listM.size(); i++) {
-                        if (listM.get(i).getType() == "video") {
-                            urlVideo = listM.get(i).getUrl();
-                        }
-                        if (listM.get(i).getType() == "audio") {
-                            urlAudio = listM.get(i).getUrl();
-                        }
-                    }
+                    publishProgress(params);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 return content;
             }
-        }.execute();
-        // playVdGray
-        // playSDGray
-        if (urlVideo == "none") {
-            playVd.setVisibility(View.GONE);
-            playVdGray.setVisibility(View.VISIBLE);
-            playVdGray.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(ProjectActivity.this, "אין וידאו לפרוייקט", Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-        if (urlVideo != "none") {
-            playVdGray.setVisibility(View.GONE);
-            playVd.setVisibility(View.VISIBLE);
-            playVd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(ProjectActivity.this, YouTubeActivity.class);
-                    i.putExtra("url", urlVideo);
-                    startActivity(i);
-                }
-            });
-        }
-        if (urlAudio == "none") {
-            playSD.setVisibility(View.GONE);
-            playSDGray.setVisibility(View.VISIBLE);
-            playSDGray.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(ProjectActivity.this, "אין קטע שמיעה", Toast.LENGTH_LONG).show();
-                }
-            });
-
-        }
-          if (urlAudio != "none") {
-              playSDGray.setVisibility(View.GONE);
-              playSD.setVisibility(View.VISIBLE);
-            playSD.setOnClickListener(new View.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.KITKAT)
             @Override
-            public void onClick(View v) {
-                final Dialog dialogT = new Dialog(context);
-                dialogT.setContentView(R.layout.custom);
-                ImageButton dialogButtonPlay = (ImageButton) dialogT.findViewById(R.id.imageButtonPlay);
-                // if button is clicked, close the custom dialog
-                dialogButtonPlay.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //  String url = "http://programmerguru.com/android-tutorial/wp-content/uploads/2013/04/hosannatelugu.mp3";
-                        String url = urlAudio;
-                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                        try {
-                            mediaPlayer.setDataSource(url);
-                        } catch (IllegalArgumentException e) {
+            protected void onPostExecute(Content contents) {
+               super.onPostExecute(contents);
 
-                        } catch (SecurityException e) {
-
-                        } catch (IllegalStateException e) {
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                   if (contents != null) {
+                       listM = contents.getMedia();
+                       for (int i = 0; i < listM.size(); ++i) {
+                           if (Objects.equals(listM.get(i).getType(), "video")) {
+                               urlVideo = listM.get(i).getUrl();
+                           }
+                           if (Objects.equals(listM.get(i).getType(), "audio")) {
+                               urlAudio = listM.get(i).getUrl();
+                           }
+                       }
+                   }
+                if (urlVideo != null) {
+                    playVd.setVisibility(View.VISIBLE);
+                    playVd.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(ProjectActivity.this, YouTubeActivity.class);
+                            i.putExtra("url", urlVideo);
+                            startActivity(i);
                         }
-                        try {
-                            mediaPlayer.prepare();
-                        } catch (IllegalStateException e) {
-
-                        } catch (IOException e) {
-
+                    });
+                }
+                if (urlVideo == null) {
+                    playVdGray.setVisibility(View.VISIBLE);
+                    playVdGray.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(ProjectActivity.this, "אין וידאו לפרוייקט", Toast.LENGTH_LONG).show();
                         }
-                        mediaPlayer.start();
-                    }
-                });
-                ImageButton dialogButtonStop = (ImageButton) dialogT.findViewById(R.id.imageButtonStop);
-                // if button is clicked, close the custom dialog
-                dialogButtonStop.setOnClickListener(new View.OnClickListener() {
+                    });
+                }
+                if (urlAudio == null) {
+                    playSDGray.setVisibility(View.VISIBLE);
+                    playSDGray.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(ProjectActivity.this, "אין קטע שמיעה", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+                if (urlAudio != null) {
+                    playSD.setVisibility(View.VISIBLE);
+                    playSD.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final Dialog dialogT = new Dialog(context);
+                            dialogT.setContentView(R.layout.custom);
+                            ImageButton dialogButtonPlay = (ImageButton) dialogT.findViewById(R.id.imageButtonPlay);
+                            // if button is clicked, close the custom dialog
+                            dialogButtonPlay.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //  String url = "http://programmerguru.com/android-tutorial/wp-content/uploads/2013/04/hosannatelugu.mp3";
+                                    String url = urlAudio;
+                                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                                    try {
+                                        mediaPlayer.setDataSource(url);
+                                    } catch (IllegalArgumentException e) {
 
-                    @Override
-                    public void onClick(View v) {
-                        mediaPlayer.stop();
-                    }
-                });
+                                    } catch (SecurityException e) {
 
-                dialogT.show();
+                                    } catch (IllegalStateException e) {
 
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    try {
+                                        mediaPlayer.prepare();
+                                    } catch (IllegalStateException e) {
+
+                                    } catch (IOException e) {
+
+                                    }
+                                    mediaPlayer.start();
+                                }
+                            });
+                            ImageButton dialogButtonStop = (ImageButton) dialogT.findViewById(R.id.imageButtonStop);
+                            // if button is clicked, close the custom dialog
+                            dialogButtonStop.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mediaPlayer.stop();
+                                }
+                            });
+                            dialogT.show();
+                        }
+                    });
+                }
             }
-
-        });
+            @Override
+            protected void onProgressUpdate( Void... params){
+               super.onProgressUpdate();
+            }
+        }.execute();
     }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -258,8 +268,6 @@ public class ProjectActivity extends ShenkarActivity {
 
                     }
                 }).setRootUrl(Constants.ROOT_URL).build();
-
-
         new AsyncTask<Void, Void, Project>() {
             @Override
             protected void onPreExecute() {
@@ -271,12 +279,12 @@ public class ProjectActivity extends ShenkarActivity {
             protected Project doInBackground(Void... params) {
                 try {
                     return projectApi.getProject(projectId).execute();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 return null;
             }
-
             @Override
             protected void onPostExecute(Project project) {
                 mProgressDialog.dismiss();
@@ -285,6 +293,11 @@ public class ProjectActivity extends ShenkarActivity {
                     refreshContent(Long.parseLong(mProject.getContentId()));
                 }
             }
+            @Override
+            protected void onProgressUpdate( Void... params){
+                super.onProgressUpdate();
+            }
+
         }.execute();
     }
 
@@ -299,7 +312,6 @@ public class ProjectActivity extends ShenkarActivity {
 
                     }
                 }).setRootUrl(Constants.ROOT_URL).build();
-
         new AsyncTask<Void, Void, Content>() {
             @Override
             protected Content doInBackground(Void... params) {
@@ -310,7 +322,6 @@ public class ProjectActivity extends ShenkarActivity {
                 }
                 return null;
             }
-
             @Override
             protected void onPostExecute(Content result) {
                 if (result != null) {
