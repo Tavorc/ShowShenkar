@@ -40,28 +40,29 @@ public class Upload extends HttpServlet {
             
             res.sendRedirect("/uploadImage.jsp?updated=no");
         } else {
-            String imageUrl = ImagesServiceFactory.getImagesService().getServingUrl(ServingUrlOptions.Builder.withBlobKey(blobKeys.get(0)));
             Long id = Long.valueOf(req.getParameter("id"));
             String type = req.getParameter("type");
             String url = req.getParameter("url");
-            log.info("id: " + id + '\n' + "type: " + type + '\n' + "URL: " + imageUrl + '\n');
-            if(Objects.equals(type, "")){
+            if(!Objects.equals(url, "")){
                 Content content = OfyService.ofy().load().type(Content.class).id(id).now();
-                if(!Objects.equals(url, "")){
-                    if (content != null) {
-                        log.info("Content found: " + content.toString() + '\n');
-                        Media media = new Media();
-                        media.setUrl(url);
-                        media.setType("video");
-                        if (content.getMedia() == null) {
-                            List<Media> mediaList = new ArrayList<>();
-                            content.setMedia(mediaList);
-                        }
-                        content.getMedia().add(media);
-                        OfyService.ofy().save().entity(content).now();
+                if (content != null) {
+                    log.info("Content found: " + content.toString() + '\n');
+                    Media media = new Media();
+                    media.setUrl(url);
+                    media.setType("video");
+                    if (content.getMedia() == null) {
+                        List<Media> mediaList = new ArrayList<>();
+                        content.setMedia(mediaList);
                     }
+                    content.getMedia().add(media);
+                    OfyService.ofy().save().entity(content).now();
                 }
-                else {
+            }
+            else {
+                String imageUrl = ImagesServiceFactory.getImagesService().getServingUrl(ServingUrlOptions.Builder.withBlobKey(blobKeys.get(0)));
+                log.info("id: " + id + '\n' + "type: " + type + '\n' + "URL: " + imageUrl + '\n');
+                if (Objects.equals(type, "")) {
+                    Content content = OfyService.ofy().load().type(Content.class).id(id).now();
                     if (content != null) {
                         log.info("Content found: " + content.toString() + '\n');
                         Media media = new Media();
@@ -74,22 +75,20 @@ public class Upload extends HttpServlet {
                         content.getMedia().add(media);
                         OfyService.ofy().save().entity(content).now();
                     }
-                }
-            }
-            else if(Objects.equals(type, "dep")){
-                Department department = OfyService.ofy().load().type(Department.class).id(id).now();
-                if(department != null){
-                    log.info("Department found: " + department.toString() + '\n');
-                    department.setImageUrl(imageUrl);
-                    OfyService.ofy().save().entity(department).now();
-                }
-            }
-            else{
-                Department department = OfyService.ofy().load().type(Department.class).id(id).now();
-                if(department != null){
-                    log.info("Department found: " + department.toString() + '\n');
-                    department.setLargeImageUrl(imageUrl);
-                    OfyService.ofy().save().entity(department).now();
+                } else if (Objects.equals(type, "dep")) {
+                    Department department = OfyService.ofy().load().type(Department.class).id(id).now();
+                    if (department != null) {
+                        log.info("Department found: " + department.toString() + '\n');
+                        department.setImageUrl(imageUrl);
+                        OfyService.ofy().save().entity(department).now();
+                    }
+                } else {
+                    Department department = OfyService.ofy().load().type(Department.class).id(id).now();
+                    if (department != null) {
+                        log.info("Department found: " + department.toString() + '\n');
+                        department.setLargeImageUrl(imageUrl);
+                        OfyService.ofy().save().entity(department).now();
+                    }
                 }
             }
             res.sendRedirect("/uploadImage.jsp?updated=yes");
