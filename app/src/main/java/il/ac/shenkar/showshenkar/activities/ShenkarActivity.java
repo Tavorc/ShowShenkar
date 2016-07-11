@@ -1,6 +1,7 @@
 package il.ac.shenkar.showshenkar.activities;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,11 +13,19 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.IOException;
+
 import il.ac.shenkar.showshenkar.R;
+import il.ac.shenkar.showshenkar.backend.projectApi.ProjectApi;
+import il.ac.shenkar.showshenkar.backend.projectApi.model.Project;
+import il.ac.shenkar.showshenkar.model.DBHelper;
 
 public class ShenkarActivity extends AppCompatActivity {
 
     public String Qrlocation;
+    Long rContent;
+    ProjectApi projectApi;
+    Project project;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +84,45 @@ public class ShenkarActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Cancelled scan");
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                Long rContent = Long.valueOf(result.getContents()).longValue();
-                Intent to_mapActivity = new Intent(this, MapActivity.class);
-                to_mapActivity.putExtra("objectId",rContent) ;
-                to_mapActivity.putExtra("objectType", "project");
-                startActivity(to_mapActivity);
+//                String locationId;
+                DBHelper helper = new DBHelper();
+                try {
+                    rContent = Long.valueOf(result.getContents());
+                } catch (NumberFormatException e){
+//                    locationId = result.getContents();
+//                    Intent to_mapActivity = new Intent(this, MapActivity.class);
+//                    to_mapActivity.putExtra("objectId",locationId);
+//                    to_mapActivity.putExtra("objectType", "location");
+//                    startActivity(to_mapActivity);
+                    //TODO: location id, goto map activity
+                }
+                projectApi = helper.getProjectApi();
+                new AsyncTask<Void, Void, Project>() {
+                    @Override
+                    protected Project doInBackground(Void... params) {
+                        try {
+                            project = projectApi.getProject(rContent).execute();
+                            publishProgress(params);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return project;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Project project) {
+                        super.onPostExecute(project);
+                        Intent i = new Intent(ShenkarActivity.this, ProjectActivity.class);
+                        String students = "";
+                        for(String name: project.getStudentNames()){
+                            students += name + " ";
+                        }
+                        i.putExtra("id", project.getId());
+                        i.putExtra("project", project.getName());
+                        i.putExtra("students", students);
+                        startActivity(i);
+                    }
+                }.execute();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
