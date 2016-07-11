@@ -401,7 +401,7 @@ public class ProjectActivity extends ShenkarActivity {
             startActivity(Intent.createChooser(i, "Send Email"));
             Toast.makeText(this, "שלחו מייל ליוצר/ת", Toast.LENGTH_LONG).show();
         } catch (ActivityNotFoundException ex) {
-            Toast.makeText(this, "No email clients installed", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "No email clients installed", Toast.LENGTH_SHORT).show();
         }
     }
 }
