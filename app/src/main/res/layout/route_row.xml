@@ -16,7 +16,7 @@
         android:layout_marginRight="10dp"
         android:src="@drawable/star" />
 
-    <il.ac.shenkar.showshenkar.utils.BoldAlefTextView
+    <il.ac.shenkar.endofyearshenkar.utils.BoldAlefTextView
         android:id="@+id/route_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

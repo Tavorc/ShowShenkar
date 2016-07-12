@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="il.ac.shenkar.showshenkar.activities.ProjectLocationMap">
+    tools:context="il.ac.shenkar.endofyearshenkar.activities.ProjectLocationMap">
 
     <fragment
         android:id="@+id/department_map"

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="il.ac.shenkar.showshenkar">
+    package="il.ac.shenkar.endofyearshenkar"
+    android:versionCode="1"
+    android:versionName="1.0">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -17,10 +19,6 @@
 
     <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
 
-    <provider
-        android:name="com.facebook.FacebookContentProvider"
-        android:authorities="com.facebook.app.FacebookContentProvider1555398778103189"
-        android:exported="true" />
 
     <application
         android:allowBackup="true"
@@ -29,23 +27,28 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider1555398778103189"
+            android:exported="true" />
+
         <!-- <activity android:name=".activities.AudioActivity" /> -->
-        <activity android:name=".activities.DepartmentActivity" />
+        <activity android:name="il.ac.shenkar.endofyearshenkar.activities.DepartmentActivity" />
         <!-- <activity android:name=".activities.VideoActivity" /> -->
-        <activity android:name=".activities.MainActivity">
+        <activity android:name="il.ac.shenkar.endofyearshenkar.activities.MainActivity">
         </activity>
-        <activity android:name=".activities.ProjectActivity" />
-        <activity android:name=".activities.RoutesActivity" />
+        <activity android:name="il.ac.shenkar.endofyearshenkar.activities.ProjectActivity" />
+        <activity android:name="il.ac.shenkar.endofyearshenkar.activities.RoutesActivity" />
         <activity
-            android:name=".activities.MapActivity"
+            android:name="il.ac.shenkar.endofyearshenkar.activities.MapActivity"
             android:label="@string/department"
             android:supportsRtl="true"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activities.MyRouteActivity" />
-        <activity android:name=".activities.YouTubeActivity" />
-        <activity android:name=".activities.GeneralActivity" />
+        <activity android:name="il.ac.shenkar.endofyearshenkar.activities.MyRouteActivity" />
+        <activity android:name="il.ac.shenkar.endofyearshenkar.activities.YouTubeActivity" />
+        <activity android:name="il.ac.shenkar.endofyearshenkar.activities.GeneralActivity" />
         <activity
-            android:name=".activities.ProjectLocationMap"
+            android:name="il.ac.shenkar.endofyearshenkar.activities.ProjectLocationMap"
             android:label="@string/project_location"
             android:supportsRtl="true"
             android:theme="@style/AppTheme" />
@@ -62,9 +65,9 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".activities.SuggestedRouteActivity" />
-        <activity android:name=".activities.ProjectImageActivity" />
-        <activity android:name=".activities.LaunchActivity">
+        <activity android:name="il.ac.shenkar.endofyearshenkar.activities.SuggestedRouteActivity" />
+        <activity android:name="il.ac.shenkar.endofyearshenkar.activities.ProjectImageActivity" />
+        <activity android:name="il.ac.shenkar.endofyearshenkar.activities.LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -18,7 +18,12 @@
         <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
         <init-param>
             <param-name>services</param-name>
-            <param-value>il.ac.shenkar.showshenkar.backend.RegistrationEndpoint, il.ac.shenkar.showshenkar.backend.MessagingEndpoint, il.ac.shenkar.showshenkar.backend.api.ContentApi, il.ac.shenkar.showshenkar.backend.api.ProjectApi, il.ac.shenkar.showshenkar.backend.api.DepartmentApi, il.ac.shenkar.showshenkar.backend.api.RouteApi</param-value>
+            <param-value>il.ac.shenkar.endofyearshenkar.backend.RegistrationEndpoint,
+                il.ac.shenkar.endofyearshenkar.backend.MessagingEndpoint,
+                il.ac.shenkar.endofyearshenkar.backend.api.ContentApi,
+                il.ac.shenkar.endofyearshenkar.backend.api.ProjectApi,
+                il.ac.shenkar.endofyearshenkar.backend.api.DepartmentApi,
+                il.ac.shenkar.endofyearshenkar.backend.api.RouteApi</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
@@ -32,12 +37,12 @@
 
     <servlet>
         <servlet-name>Upload</servlet-name>
-        <servlet-class>il.ac.shenkar.showshenkar.backend.servlets.Upload</servlet-class>
+        <servlet-class>il.ac.shenkar.endofyearshenkar.backend.servlets.Upload</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>UploadLocation</servlet-name>
-        <servlet-class>il.ac.shenkar.showshenkar.backend.servlets.UploadLocation</servlet-class>
+        <servlet-class>il.ac.shenkar.endofyearshenkar.backend.servlets.UploadLocation</servlet-class>
     </servlet>
 
     <servlet-mapping>
