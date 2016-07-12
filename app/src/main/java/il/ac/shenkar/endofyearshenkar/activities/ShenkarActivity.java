@@ -1,7 +1,6 @@
 package il.ac.shenkar.endofyearshenkar.activities;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,11 +12,8 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.io.IOException;
-
 import il.ac.shenkar.endofyearshenkar.R;
 import il.ac.shenkar.endofyearshenkar.model.DBHelper;
-
 import il.ac.shenkar.showshenkar.backend.projectApi.ProjectApi;
 import il.ac.shenkar.showshenkar.backend.projectApi.model.Project;
 
@@ -91,15 +87,20 @@ public class ShenkarActivity extends AppCompatActivity {
 //                String locationId;
                 DBHelper helper = new DBHelper();
                 try {
-                    rContent = Long.valueOf(result.getContents());
+                    String oType = result.getContents().split(";")[0];
+                    Long oID = Long.valueOf(result.getContents().split(";")[1]);
+                    //rContent = Long.valueOf(result.getContents());
+                    //locationId = result.getContents();
+                    Intent to_mapActivity = new Intent(this, MapActivity.class);
+                    to_mapActivity.putExtra("objectId",oID);
+                    to_mapActivity.putExtra("objectType", oType);
+                    startActivity(to_mapActivity);
+
                 } catch (NumberFormatException e){
-//                    locationId = result.getContents();
-//                    Intent to_mapActivity = new Intent(this, MapActivity.class);
-//                    to_mapActivity.putExtra("objectId",locationId);
-//                    to_mapActivity.putExtra("objectType", "location");
-//                    startActivity(to_mapActivity);
+
                     //TODO: location id, goto map activity
                 }
+                /*
                 projectApi = helper.getProjectApi();
                 new AsyncTask<Void, Void, Project>() {
                     @Override
@@ -127,6 +128,8 @@ public class ShenkarActivity extends AppCompatActivity {
                         startActivity(i);
                     }
                 }.execute();
+
+                */
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
