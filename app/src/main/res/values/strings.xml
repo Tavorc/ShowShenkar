@@ -32,5 +32,5 @@
     <string name="permission_required_toast">Location permission is required for this demo.</string>
     <string name="shenkar_title">שנקר</string>
     <string name="route_name_place_holder">שם המסלול</string>
-    <string name="empty_my_route">במסך זה תראו פרוייקטים שעברתם עליהן עם האפליקציה</string>
+    <string name="empty_my_route">במסך זה תראו פרוייקטים שעברתם עליהם עם האפליקציה</string>
 </resources>

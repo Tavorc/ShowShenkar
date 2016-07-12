@@ -88,9 +88,11 @@ public class DepProjectsRecyclerAdapter extends RecyclerView.Adapter<DepProjects
         @Override
         public void onClick(View v) {
             //Create intent
+            String studentNames = txtProjectStudent.getText().toString();
+            studentNames = studentNames.replace('\n', ' ');
             Intent intent = new Intent(mContext, ProjectActivity.class);
             intent.putExtra("project", txtProjectName.getText().toString());
-            intent.putExtra("students", txtProjectStudent.getText().toString());
+            intent.putExtra("students", studentNames);
             intent.putExtra("id", projectId);
 
             //Start details activity
