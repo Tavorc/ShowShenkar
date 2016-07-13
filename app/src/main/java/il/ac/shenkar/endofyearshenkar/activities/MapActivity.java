@@ -60,6 +60,7 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
     private static final LatLng SHENKAR = new LatLng(32.090023, 34.803151);
 
     private static final LatLng ELIT = new LatLng(32.08264557800064, 34.80440218001604);
+    private static final LatLng DEFAULT = new LatLng(32.089894851521, 34.80303257703781);
 
     private Long objectId;
 
@@ -300,19 +301,19 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
 
         switch (building){
             case "Pernik" :{
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(PERNIK,20));
-                AddMarker(PERNIK, department + " -  בניין פרניק");
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT, 21));
+                //AddMarker(PERNIK, department + " -  בניין פרניק");
             break;
             }
             case "Mitchle" :{
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MITSHLE,20));
-                AddMarker(MITSHLE, department + " - בניין מיטשל");
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT, 21));
+                //AddMarker(MITSHLE, department + " - בניין מיטשל");
                 break;
             }
             case "Shenkar" :
             default:{
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SHENKAR,18));
-                AddMarker(SHENKAR, department);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT, 21));
+                //AddMarker(SHENKAR, department);
                 break;
             }
         }
