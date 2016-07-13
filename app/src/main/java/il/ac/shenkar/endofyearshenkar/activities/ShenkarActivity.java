@@ -82,7 +82,7 @@ public class ShenkarActivity extends AppCompatActivity {
     }
 
     /*
-    * working the result of the scan*/
+     * working the result of the scan*/
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
@@ -90,94 +90,53 @@ public class ShenkarActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Cancelled scan");
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                //                String locationId;
+
                 DBHelper helper = new DBHelper();
-                try
-                {
+                try {
                     String oType = result.getContents().split(";")[0];
-                    final Long oID = Long.valueOf(result.getContents().split(";")[1]);
+                    Long oID = Long.valueOf(result.getContents().split(";")[1]);
 
-                    //rContent = Long.valueOf(result.getContents());
-                    //locationId = result.getContents();
-
-                    /*
-                    * if we know we got and prockent to pass on
-                    */
-                    if(oType.equals("project"))
-                    {
+                    if(oType=="project" || oType=="department"){
+                        Intent to_mapActivity = new Intent(this, MapActivity.class);
+                        to_mapActivity.putExtra("objectId",oID);
+                        to_mapActivity.putExtra("objectType", oType);
+                        startActivity(to_mapActivity);
+                    }else{
+                        projectApi = helper.getProjectApi();
                         new AsyncTask<Void, Void, Project>() {
-                            @Override
-                            protected void onPreExecute() {
-                                super.onPreExecute();
-                            }
-
                             @Override
                             protected Project doInBackground(Void... params) {
                                 try {
-                                    project = projectApi.getProject(oID).execute();
-                                    projectName = project.getName();
-                                    studentsName = project.getStudentNames();
+                                    project = projectApi.getProject(rContent).execute();
+                                    publishProgress(params);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
                                 return project;
                             }
+
+                            @Override
+                            protected void onPostExecute(Project project) {
+                                super.onPostExecute(project);
+                                Intent i = new Intent(ShenkarActivity.this, ProjectActivity.class);
+                                String students = "";
+                                for(String name: project.getStudentNames()){
+                                    students += name + " ";
+                                }
+                                i.putExtra("id", project.getId());
+                                i.putExtra("project", project.getName());
+                                i.putExtra("students", students);
+                                startActivity(i);
+                            }
                         }.execute();
-
-                        String namesStr = "";
-                        for (String name : studentsName) {
-                            namesStr += name + "\n";
-                        }
-
-                        Intent to_projectActivity = new Intent(this, ProjectActivity.class);
-                        to_projectActivity.putExtra("project",projectName);
-                        to_projectActivity.putExtra("students", namesStr);
-                        to_projectActivity.putExtra("id", oID);
-                        startActivity(to_projectActivity);
                     }
-                    /*
-                    * if we got something else from project type
-                    */
-                    else
-                    {
-                        Intent to_mapActivity = new Intent(this, MapActivity.class);
-                        to_mapActivity.putExtra("objectId",oID);
-                        to_mapActivity.putExtra("objectType", oType);
-                        startActivity(to_mapActivity);
-                    }
+
+
                 } catch (NumberFormatException e){
-                    Toast.makeText(this, "Error: Invalid QR ", Toast.LENGTH_LONG).show();
+
+
                 }
-                /*
-                projectApi = helper.getProjectApi();
-                new AsyncTask<Void, Void, Project>() {
-                    @Override
-                    protected Project doInBackground(Void... params) {
-                        try {
-                            project = projectApi.getProject(rContent).execute();
-                            publishProgress(params);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        return project;
-                    }
 
-                    @Override
-                    protected void onPostExecute(Project project) {
-                        super.onPostExecute(project);
-                        Intent i = new Intent(ShenkarActivity.this, ProjectActivity.class);
-                        String students = "";
-                        for(String name: project.getStudentNames()){
-                            students += name + " ";
-                        }
-                        i.putExtra("id", project.getId());
-                        i.putExtra("project", project.getName());
-                        i.putExtra("students", students);
-                        startActivity(i);
-                    }
-                }.execute();
-
-                */
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
