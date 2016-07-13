@@ -11,8 +11,8 @@ import java.io.Serializable;
 @Embed
 public class Location implements Serializable {
     String description;
-    Long lat;
-    Long lng;
+    Double lat;
+    Double lng;
     String url;
 
     public String getDescription() {
@@ -23,19 +23,19 @@ public class Location implements Serializable {
         this.description = description;
     }
 
-    public Long getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(Long lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
     }
 
-    public Long getLng() {
+    public Double getLng() {
         return lng;
     }
 
-    public void setLng(Long lng) {
+    public void setLng(Double lng) {
         this.lng = lng;
     }
 
