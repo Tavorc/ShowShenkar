@@ -103,7 +103,7 @@ public class ShenkarActivity extends AppCompatActivity {
                     /*
                     * if we know we got and prockent to pass on
                     */
-                    if(oType.equals("project"))
+                    if(oType.matches("project"))
                     {
                         new AsyncTask<Void, Void, Project>() {
                             @Override
@@ -122,18 +122,22 @@ public class ShenkarActivity extends AppCompatActivity {
                                 }
                                 return project;
                             }
+
+                            @Override
+                            protected void onPostExecute(Project project){
+                                String namesStr = "";
+                                for (String name : studentsName) {
+                                    namesStr += name + "\n";
+                                }
+
+                                Intent to_projectActivity = new Intent(ShenkarActivity.this, ProjectActivity.class);
+                                to_projectActivity.putExtra("project",projectName);
+                                to_projectActivity.putExtra("students", namesStr);
+                                to_projectActivity.putExtra("id", oID);
+                                startActivity(to_projectActivity);
+                            }
+
                         }.execute();
-
-                        String namesStr = "";
-                        for (String name : studentsName) {
-                            namesStr += name + "\n";
-                        }
-
-                        Intent to_projectActivity = new Intent(this, ProjectActivity.class);
-                        to_projectActivity.putExtra("project",projectName);
-                        to_projectActivity.putExtra("students", namesStr);
-                        to_projectActivity.putExtra("id", oID);
-                        startActivity(to_projectActivity);
                     }
                     /*
                     * if we got something else from project type
