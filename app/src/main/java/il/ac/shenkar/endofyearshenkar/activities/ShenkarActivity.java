@@ -1,6 +1,7 @@
 package il.ac.shenkar.endofyearshenkar.activities;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -11,6 +12,9 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.io.IOException;
+import java.util.List;
 
 import il.ac.shenkar.endofyearshenkar.R;
 import il.ac.shenkar.endofyearshenkar.model.DBHelper;
@@ -23,6 +27,8 @@ public class ShenkarActivity extends AppCompatActivity {
     Long rContent;
     ProjectApi projectApi;
     Project project;
+    List <String> studentsName;
+    String projectName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,21 +90,63 @@ public class ShenkarActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Cancelled scan");
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-//                String locationId;
+                //                String locationId;
                 DBHelper helper = new DBHelper();
-                try {
+                try
+                {
                     String oType = result.getContents().split(";")[0];
-                    Long oID = Long.valueOf(result.getContents().split(";")[1]);
+                    final Long oID = Long.valueOf(result.getContents().split(";")[1]);
+
                     //rContent = Long.valueOf(result.getContents());
                     //locationId = result.getContents();
-                    Intent to_mapActivity = new Intent(this, MapActivity.class);
-                    to_mapActivity.putExtra("objectId",oID);
-                    to_mapActivity.putExtra("objectType", oType);
-                    startActivity(to_mapActivity);
 
+                    /*
+                    * if we know we got and prockent to pass on
+                    */
+                    if(oType.equals("project"))
+                    {
+                        new AsyncTask<Void, Void, Project>() {
+                            @Override
+                            protected void onPreExecute() {
+                                super.onPreExecute();
+                            }
+
+                            @Override
+                            protected Project doInBackground(Void... params) {
+                                try {
+                                    project = projectApi.getProject(oID).execute();
+                                    projectName = project.getName();
+                                    studentsName = project.getStudentNames();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                return project;
+                            }
+                        }.execute();
+
+                        String namesStr = "";
+                        for (String name : studentsName) {
+                            namesStr += name + "\n";
+                        }
+
+                        Intent to_projectActivity = new Intent(this, ProjectActivity.class);
+                        to_projectActivity.putExtra("project",projectName);
+                        to_projectActivity.putExtra("students", namesStr);
+                        to_projectActivity.putExtra("id", oID);
+                        startActivity(to_projectActivity);
+                    }
+                    /*
+                    * if we got something else from project type
+                    */
+                    else
+                    {
+                        Intent to_mapActivity = new Intent(this, MapActivity.class);
+                        to_mapActivity.putExtra("objectId",oID);
+                        to_mapActivity.putExtra("objectType", oType);
+                        startActivity(to_mapActivity);
+                    }
                 } catch (NumberFormatException e){
-
-                    //TODO: location id, goto map activity
+                    Toast.makeText(this, "Error: Invalid QR ", Toast.LENGTH_LONG).show();
                 }
                 /*
                 projectApi = helper.getProjectApi();
