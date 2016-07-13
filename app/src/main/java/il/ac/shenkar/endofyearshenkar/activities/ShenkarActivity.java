@@ -90,107 +90,32 @@ public class ShenkarActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Cancelled scan");
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                //                String locationId;
-                DBHelper helper = new DBHelper();
-                try
-                {
-                    String oType = result.getContents().split(";")[0];
+                try {
+                    // Parse QR Code
+                    String oActivity = result.getContents().split(";")[0];
                     final Long oID = Long.valueOf(result.getContents().split(";")[1]);
-
-                    //rContent = Long.valueOf(result.getContents());
-                    //locationId = result.getContents();
-
-                    /*
-                    * if we know we got and prockent to pass on
-                    */
-                    if(oType.matches("project"))
-                    {
-                        new AsyncTask<Void, Void, Project>() {
-                            @Override
-                            protected void onPreExecute() {
-                                super.onPreExecute();
-                            }
-
-                            @Override
-                            protected Project doInBackground(Void... params) {
-                                try {
-                                    project = projectApi.getProject(oID).execute();
-                                    projectName = project.getName();
-                                    studentsName = project.getStudentNames();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                return project;
-                            }
-
-                            @Override
-                            protected void onPostExecute(Project project){
-                                String namesStr = "";
-                                for (String name : studentsName) {
-                                    namesStr += name + "\n";
-                                }
-
-                                Intent to_projectActivity = new Intent(ShenkarActivity.this, ProjectActivity.class);
-                                to_projectActivity.putExtra("project",projectName);
-                                to_projectActivity.putExtra("students", namesStr);
-                                to_projectActivity.putExtra("id", oID);
-                                startActivity(to_projectActivity);
-                            }
-
-                        }.execute();
+                    // Select Activity
+                    Intent intent;
+                    if(oActivity.equals("MapActivity")){
+                        String oType = result.getContents().split(";")[2];
+                        intent = new Intent(this, MapActivity.class);
+                        intent.putExtra("objectType", oType);
+                        intent.putExtra("objectId", oID);
+                        startActivity(intent);
+                    }else if(oActivity.equals("ProjectActivity")) {
+                        intent = new Intent(this, ProjectActivity.class);
+                        intent.putExtra("objectId", oID);
+                        startActivity(intent);
                     }
-                    /*
-                    * if we got something else from project type
-                    */
-                    else
-                    {
-                        Intent to_mapActivity = new Intent(this, MapActivity.class);
-                        to_mapActivity.putExtra("objectId",oID);
-                        to_mapActivity.putExtra("objectType", oType);
-                        startActivity(to_mapActivity);
-                    }
-                } catch (NumberFormatException e){
-                    Toast.makeText(this, "Error: Invalid QR ", Toast.LENGTH_LONG).show();
+
+                }catch (Exception exc){
+
                 }
-                /*
-                projectApi = helper.getProjectApi();
-                new AsyncTask<Void, Void, Project>() {
-                    @Override
-                    protected Project doInBackground(Void... params) {
-                        try {
-                            project = projectApi.getProject(rContent).execute();
-                            publishProgress(params);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        return project;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Project project) {
-                        super.onPostExecute(project);
-                        Intent i = new Intent(ShenkarActivity.this, ProjectActivity.class);
-                        String students = "";
-                        for(String name: project.getStudentNames()){
-                            students += name + " ";
-                        }
-                        i.putExtra("id", project.getId());
-                        i.putExtra("project", project.getName());
-                        i.putExtra("students", students);
-                        startActivity(i);
-                    }
-                }.execute();
-
-                */
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
             Qrlocation = result.getContents();
         }
 
-        /*
-            read the project id from the QR code then add it to my route using the following code
-            MyRouteActivity.addProjectId(this, projectId);
-         */
     }
 }

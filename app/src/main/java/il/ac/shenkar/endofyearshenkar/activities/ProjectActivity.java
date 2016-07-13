@@ -104,13 +104,8 @@ public class ProjectActivity extends ShenkarActivity {
 
         // initialize all the project's views
         views = new ProjectViewHolder(this);
-
-        project = getIntent().getStringExtra("project");
-        views.txtProjectName.setText(project);
-        String students = getIntent().getStringExtra("students");
-        views.txtStudentName.setText(students);
-
-        projectId = getIntent().getLongExtra("id", 0);
+        projectId = getIntent().getLongExtra("objectId", 0);
+        getData(projectId);
         playVd = (ImageButton) findViewById(R.id.imageButtonVideo);
         playSD = (ImageButton) findViewById(R.id.imageButtonSound);
         playVdGray = (ImageButton) findViewById(R.id.imageButtonVideo2);
@@ -128,6 +123,33 @@ public class ProjectActivity extends ShenkarActivity {
         playVdGray.setVisibility(View.GONE);
         playSDGray.setVisibility(View.GONE);
         refreshMedia();
+    }
+    public void getData(final Long projectId){
+        DBHelper helper = new DBHelper();
+        projectApi = helper.getProjectApi();
+        new AsyncTask<Void, Void, Project>() {
+            @Override
+            protected Project doInBackground(Void... params) {
+                try {
+                    mProject = projectApi.getProject(projectId).execute();
+                    publishProgress(params);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return mProject;
+            }
+
+            @Override
+            protected void onPostExecute(Project project) {
+                super.onPostExecute(project);
+                views.txtProjectName.setText(project.getName());
+                String students = "";
+                for(String name: project.getStudentNames()){
+                    students += name + " ";
+                }
+                views.txtStudentName.setText(students);
+            }
+        }.execute();
     }
 
     public void refreshMedia() {
