@@ -280,7 +280,7 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
                 break;
             }
             case "הנדסת תוכנה": {
-                path = "Pernik/2";
+                path = "Software";
                 building = "Pernik";
                 // Shenkar.ac.il says Mitchle
                 break;
