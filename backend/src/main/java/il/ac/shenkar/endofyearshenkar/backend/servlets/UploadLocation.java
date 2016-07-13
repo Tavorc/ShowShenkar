@@ -42,8 +42,8 @@ public class UploadLocation extends HttpServlet {
 
             String imageUrl = ImagesServiceFactory.getImagesService().getServingUrl(ServingUrlOptions.Builder.withBlobKey(blobKeys.get(0)));
             Long id = Long.valueOf(req.getParameter("id"));
-            Long lat = Long.valueOf(req.getParameter("lat"));
-            Long lng = Long.valueOf(req.getParameter("lng"));
+            Double lat = Double.valueOf(req.getParameter("lat"));
+            Double lng = Double.valueOf(req.getParameter("lng"));
             String description = req.getParameter("description");
             log.info("id: " + id + '\n' + "URL: " + imageUrl + '\n');
             Content content = OfyService.ofy().load().type(Content.class).id(id).now();
