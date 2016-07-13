@@ -12,7 +12,7 @@
         android:layout_marginBottom="5dp"
         android:background="@color/shenkarYellow"
         android:gravity="center"
-        android:text="@string/btn_my_routes"
+        android:text="מקבץ פרויקטים אישי"
         android:textColor="@color/black"
         android:textDirection="rtl"
         android:textSize="25dp"

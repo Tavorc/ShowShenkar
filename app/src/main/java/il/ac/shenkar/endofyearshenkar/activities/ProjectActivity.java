@@ -214,7 +214,7 @@ public class ProjectActivity extends ShenkarActivity {
                         }
                     });
                 }
-                if (urlAudio != null) {
+               if (urlAudio != null) {
                     playSD.setVisibility(View.VISIBLE);
                     playSD.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -226,7 +226,7 @@ public class ProjectActivity extends ShenkarActivity {
                             dialogButtonPlay.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    //  String url = "http://programmerguru.com/android-tutorial/wp-content/uploads/2013/04/hosannatelugu.mp3";
+                                    // String url = "http://programmerguru.com/android-tutorial/wp-content/uploads/2013/04/hosannatelugu.mp3";
                                     String url = urlAudio;
                                     mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                                     try {
