@@ -5,24 +5,28 @@
     android:weightSum="1">
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="56dp"
+        android:layout_width="47dp"
+        android:layout_height="47dp"
         android:id="@+id/imageButtonPlay"
-        android:src="@drawable/sound"/>
+        android:src="@drawable/play"
+        android:layout_marginLeft="20dp"/>
 
     <il.ac.shenkar.endofyearshenkar.utils.AlefTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="              קטע שמיעה           "
+        android:text="              קטע שמיעה         "
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal|top" />
 
     <ImageButton
-        android:layout_width="60dp"
-        android:layout_height="62dp"
+        android:layout_width="47dp"
+        android:layout_height="47dp"
         android:id="@+id/imageButtonStop"
-        android:src="@drawable/stop"/>
+        android:src="@drawable/pause"
+        android:layout_weight="0.36"
+        android:layout_marginRight="10dp"
+        />
 
 
 </LinearLayout>
