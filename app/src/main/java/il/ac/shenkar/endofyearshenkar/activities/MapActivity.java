@@ -113,7 +113,7 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
             SetDepartmentMap(objectId,null);
         }
         else if (objectType.equals("general")){
-            SetDepartmentMap(objectId,"general");
+            SetMapByDepartmentName("general","general");
         }
     }
 
@@ -230,7 +230,7 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
     private void SetMapByDepartmentName(String department,String type){
         // Find the position of department
         String path = null;
-        LatLng position = null;
+        LatLng position = SHENKAR;
         switch (department) {
             case "עיצוב תכשיטים": {
                 path = "Mitchle/3";
@@ -294,7 +294,7 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
         }
 
         // Move Camera to position
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 20));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 19));
 
         // Set Map tiles path
         if(type.equals("general")){
