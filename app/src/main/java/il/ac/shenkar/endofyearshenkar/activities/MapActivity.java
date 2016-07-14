@@ -110,7 +110,7 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
         if (objectType.equals("project")){
             SetProjectMap(objectId);
         }else if (objectType.equals("department")){
-            SetDepartmentMap(objectId,null);
+            SetDepartmentMap(objectId, " ");
         }
         else if (objectType.equals("general")){
             SetMapByDepartmentName("general","general");

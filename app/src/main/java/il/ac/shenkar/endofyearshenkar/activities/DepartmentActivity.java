@@ -78,7 +78,7 @@ public class DepartmentActivity extends ShenkarActivity {
     public void showMap() {
         Intent i = new Intent(this, MapActivity.class);
         i.putExtra("objectId", mDepartmentId);
-        i.putExtra("objectType", "general");
+        i.putExtra("objectType", "department");
         startActivity(i);
     }
 
