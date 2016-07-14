@@ -113,7 +113,7 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
             SetDepartmentMap(objectId, " ");
         }
         else if (objectType.equals("general")){
-            SetMapByDepartmentName("general","general");
+            SetMapByDepartmentName("general", "general");
         }
     }
 
@@ -233,39 +233,39 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
         LatLng position = SHENKAR;
         switch (department) {
             case "עיצוב תכשיטים": {
-                path = "Mitchle/3";
+                path = "Anna";
                 position = SHENKAR_S;
                 break;
             }
             case "תואר שני בעיצוב": {
-                path = "Mitchle/7";
+                path = "Anna";
                 position = SHENKAR_S;
                 //לרחבת הכניסה של בניין פרניק
                 break;
             }
             case "עיצוב תעשייתי": {
-                path = "Mitchle/4";
+                path = "Anna";
                 position = SHENKAR;
                 break;
             }
             case "תקשורת חזותית": {
-                path = "Mitchle/6";
+                path = "Anna";
                 position = MITSHLE;
                 //path = "Mitchle/5";
                 break;
             }
             case "עיצוב פנים מבנה וסביבה": {
-                path = "Mitchle/5";
+                path = "Anna";
                 position = SHENKAR_N;
                 break;
             }
             case "עיצוב טקסטיל": {
-                path = "Pernik/-1";
+                path = "Anna";
                 position = SHENKAR_E;
                 break;
             }
             case "אומנות רב תחומית": {
-                path = "Mitchle/7";
+                path = "Anna";
                 position = SHENKAR;
                 // בבנין עלית ההיסטורי
                 break;
@@ -281,7 +281,7 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
                 break;
             }
             case "עיצוב אופנה": {
-                path = "Pernik/4";
+                path = "Anna";
                 position = SHENKAR_E;
                 //  path = "Permik/3";
                 break;
