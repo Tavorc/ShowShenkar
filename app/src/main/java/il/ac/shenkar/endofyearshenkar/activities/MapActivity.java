@@ -272,7 +272,11 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
             }
             case "הנדסת תוכנה": {
                 path = "Software";
+                if(type.equals(" "))
+                position = SHENKAR;
+                else
                 position = SHENKAR_E;
+
                 // Shenkar.ac.il says Mitchle
                 break;
             }
