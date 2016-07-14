@@ -58,6 +58,15 @@ public class DepartmentActivity extends ShenkarActivity {
 
         adapter = new DepProjectsRecyclerAdapter(this, mProjects);
         rvProjects.setAdapter(adapter);
+
+        ImageButton mapBtn = (ImageButton)findViewById(R.id.toolbarmap);
+        mapBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                showMap();
+            }
+        });
     }
 
     @Override
@@ -66,10 +75,10 @@ public class DepartmentActivity extends ShenkarActivity {
         adapter.refresh(mDepartmentName);
     }
 
-    public void showDepartmentLocation(View v) {
+    public void showMap() {
         Intent i = new Intent(this, MapActivity.class);
         i.putExtra("objectId", mDepartmentId);
-        i.putExtra("objectType", "department");
+        i.putExtra("objectType", "general");
         startActivity(i);
     }
 

@@ -52,15 +52,15 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
     private GoogleMap mMap;
 
     private static final LatLng PERNIK = new LatLng(32.0900466 , 34.8035959);
-
     private static final LatLng MITSHLE = new LatLng(32.089928, 34.802239);
-
     private static final LatLng INTERIOR_DESIGN = new LatLng(32.09030615669672, 34.803183311601877);
-
-    private static final LatLng SHENKAR = new LatLng(32.090023, 34.803151);
-
     private static final LatLng ELIT = new LatLng(32.08264557800064, 34.80440218001604);
     private static final LatLng DEFAULT = new LatLng(32.089894851521, 34.80303257703781);
+    private static final LatLng SHENKAR = new LatLng(32.090023, 34.803151);
+    private static final LatLng SHENKAR_S = new LatLng(32.089648, 34.803158);
+    private static final LatLng SHENKAR_N = new LatLng(32.09039421212218, 34.80307549238205);
+    private static final LatLng SHENKAR_W = new LatLng(32.08998745215713, 34.80242371559143);
+    private static final LatLng SHENKAR_E = new LatLng(32.090076, 34.803406);
 
     private Long objectId;
 
@@ -110,24 +110,17 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
         if (objectType.equals("project")){
             SetProjectMap(objectId);
         }else if (objectType.equals("department")){
-            SetDepartmentMap(objectId);
+            SetDepartmentMap(objectId,null);
         }
         else if (objectType.equals("general")){
-            SetGeneralMap();
+            SetDepartmentMap(objectId,"general");
         }
-    }
-    /*
-     *   Set General Map
-     * */
-    public void SetGeneralMap(){
-        SetMapByDepartmentName("שנקר");
-        mMap.setInfoWindowAdapter(new PopupAdapter(getLayoutInflater(),""));
     }
 
     /*
      *   Set Department Map
      * */
-    public void SetDepartmentMap(final Long departmentId){
+    public void SetDepartmentMap(final Long departmentId, final String type){
         final DepartmentApi departmentApi = new DepartmentApi.Builder(
                 AndroidHttp.newCompatibleTransport(),
                 new JacksonFactory(),
@@ -152,7 +145,7 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
             @Override
             protected void onPostExecute(Department department) {
                 if (department != null) {
-                    SetMapByDepartmentName(department.getName());
+                    SetMapByDepartmentName(department.getName(),type);
                     mMap.setInfoWindowAdapter(new PopupAdapter(getLayoutInflater(),department.getImageUrl()));
                 }
             }
@@ -188,7 +181,7 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
             @Override
             protected void onPostExecute(Project project) {
                 if (project != null) {
-                    SetMapByDepartmentName(project.getDepartment());
+                    SetMapByDepartmentName(project.getDepartment()," ");
                     AddMarkerByLocationContent(Long.parseLong(project.getContentId()), project.getName());
                 }
             }
@@ -234,91 +227,77 @@ public class MapActivity extends ShenkarActivity implements OnMapReadyCallback, 
         }.execute();
     }
 
-    void AddMarker(LatLng location,String text){
-        mMap.addMarker(new MarkerOptions().position(location).title(text));
-    }
-
-    private void SetMapByDepartmentName(String department){
+    private void SetMapByDepartmentName(String department,String type){
+        // Find the position of department
         String path = null;
-        String building = null;
+        LatLng position = null;
         switch (department) {
             case "עיצוב תכשיטים": {
                 path = "Mitchle/3";
-                building = "Mitchle";
+                position = SHENKAR_S;
                 break;
             }
             case "תואר שני בעיצוב": {
                 path = "Mitchle/7";
-                building = "Mitchle";
+                position = SHENKAR_S;
                 //לרחבת הכניסה של בניין פרניק
                 break;
             }
             case "עיצוב תעשייתי": {
                 path = "Mitchle/4";
-                building = "Mitchle";
+                position = SHENKAR;
                 break;
             }
             case "תקשורת חזותית": {
                 path = "Mitchle/6";
-                building = "Mitchle";
+                position = MITSHLE;
                 //path = "Mitchle/5";
                 break;
             }
             case "עיצוב פנים מבנה וסביבה": {
                 path = "Mitchle/5";
-                building = "Mitchle";
+                position = SHENKAR_N;
                 break;
             }
             case "עיצוב טקסטיל": {
                 path = "Pernik/-1";
-                building = "Pernik";
+                position = SHENKAR_E;
                 break;
             }
             case "אומנות רב תחומית": {
                 path = "Mitchle/7";
-                building = "Mitchle";
+                position = SHENKAR;
                 // בבנין עלית ההיסטורי
                 break;
             }
             case "הנדסת תוכנה": {
                 path = "Software";
-                building = "Pernik";
+                position = SHENKAR_E;
                 // Shenkar.ac.il says Mitchle
                 break;
             }
             case "עיצוב אופנה": {
                 path = "Pernik/4";
-                building = "Pernik";
+                position = SHENKAR_E;
                 //  path = "Permik/3";
                 break;
             }
             case "שנקר": {
                 path = "Anna";
-                building = "Shenkar";
+                position = SHENKAR;
                 break;
             }
         }
 
-        switch (building){
-            case "Pernik" :{
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT, 21));
-                //AddMarker(PERNIK, department + " -  בניין פרניק");
-            break;
-            }
-            case "Mitchle" :{
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT, 21));
-                //AddMarker(MITSHLE, department + " - בניין מיטשל");
-                break;
-            }
-            case "Shenkar" :
-            default:{
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT, 21));
-                //AddMarker(SHENKAR, department);
-                break;
-            }
-        }
+        // Move Camera to position
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 20));
 
-        setUpMap(path);
+        // Set Map tiles path
+        if(type.equals("general")){
+            setUpMap("anna");
+        }else{
+            setUpMap(path);
+        }
     }
 
     private void setUpMap(final String path) {
